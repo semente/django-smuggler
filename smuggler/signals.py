@@ -12,6 +12,7 @@ from smuggler.settings import SMUGGLER_FIXTURE_DIR, SMUGGLER_FORMAT
 
 def save_data_on_filesystem(sender, **kwargs):
     if not SMUGGLER_FIXTURE_DIR:
+        # TODO: improve exception
         raise ImproperlyConfigured
     objects = sender._default_manager.all()
     app_label, model_label = sender._meta.app_label, sender._meta.module_name

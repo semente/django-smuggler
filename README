@@ -4,8 +4,15 @@ admin interface.
 
 For installation instructions, see the file INSTALL.
 
+Quick admin setup:
+
+    class ExampleAdmin(admin.ModelAdmin):
+        change_list_template = 'smuggler/change_list.html'
+        ...
+
 For more information, read the online documentation at
 <http://packages.python.org/django-smuggler/>.
+
 
 Django Smuggler is free software; you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
