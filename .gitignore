@@ -1,0 +1,8 @@
+*.pyc
+*.bak
+*.swp
+._*
+.#*
+*#
+dist
+build

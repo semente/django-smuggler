@@ -1,0 +1,8 @@
+include MANIFEST.in
+include AUTHORS
+include COPYING.LESSER
+include INSTALL
+include README
+recursive-include docs *
+recursive-include smuggler/locale *.po *.mo
+recursive-include diario/templates *.html
