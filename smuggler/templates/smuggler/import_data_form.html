@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_modify adminmedia %}
 
-{% block title %}{% trans "Import data to" %} "{{ opts.verbose_name_plural|capfirst }}" {{ block.super }}{% endblock %}
+{% block title %}{% trans "Import data" %} {{ block.super }}{% endblock %}
 
 {% block extrahead %}
   {{ block.super }}
@@ -16,19 +16,17 @@
 
 {% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
 
-{% block bodyclass %}{{ opts.app_label }}-{{ opts.object_name.lower }} change-form{% endblock %}
+{% block bodyclass %}change-form{% endblock %}
 
 {% block breadcrumbs %}{% if not is_popup %}
 <div class="breadcrumbs">
-     <a href="../../../">{% trans "Home" %}</a> &rsaquo;
-     <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo;
-     <a href="../">{{ opts.verbose_name_plural|capfirst }}</a> &rsaquo;
+     <a href="{% url admin:index %}">{% trans "Home" %}</a> &rsaquo;
      {% trans "Import data" %}
 </div>
 {% endif %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Import data to" %} &ldquo;{{ opts.verbose_name_plural|capfirst }}&rdquo;</h1>
+<h1>{% trans "Import data" %}</h1>
 
 <div id="content-main">
   <form enctype="multipart/form-data" method="post" action="">
