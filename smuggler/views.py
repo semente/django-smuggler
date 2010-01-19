@@ -33,7 +33,15 @@ def import_data(request, app_label, model_label):
                 data = file(uploaded_file.temporary_file_path(), 'r')
             else:
                 data = uploaded_file.read()
-            objects = serializers.deserialize('json', data)
+            if uploaded_file.content_type == 'text/xml':
+                file_ext = 'xml'
+            elif uploaded_file.content_type == 'application/json':
+                file_ext = 'json'
+            else:
+                # Fallback to "json" because on some tests the ``content_type``
+                # of JSON files was "application/octet-stream".
+                file_ext = 'json'
+            objects = serializers.deserialize(file_ext, data)
             for obj in objects:
                 obj.save()
             user_msg = _('Data imported with success.')
