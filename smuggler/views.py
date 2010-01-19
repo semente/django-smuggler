@@ -6,6 +6,7 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 
+from datetime import datetime
 from django.core import serializers
 from django.db.models import get_model
 from django.http import HttpResponse, HttpResponseRedirect
@@ -19,7 +20,8 @@ from smuggler.utils import serialize_to_response
 def export_data(request, app_label, model_label):
     model = get_model(app_label, model_label)
     objects = model._default_manager.all()
-    filename = '%s-%s.%s' % (app_label, model_label, SMUGGLER_FORMAT)
+    filename = '%s-%s_%s.%s' % (app_label, model_label, SMUGGLER_FORMAT,
+                                datetime.now().isoformat())
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return serialize_to_response(objects, response)
