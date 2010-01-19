@@ -1,8 +1,0 @@
-Is basically run ``setup.py install'', like follow:
-
-  # python setup.py install
-
-...and configure your project.
-
-For detailed and updated install and setup instructions, see the
-documentation <http://packages.python.org/django-smuggler/>.
