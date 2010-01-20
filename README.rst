@@ -30,6 +30,10 @@ command on directory that contains the file ``setup.py``::
 
   python setup.py install
 
+.. image:: etc/screenshot-1.png
+   :alt: import form
+   :align: center
+
 After installation you need configure your project to recognizes the Smuggler
 application adding ``'smuggler'`` to your ``INSTALLED_APPS`` setting and setup
 the project *URLConf* like follow::
@@ -46,6 +50,10 @@ change list page::
     class ExampleAdmin(admin.ModelAdmin):
         change_list_template = 'smuggler/change_list.html'
         ...
+
+.. image:: etc/screenshot-0.png
+   :alt: buttons on change_list.html
+   :align: center
 
 
 Copying conditions
