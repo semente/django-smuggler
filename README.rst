@@ -30,10 +30,6 @@ command on directory that contains the file ``setup.py``::
 
   python setup.py install
 
-.. image:: http://github.com/semente/django-smuggler/raw/master/etc/screenshot-1.png
-   :alt: import form
-   :align: center
-
 After installation you need configure your project to recognizes the Smuggler
 application adding ``'smuggler'`` to your ``INSTALLED_APPS`` setting and setup
 the project *URLConf* like follow::
@@ -50,6 +46,17 @@ change list page::
     class ExampleAdmin(admin.ModelAdmin):
         change_list_template = 'smuggler/change_list.html'
         ...
+
+Screenshots
+===========
+
+**Import form:**
+
+.. image:: http://github.com/semente/django-smuggler/raw/master/etc/screenshot-1.png
+   :alt: import form
+   :align: center
+
+**Buttons on change_list.html:**
 
 .. image:: http://github.com/semente/django-smuggler/raw/master/etc/screenshot-0.png
    :alt: buttons on change_list.html
