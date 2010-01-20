@@ -40,12 +40,34 @@ the project *URLConf* like follow::
       (r'^admin/', include(admin.site.urls)),
   )
 
-Finally, setup the ModelAdmin you are interested to show Smuggler's options on
-change list page::
+Then try access these urls:
+
+* `/admin/import/ <http://127.0.0.1/admin/import/>`_, to upload files to be
+  imported;
+
+* `/admin/export/ <http://127.0.0.1/admin/export/>`_, to download data from
+  whole project;
+
+* `/admin/APP_LABEL/export/ <http://127.0.0.1/admin/APP_LABEL/export/>`_, to
+  download data from a app;
+
+* `/admin/APP_LABEL/MODEL_LABEL/export/
+  <http://127.0.0.1/admin/APP_LABEL/MODEL_LABEL/export/>`_, to download data
+  from a model;
+
+If you can access the URLs above, the application was setup correctly. Note
+that these URLs are accessible only by superusers.
+
+Smuggler also provides a template to show buttons for import and export data on
+change list page (``change_list.html``). You can setup the ModelAdmin you are
+interested like follow::
 
     class ExampleAdmin(admin.ModelAdmin):
         change_list_template = 'smuggler/change_list.html'
         ...
+
+*Note: on directory "etc/sample_templates/" you have some template examples
+to put Smuggler's buttons on app indexes and admin index page.*
 
 Settings
 ````````
