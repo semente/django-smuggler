@@ -10,7 +10,7 @@
         </a>
       </li>
       <li>
-        <a href="import/{% if is_popup %}?_popup=1{% endif %}">
+        <a href="{% url import-data %}{% if is_popup %}?_popup=1{% endif %}">
           {% trans "Import data" %}
         </a>
       </li>

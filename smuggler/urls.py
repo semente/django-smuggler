@@ -7,8 +7,18 @@
 # Software Foundation. See the file README for copying conditions.
 
 from django.conf.urls.defaults import *
+from smuggler.views import export_data, import_data
 
-urlpatterns = patterns('smuggler.views',
-    (r'^(?P<app_label>\w+)/(?P<model_label>\w+)/export/$', 'export_data'),
-    (r'^(?P<app_label>\w+)/(?P<model_label>\w+)/import/$', 'import_data'),
+export_data_url = url(
+    regex=r'^(?P<app_label>\w+)/(?P<model_label>\w+)/export/$',
+    view=export_data,
+    name='export-data'
 )
+
+import_data_url = url(
+    regex=r'^import/$',
+    view=import_data,
+    name='import-data',
+)
+
+urlpatterns = patterns('', export_data_url, import_data_url)
