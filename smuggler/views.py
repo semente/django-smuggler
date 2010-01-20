@@ -8,7 +8,7 @@
 
 from datetime import datetime
 from django.core import serializers
-from django.db.models import get_model
+from django.db.models import get_app, get_apps, get_model, get_models
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -17,7 +17,35 @@ from smuggler.forms import ImportDataForm
 from smuggler.settings import SMUGGLER_FORMAT
 from smuggler.utils import serialize_to_response
 
-def export_data(request, app_label, model_label):
+def export_data(request):
+    """Exports data from whole project.
+    """
+    objects = []
+    for app in get_apps():
+        for model in get_models(app):
+            if not model._meta.proxy:
+                objects.extend(model._default_manager.all())
+    filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
+    response = HttpResponse(mimetype="text/plain")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    return serialize_to_response(objects, response)
+
+def export_app_data(request, app_label):
+    """Exports data from a application.
+    """
+    objects = []
+    for model in get_models(get_app(app_label)):
+        if not model._meta.proxy:
+            objects.extend(model._default_manager.all())
+    filename = '%s_%s.%s' % (app_label, datetime.now().isoformat(),
+                             SMUGGLER_FORMAT)
+    response = HttpResponse(mimetype="text/plain")
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    return serialize_to_response(objects, response)
+
+def export_model_data(request, app_label, model_label):
+    """Exports data from a model.
+    """
     model = get_model(app_label, model_label)
     objects = model._default_manager.all()
     filename = '%s-%s_%s.%s' % (app_label, model_label,
@@ -27,6 +55,8 @@ def export_data(request, app_label, model_label):
     return serialize_to_response(objects, response)
 
 def import_data(request):
+    """Import data from uploaded file.
+    """
     if request.method == 'POST':
         form = ImportDataForm(request.POST, request.FILES)
         if form.is_valid():
