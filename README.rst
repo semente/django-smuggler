@@ -47,6 +47,24 @@ change list page::
         change_list_template = 'smuggler/change_list.html'
         ...
 
+Settings
+````````
+
+Smuggler has the following settings available. You can set them in your 
+``settings.py``. If you doesn't set them it will assume the default values:
+                                
+SMUGGLER_FORMAT
+    Format for exported files. 'json' and 'xml' are supported.
+    Default: 'json'.
+
+SMUGGLER_INDENT
+    Indentation for exported files.
+    Default: 4.
+
+SMUGGLER_FIXTURE_DIR
+    To be used with signal ``smuggler.signals.save_data_on_filesystem``.
+    Default: None.
+
 
 Screenshots
 ===========
