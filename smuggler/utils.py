@@ -17,7 +17,9 @@ def serialize_to_response(queryset, response=HttpResponse(),
     return response
 
 def superuser_required(function):
-    """Decorator for views that checks that the logged user is superuser.
+    """
+    Decorator for views that checks if the logged user is a superuser. In other
+    words, deny access from non-superusers.
     """
     def _inner(request, *args, **kwargs):
         if not request.user.is_superuser:
