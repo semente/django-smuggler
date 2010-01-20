@@ -15,7 +15,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from smuggler.forms import ImportDataForm
 from smuggler.settings import SMUGGLER_FORMAT
-from smuggler.utils import serialize_to_response
+from smuggler.utils import serialize_to_response, superuser_required
 
 def export_data(request):
     """Exports data from whole project.
@@ -29,6 +29,7 @@ def export_data(request):
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return serialize_to_response(objects, response)
+export_data = superuser_required(export_data)
 
 def export_app_data(request, app_label):
     """Exports data from a application.
@@ -42,6 +43,7 @@ def export_app_data(request, app_label):
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return serialize_to_response(objects, response)
+export_app_data = superuser_required(export_app_data)
 
 def export_model_data(request, app_label, model_label):
     """Exports data from a model.
@@ -53,6 +55,7 @@ def export_model_data(request, app_label, model_label):
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return serialize_to_response(objects, response)
+export_model_data = superuser_required(export_model_data)
 
 def import_data(request):
     """Import data from uploaded file.
@@ -87,3 +90,4 @@ def import_data(request):
         context,
         context_instance=RequestContext(request)
     )
+import_data = superuser_required(import_data)

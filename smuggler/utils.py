@@ -7,6 +7,7 @@
 # Software Foundation. See the file README for copying conditions.
 
 from django.core import serializers
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from smuggler.settings import SMUGGLER_FORMAT, SMUGGLER_INDENT
 
@@ -14,3 +15,12 @@ def serialize_to_response(queryset, response=HttpResponse(),
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
     serializers.serialize(format, queryset, indent=indent, stream=response)
     return response
+
+def superuser_required(function):
+    """Decorator for views that checks that the logged user is superuser.
+    """
+    def _inner(request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied
+        return function(request, *args, **kwargs)
+    return _inner
