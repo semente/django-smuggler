@@ -2,5 +2,6 @@ include AUTHORS
 include COPYING.LESSER
 include MANIFEST.in
 include README.rst
+recursive-include etc *
 recursive-include smuggler/locale *.po *.mo
 recursive-include smuggler/templates *.html
