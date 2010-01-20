@@ -30,7 +30,7 @@ command on directory that contains the file ``setup.py``::
 
   python setup.py install
 
-.. image:: etc/screenshot-1.png
+.. image:: http://github.com/semente/django-smuggler/blob/master/etc/screenshot-1.png
    :alt: import form
    :align: center
 
@@ -51,7 +51,7 @@ change list page::
         change_list_template = 'smuggler/change_list.html'
         ...
 
-.. image:: etc/screenshot-0.png
+.. image:: http://github.com/semente/django-smuggler/blob/master/etc/screenshot-0.png
    :alt: buttons on change_list.html
    :align: center
 
