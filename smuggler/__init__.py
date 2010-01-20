@@ -6,6 +6,11 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 
+"""
+Django Smuggler is a pluggable application for Django Web Framework that help
+you import/export fixtures via the automatically-generated admin interface.
+"""
+
 VERSION = (0, 1, 'pre')
 
 def get_version():
