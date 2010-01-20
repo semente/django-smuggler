@@ -26,7 +26,7 @@ def export_data(request, app_label, model_label):
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return serialize_to_response(objects, response)
 
-def import_data(request, app_label, model_label):
+def import_data(request):
     if request.method == 'POST':
         form = ImportDataForm(request.POST, request.FILES)
         if form.is_valid():
@@ -51,12 +51,7 @@ def import_data(request, app_label, model_label):
             return HttpResponseRedirect('./')
     else:
         form = ImportDataForm()
-    model = get_model(app_label, model_label)
-    context = {
-        'app_label': app_label,
-        'form': form,
-        'opts': model._meta,
-    }
+    context = {'form': form}
     return render_to_response(
         'smuggler/import_data_form.html',
         context,
