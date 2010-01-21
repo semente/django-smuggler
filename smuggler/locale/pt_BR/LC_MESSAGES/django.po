@@ -2,8 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -17,39 +16,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: forms.py:15
-msgid ""
-"Fixture file to import. <b>Note: existing items with same <i>id</i>, will be "
-"overwrited.</b>"
-msgstr ""
+msgid "Fixture file to import. <b>Note: existing items with same <i>id</i>, will be overwrited.</b>"
+msgstr "Arquivo de fixture para importar. <b>Nota: itens existentes com o mesmo <i>id</i> serão sobrescritos.</b>"
 
 #: views.py:82
 msgid "Data imported with success."
-msgstr ""
+msgstr "Dados importados com sucesso."
 
 #: templates/smuggler/change_list.html:10
 msgid "Export data"
-msgstr ""
+msgstr "Exportar dados"
 
 #: templates/smuggler/change_list.html:15
 #: templates/smuggler/import_data_form.html:4
 #: templates/smuggler/import_data_form.html:24
 #: templates/smuggler/import_data_form.html:29
 msgid "Import data"
-msgstr ""
+msgstr "Importar dados"
 
 #: templates/smuggler/change_list.html:21
 #, python-format
 msgid "Add %(name)s"
-msgstr ""
+msgstr "Adicionar %(name)s"
 
 #: templates/smuggler/import_data_form.html:23
 msgid "Home"
-msgstr ""
+msgstr "Início"
 
 #: templates/smuggler/import_data_form.html:35
 msgid "Please correct the error below."
-msgstr ""
+msgstr "Por favor, corrija o erro abaixo."
 
 #: templates/smuggler/import_data_form.html:55
 msgid "Import"
-msgstr ""
+msgstr "Importar"
