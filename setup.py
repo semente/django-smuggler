@@ -20,8 +20,11 @@ setup(
     version = get_version(),
     description = 'import/export fixtures via Django admin interface',
     long_description = ('Django Smuggler is a pluggable application for Django '
-                        'Web Framework that help you import/export fixtures '
-                        'via the automatically-generated admin interface.'),
+                        'Web Framework for you easily import/export fixtures '
+                        'via the automatically-generated administration '
+                        'interface. Especially useful for transporting data in '
+                        'production for the development project and vice'
+                        'versa, but can also be used as a backup tool.'),
     keywords = 'django apps tools backup fixtures admin',
     author = 'Guilherme Gondim',
     author_email = 'semente@taurinus.org',

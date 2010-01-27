@@ -2,9 +2,11 @@
 Django Smuggler
 ===============
 
-**Django Smuggler** is a pluggable application for `Django Web Framework`_ that
-help you import/export fixtures via the automatically-generated admin
-interface.
+**Django Smuggler** is a pluggable application for `Django Web Framework`_ for
+you easily import/export fixtures via the automatically-generated
+administration interface. Especially useful for transporting data in production
+for the development project and vice versa, but can also be used as a backup
+tool.
 
 .. _`Django Web Framework`: http://www.djangoproject.com
 
@@ -72,7 +74,7 @@ to put Smuggler's buttons on app indexes and admin index page.*
 Settings
 ````````
 
-Smuggler has the following settings available. You can set them in your 
+Smuggler has the following settings available. You can set them in your project
 ``settings.py``. If you doesn't set them it will assume the default values:
                                 
 SMUGGLER_FORMAT
