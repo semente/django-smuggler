@@ -98,13 +98,13 @@ SMUGGLER_INDENT
 Screenshots
 ===========
 
-Import form:
+Buttons on change_list.html:
 
 .. image:: http://github.com/semente/django-smuggler/raw/master/etc/screenshot-0.png
    :alt: buttons on change_list.html
    :align: center
 
-Buttons on change_list.html:
+Import form:
 
 .. image:: http://github.com/semente/django-smuggler/raw/master/etc/screenshot-1.png
    :alt: import form
