@@ -76,7 +76,16 @@ Settings
 
 Smuggler has the following settings available. You can set them in your project
 ``settings.py``. If you doesn't set them it will assume the default values:
+
+SMUGGLER_EXCLUDE_LIST
+    List of models to be excluded from exportation. Use the form
+    'app_label.ModelName'.
+    Default: [].
                                 
+SMUGGLER_FIXTURE_DIR
+    To be used with signal ``smuggler.signals.save_data_on_filesystem``.
+    Default: None.
+
 SMUGGLER_FORMAT
     Format for exported files. 'json' and 'xml' are supported.
     Default: 'json'.
@@ -84,10 +93,6 @@ SMUGGLER_FORMAT
 SMUGGLER_INDENT
     Indentation for exported files.
     Default: 4.
-
-SMUGGLER_FIXTURE_DIR
-    To be used with signal ``smuggler.signals.save_data_on_filesystem``.
-    Default: None.
 
 
 Screenshots

@@ -15,14 +15,15 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from smuggler.forms import ImportDataForm
 from smuggler.settings import SMUGGLER_FORMAT
-from smuggler.utils import serialize_to_response, superuser_required
+from smuggler.utils import (get_excluded_models_set, serialize_to_response,
+                            superuser_required)
 
 def export_data(request):
     """Exports data from whole project.
     """
     objects = []
     for app in get_apps():
-        for model in get_models(app):
+        for model in set(get_models(app)) - get_excluded_models_set():
             if not model._meta.proxy:
                 objects.extend(model._default_manager.all())
     filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
@@ -35,7 +36,7 @@ def export_app_data(request, app_label):
     """Exports data from a application.
     """
     objects = []
-    for model in get_models(get_app(app_label)):
+    for model in set(get_models(get_app(app_label))) - get_excluded_models_set():
         if not model._meta.proxy:
             objects.extend(model._default_manager.all())
     filename = '%s_%s.%s' % (app_label, datetime.now().isoformat(),
