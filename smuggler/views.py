@@ -23,7 +23,8 @@ def export_data(request):
     """
     objects = []
     for app in get_apps():
-        for model in set(get_models(app)) - get_excluded_models_set():
+        models = set(get_models(app)) - get_excluded_models_set()
+        for model in models:
             if not model._meta.proxy:
                 objects.extend(model._default_manager.all())
     filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
@@ -36,7 +37,8 @@ def export_app_data(request, app_label):
     """Exports data from a application.
     """
     objects = []
-    for model in set(get_models(get_app(app_label))) - get_excluded_models_set():
+    models = set(get_models(get_app(app_label))) - get_excluded_models_set()
+    for model in models:
         if not model._meta.proxy:
             objects.extend(model._default_manager.all())
     filename = '%s_%s.%s' % (app_label, datetime.now().isoformat(),
