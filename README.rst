@@ -71,7 +71,7 @@ interested like follow::
 to put Smuggler's buttons on app indexes and admin index page.*
 
 Settings
-````````
+--------
 
 Smuggler has the following settings available. You can set them in your project
 ``settings.py``. If you doesn't set them it will assume the default values:
@@ -117,7 +117,8 @@ Since version 0.1
 -----------------
 
 2010-02-11
-    Renamed urls from import/export to load/dump to reflect recent changes
+    Renamed urls from import/export to load/dump to reflect recent
+    changes (c276b07)
 
 
 Copying conditions
