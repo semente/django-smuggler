@@ -3,10 +3,9 @@ Django Smuggler
 ===============
 
 **Django Smuggler** is a pluggable application for `Django Web Framework`_ for
-you easily import/export fixtures via the automatically-generated
-administration interface. Especially useful for transporting data in production
-for the development project and vice versa, but can also be used as a backup
-tool.
+you easily dump/load fixtures via the automatically-generated administration
+interface. Especially useful for transporting data in production for the
+development project and vice versa, but can also be used as a backup tool.
 
 .. _`Django Web Framework`: http://www.djangoproject.com
 
@@ -44,23 +43,23 @@ the project *URLConf* like follow::
 
 Then try access these urls:
 
-* `/admin/import/ <http://127.0.0.1/admin/import/>`_, to upload files to be
-  imported;
+* `/admin/load/ <http://127.0.0.1/admin/load/>`_, to load data from uploaded
+  files or files on SMUGGLER_FIXTURE_DIR;
 
-* `/admin/export/ <http://127.0.0.1/admin/export/>`_, to download data from
+* `/admin/dump/ <http://127.0.0.1/admin/dump/>`_, to download data from
   whole project;
 
-* `/admin/APP_LABEL/export/ <http://127.0.0.1/admin/APP_LABEL/export/>`_, to
+* `/admin/APP_LABEL/dump/ <http://127.0.0.1/admin/APP_LABEL/dump/>`_, to
   download data from a app;
 
-* `/admin/APP_LABEL/MODEL_LABEL/export/
-  <http://127.0.0.1/admin/APP_LABEL/MODEL_LABEL/export/>`_, to download data
+* `/admin/APP_LABEL/MODEL_LABEL/dump/
+  <http://127.0.0.1/admin/APP_LABEL/MODEL_LABEL/dump/>`_, to download data
   from a model;
 
 If you can access the URLs above, the application was setup correctly. Note
 that these URLs are accessible only by superusers.
 
-Smuggler also provides a template to show buttons for import and export data on
+Smuggler also provides a template to show buttons for dump and load data on
 change list page (``change_list.html``). You can setup the ModelAdmin you are
 interested like follow::
 
@@ -78,21 +77,21 @@ Smuggler has the following settings available. You can set them in your project
 ``settings.py``. If you doesn't set them it will assume the default values:
 
 SMUGGLER_EXCLUDE_LIST
-    List of models to be excluded from exportation. Use the form
-    'app_label.ModelName'.
+    List of models to be excluded from dump. Use the form 'app_label.ModelName'.
     Default: [].
                                 
 SMUGGLER_FIXTURE_DIR
-    To be used with signal ``smuggler.signals.save_data_on_filesystem``.
+    Saved files will be stored on this directory. The signal
+    ``smuggler.signals.save_data_on_filesystem`` uses this value too.
     Default: None.
 
 SMUGGLER_FORMAT
-    Format for exported files. 'json' and 'xml' are supported.
+    Format for dumped files. 'json' and 'xml' are supported.
     Default: 'json'.
 
 SMUGGLER_INDENT
-    Indentation for exported files.
-    Default: 4.
+    Indentation for dumped files.
+    Default: 2.
 
 
 Screenshots
@@ -104,11 +103,21 @@ Buttons on change_list.html:
    :alt: buttons on change_list.html
    :align: center
 
-Import form:
+Load form:
 
 .. image:: http://github.com/semente/django-smuggler/raw/master/etc/screenshot-1.png
-   :alt: import form
+   :alt: load form
    :align: center
+
+
+Backwards-incompatible changes
+==============================
+
+Since version 0.1
+-----------------
+
+2010-02-11
+    Renamed urls from import/export to load/dump to reflect recent changes
 
 
 Copying conditions
