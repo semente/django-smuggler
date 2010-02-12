@@ -104,8 +104,12 @@ def load_data(request):
                 counter += 1
                 obj.save()
         if data:
-            user_msg = _('%s object(s) from %s file(s) loaded with success.' % \
-                             (counter, len(data))) # TODO: pluralize
+            user_msg = ('%(obj_count)d object(s) from %(file_count)d file(s) '
+                        'loaded with success.') # TODO: pluralize
+            user_msg = _(user_msg) % {
+                'obj_count': counter,
+                'file_count': len(data)
+            }
             request.user.message_set.create(message=user_msg)
     context = {
         'files_available': get_file_list(SMUGGLER_FIXTURE_DIR) \
