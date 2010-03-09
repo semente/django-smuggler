@@ -8,6 +8,11 @@ administration interface. Especially useful for transporting data in production
 for the development project and vice versa, but can also be used as a backup
 tool.
 
+Project page
+    http://github.com/sement/django-smuggler
+Translations
+    https://www.transifex.net/projects/p/django-smuggler/
+
 .. _`Django Web Framework`: http://www.djangoproject.com
 
 
@@ -109,6 +114,25 @@ Import form:
 .. image:: http://github.com/semente/django-smuggler/raw/master/etc/screenshot-1.png
    :alt: import form
    :align: center
+
+
+Contributing
+============
+
+If you find any problems in the code or documentation, please take 30 seconds
+to fill out a issue `here <http://github.com/semente/django-smuggler/issues>`_.
+
+The contributing with code or translation is MUCH-APPRECIATED. You feel free to
+create forks or send patchs.
+
+You can online translate this application to your language using
+Transifex. Access the `project page
+<https://www.transifex.net/projects/p/django-smuggler/.>`_ on Transifex.
+
+See AUTHORS file for a complete authors list of this application.
+
+Thanks to `Interaction Consortium <http://interactionconsortium.com/>`_ for
+sponsoring the project. Donate you too!
 
 
 Copying conditions
