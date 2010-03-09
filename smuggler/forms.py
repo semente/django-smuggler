@@ -7,12 +7,21 @@
 # Software Foundation. See the file README for copying conditions.
 
 from django import forms
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils.translation import ugettext as _
 
-class ImportDataForm(forms.Form):
+class ImportFileForm(forms.Form):
     file = forms.FileField(
-        label="File",
-        help_text=_("Fixture file to import. <b>Note: existing items with same "
-                    "<i>id</i>, will be overwrited.</b>"),
-        required=True
+        label='File to load',
+        help_text=_('Existing items with same <i>id</i> will be overwrited.'),
+        required=True,
     )
+
+    def clean_file(self):
+        data = self.cleaned_data['file']
+        if not isinstance(data, InMemoryUploadedFile):
+            return data
+        file_format = data.name.split('.')[-1]
+        if not file_format in ['json', 'xml']:
+            raise forms.ValidationError(_('Invalid file extension.'))
+        return data

@@ -53,10 +53,10 @@
     {# +++ CUSTOMIZATION STARTS HERE +++ #}
     <div class="module">
         <h2>{% trans 'Administration' %}</h2>
-        <h3>{% trans 'Data import/export' %}</h3>
+        <h3>{% trans 'Data' %}</h3>
         <ul class="actionlist">
-            <li><a href="{% url import-data %}">Import data</a></li>
-            <li><a href="export/">Export data</a></li>
+            <li><a href="{% url load-data %}">Load data</a></li>
+            <li><a href="dump/">Dump data</a></li>
         </ul>
     </div>
     {# +++ CUSTOMIZATION ENDS HERE +++ #}

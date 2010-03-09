@@ -6,47 +6,73 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-21 10:45-0200\n"
-"PO-Revision-Date: 2010-01-21 11:18-0200\n"
+"Report-Msgid-Bugs-To: django-l10n-portuguese <django-l10n-portuguese@googlegroups.com>\n"
+"POT-Creation-Date: 2010-02-12 16:36-0200\n"
+"PO-Revision-Date: 2010-02-12 16:40-0200\n"
 "Last-Translator: \n"
 "Language-Team: django-l10n-portuguese <django-l10n-portuguese@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:15
-msgid "Fixture file to import. <b>Note: existing items with same <i>id</i>, will be overwrited.</b>"
-msgstr "Arquivo de fixture para importar. <b>Nota: itens existentes com o mesmo <i>id</i> serão sobrescritos.</b>"
+#: forms.py:16
+msgid "Existing items with same <i>id</i> will be overwrited."
+msgstr "Itens existentes com o mesmo <i>id</i> serão sobrescritos."
 
-#: views.py:82
-msgid "Data imported with success."
-msgstr "Dados importados com sucesso."
+#: forms.py:26
+msgid "Invalid file extension."
+msgstr "Extensão de arquivo inválida."
 
 #: templates/smuggler/change_list.html:10
-msgid "Export data"
-msgstr "Exportar dados"
+msgid "Dump data"
+msgstr "Descarregar dados"
 
 #: templates/smuggler/change_list.html:15
-#: templates/smuggler/import_data_form.html:4
-#: templates/smuggler/import_data_form.html:24
-#: templates/smuggler/import_data_form.html:29
-msgid "Import data"
-msgstr "Importar dados"
+#: templates/smuggler/load_data_form.html:4
+#: templates/smuggler/load_data_form.html:24
+#: templates/smuggler/load_data_form.html:29
+msgid "Load data"
+msgstr "Carregar dados"
 
 #: templates/smuggler/change_list.html:21
 #, python-format
 msgid "Add %(name)s"
 msgstr "Adicionar %(name)s"
 
-#: templates/smuggler/import_data_form.html:23
+#: templates/smuggler/load_data_form.html:23
 msgid "Home"
 msgstr "Início"
 
-#: templates/smuggler/import_data_form.html:35
+#: templates/smuggler/load_data_form.html:35
 msgid "Please correct the error below."
 msgstr "Por favor, corrija o erro abaixo."
 
-#: templates/smuggler/import_data_form.html:55
-msgid "Import"
-msgstr "Importar"
+#: templates/smuggler/load_data_form.html:38
+msgid "Data from your computer"
+msgstr "Dados de seu computador"
+
+#: templates/smuggler/load_data_form.html:57
+#: templates/smuggler/load_data_form.html:101
+msgid "Load"
+msgstr "Carregar"
+
+#: templates/smuggler/load_data_form.html:60
+msgid "Load fixture and save on disk"
+msgstr "Carregar fixture e salvar no disco"
+
+#: templates/smuggler/load_data_form.html:75
+msgid "You need select at least one."
+msgstr "Você precisa selecionar ao menos um."
+
+#: templates/smuggler/load_data_form.html:80
+#, python-format
+msgid "Data from %(smuggler_fixture_dir)s directory"
+msgstr "Dados do diretório %(smuggler_fixture_dir)s"
+
+#: templates/smuggler/load_data_form.html:84
+msgid "File name"
+msgstr "Nome do arquivo"
+
+#: templates/smuggler/load_data_form.html:85
+msgid "Size"
+msgstr "Tamanho"

@@ -6,6 +6,7 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 
+import os
 from datetime import datetime
 from django.core import serializers
 from django.db.models import get_app, get_apps, get_model, get_models
@@ -13,12 +14,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-from smuggler.forms import ImportDataForm
-from smuggler.settings import SMUGGLER_FORMAT
-from smuggler.utils import (get_excluded_models_set, serialize_to_response,
+from smuggler.forms import ImportFileForm
+from smuggler.settings import SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR
+from smuggler.utils import (get_excluded_models_set, get_file_list,
+                            save_uploaded_file_on_disk, serialize_to_response,
                             superuser_required)
 
-def export_data(request):
+def dump_data(request):
     """Exports data from whole project.
     """
     objects = []
@@ -31,9 +33,9 @@ def export_data(request):
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return serialize_to_response(objects, response)
-export_data = superuser_required(export_data)
+dump_data = superuser_required(dump_data)
 
-def export_app_data(request, app_label):
+def dump_app_data(request, app_label):
     """Exports data from a application.
     """
     objects = []
@@ -46,9 +48,9 @@ def export_app_data(request, app_label):
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return serialize_to_response(objects, response)
-export_app_data = superuser_required(export_app_data)
+dump_app_data = superuser_required(dump_app_data)
 
-def export_model_data(request, app_label, model_label):
+def dump_model_data(request, app_label, model_label):
     """Exports data from a model.
     """
     model = get_model(app_label, model_label)
@@ -58,39 +60,63 @@ def export_model_data(request, app_label, model_label):
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return serialize_to_response(objects, response)
-export_model_data = superuser_required(export_model_data)
+dump_model_data = superuser_required(dump_model_data)
 
-def import_data(request):
-    """Import data from uploaded file.
+def load_data(request):
     """
+    Load data from uploaded file or disk.
+
+    Note: A uploaded file will be saved on `SMUGGLER_FIXTURE_DIR` if the submit
+          button with name "_loadandsave" was pressed.
+    """
+    form = ImportFileForm()
     if request.method == 'POST':
-        form = ImportDataForm(request.POST, request.FILES)
-        if form.is_valid():
-            uploaded_file = request.FILES['file']
-            if uploaded_file.multiple_chunks():
-                data = file(uploaded_file.temporary_file_path(), 'r')
-            else:
-                data = uploaded_file.read()
-            if uploaded_file.content_type == 'text/xml':
-                file_ext = 'xml'
-            elif uploaded_file.content_type == 'application/json':
-                file_ext = 'json'
-            else:
-                # Fallback to "json" because on some tests the ``content_type``
-                # of JSON files was "application/octet-stream".
-                file_ext = 'json'
-            objects = serializers.deserialize(file_ext, data)
+        data = []
+        if request.POST.has_key('_load') or request.POST.has_key('_loadandsave'):
+            form = ImportFileForm(request.POST, request.FILES)
+            if form.is_valid():
+                uploaded_file = request.FILES['file']
+                file_name = uploaded_file.name
+                file_format = file_name.split('.')[-1]
+                if request.POST.has_key('_loadandsave'):
+                    destination_path = os.path.join(SMUGGLER_FIXTURE_DIR,
+                                                    file_name)
+                    save_uploaded_file_on_disk(uploaded_file, destination_path)
+                    file_data = open(destination_path, 'r')
+                elif uploaded_file.multiple_chunks():
+                    file_data = open(uploaded_file.temporary_file_path(), 'r')
+                else:
+                    file_data = uploaded_file.read()
+                data.append((file_format, file_data))
+        elif request.POST.has_key('_loadfromdisk'):
+            query_dict = request.POST.copy()
+            del(query_dict['_loadfromdisk'])
+            selected_files = query_dict.values()
+            for file_name in selected_files:
+                file_path = os.path.join(SMUGGLER_FIXTURE_DIR, file_name)
+                file_format = file_name.split('.')[-1]
+                file_data = open(file_path, 'r')
+                data.append((file_format, file_data))
+        counter = 0
+        for format, stream in data:
+            objects = serializers.deserialize(format, stream)
             for obj in objects:
+                counter += 1
                 obj.save()
-            user_msg = _('Data imported with success.')
+        if data:
+            user_msg = ('%(obj_count)d object(s) from %(file_count)d file(s) '
+                        'loaded with success.') # TODO: pluralize
+            user_msg = _(user_msg) % {
+                'obj_count': counter,
+                'file_count': len(data)
+            }
             request.user.message_set.create(message=user_msg)
-            return HttpResponseRedirect('./')
-    else:
-        form = ImportDataForm()
-    context = {'form': form}
-    return render_to_response(
-        'smuggler/import_data_form.html',
-        context,
-        context_instance=RequestContext(request)
-    )
-import_data = superuser_required(import_data)
+    context = {
+        'files_available': get_file_list(SMUGGLER_FIXTURE_DIR) \
+            if SMUGGLER_FIXTURE_DIR else [],
+        'smuggler_fixture_dir': SMUGGLER_FIXTURE_DIR,
+        'import_file_form': form,
+    }
+    return render_to_response('smuggler/load_data_form.html', context,
+                              context_instance=RequestContext(request))
+dump_data = superuser_required(dump_data)

@@ -18,9 +18,9 @@ from smuggler import get_version
 setup(
     name = 'django-smuggler',
     version = get_version(),
-    description = 'import/export fixtures via Django admin interface',
+    description = 'dump/load fixtures via Django admin interface',
     long_description = ('Django Smuggler is a pluggable application for Django '
-                        'Web Framework for you easily import/export fixtures '
+                        'Web Framework for you easily dump/load fixtures '
                         'via the automatically-generated administration '
                         'interface. Especially useful for transporting data in '
                         'production for the development project and vice'

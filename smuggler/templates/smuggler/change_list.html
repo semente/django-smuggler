@@ -6,13 +6,13 @@
     <ul class="object-tools">
       {% if user.is_superuser %}
       <li>
-        <a href="export/">
-          {% trans "Export data" %}
+        <a href="dump/">
+          {% trans "Dump data" %}
         </a>
       </li>
       <li>
-        <a href="{% url import-data %}{% if is_popup %}?_popup=1{% endif %}">
-          {% trans "Import data" %}
+        <a href="{% url load-data %}{% if is_popup %}?_popup=1{% endif %}">
+          {% trans "Load data" %}
         </a>
       </li>
       {% endif %}
