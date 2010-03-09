@@ -134,7 +134,7 @@ If you find any problems in the code or documentation, please take 30 seconds
 to fill out a issue `here <http://github.com/semente/django-smuggler/issues>`_.
 
 The contributing with code or translation is MUCH-APPRECIATED. You feel free to
-create forks or send patchs.
+fork or send patchs.
 
 You can online translate this application to your language using
 Transifex. Access the `project page
