@@ -119,4 +119,4 @@ def load_data(request):
     }
     return render_to_response('smuggler/load_data_form.html', context,
                               context_instance=RequestContext(request))
-dump_data = superuser_required(dump_data)
+load_data = superuser_required(load_data)
