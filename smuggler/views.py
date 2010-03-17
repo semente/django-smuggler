@@ -89,8 +89,9 @@ def load_data(request):
                     file_data = uploaded_file.read()
                 data.append((file_format, file_data))
         elif request.POST.has_key('_loadfromdisk'):
-            query_dict = request.POST.copy()
+            query_dict = request.POST.copy()        
             del(query_dict['_loadfromdisk'])
+            del(query_dict['csrfmiddlewaretoken'])
             selected_files = query_dict.values()
             for file_name in selected_files:
                 file_path = os.path.join(SMUGGLER_FIXTURE_DIR, file_name)

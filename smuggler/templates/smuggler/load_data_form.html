@@ -30,6 +30,7 @@
 
 <div>
   <form enctype="multipart/form-data" method="post" action="">
+    {% csrf_token %}
     <div>
       {% if import_file_form.errors %}
         <p class="errornote">{% trans "Please correct the error below." %}</p>
@@ -68,6 +69,7 @@
   {% if files_available %}
     <div>
       <form method="post" action="">
+        {% csrf_token %}
         <div class="inline-group">
           {% comment %}
             # TODO: implement this error message
