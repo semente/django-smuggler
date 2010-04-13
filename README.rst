@@ -143,7 +143,7 @@ Transifex. Access the `project page
 See AUTHORS file for a complete authors list of this application.
 
 Thanks to `Interaction Consortium <http://interactionconsortium.com/>`_ for
-sponsoring the project. Donate you too!
+sponsoring the project.
 
 
 Copying conditions
