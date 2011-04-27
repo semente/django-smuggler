@@ -19,7 +19,7 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 
 #: forms.py:16
-msgid "Existing items with same <i>id</i> will be overwrited."
+msgid "Existing items with same <i>id</i> will be overwritten."
 msgstr "Rekordy o takim samym <i>id</i> zostaną nadpisane."
 
 #: forms.py:26

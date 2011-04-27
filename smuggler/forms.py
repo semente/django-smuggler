@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 class ImportFileForm(forms.Form):
     file = forms.FileField(
         label='File to load',
-        help_text=_('Existing items with same <i>id</i> will be overwrited.'),
+        help_text=_('Existing items with same <i>id</i> will be overwritten.'),
         required=True,
     )
 

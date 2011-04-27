@@ -19,7 +19,7 @@ msgstr ""
 #: forms.py:15
 msgid ""
 "Fixture file to import. <b>Note: existing items with same <i>id</i>, will be "
-"overwrited.</b>"
+"overwritten.</b>"
 msgstr ""
 
 #: views.py:82

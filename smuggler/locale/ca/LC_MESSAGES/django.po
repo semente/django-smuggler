@@ -18,7 +18,7 @@ msgstr ""
 "Language-Team: \n"
 
 #: forms.py:16
-msgid "Existing items with same <i>id</i> will be overwrited."
+msgid "Existing items with same <i>id</i> will be overwritten."
 msgstr "Els ítems amb la mateixa <i>id</i> seran sobreescrits."
 
 #: forms.py:26
