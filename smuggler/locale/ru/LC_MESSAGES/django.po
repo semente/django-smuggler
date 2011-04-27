@@ -19,7 +19,7 @@ msgstr ""
 #: forms.py:15
 msgid ""
 "Fixture file to import. <b>Note: existing items with same <i>id</i>, will be "
-"overwrited.</b>" 
+"overwritten.</b>" 
 msgstr ""
 "Файл данных (fixture) для импорта. <b>Внимание! Существующие записи с теми же <i>id</i> "
 "будут перезаписаны.</b>"

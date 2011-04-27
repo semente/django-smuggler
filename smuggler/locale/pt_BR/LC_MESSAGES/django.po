@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: forms.py:16
-msgid "Existing items with same <i>id</i> will be overwrited."
+msgid "Existing items with same <i>id</i> will be overwritten."
 msgstr "Itens existentes com o mesmo <i>id</i> serão sobrescritos."
 
 #: forms.py:26
