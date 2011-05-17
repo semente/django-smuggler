@@ -14,6 +14,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+from django.contrib import messages
+
 from smuggler.forms import ImportFileForm
 from smuggler.settings import SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR
 from smuggler.utils import (get_excluded_models_set, get_file_list,
@@ -111,7 +113,7 @@ def load_data(request):
                 'obj_count': counter,
                 'file_count': len(data)
             }
-            request.user.message_set.create(message=user_msg)
+            messages.add_message(request, messages.INFO, user_msg)
     context = {
         'files_available': get_file_list(SMUGGLER_FIXTURE_DIR) \
             if SMUGGLER_FIXTURE_DIR else [],
