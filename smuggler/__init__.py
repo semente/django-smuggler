@@ -11,14 +11,13 @@ Django Smuggler is a pluggable application for Django Web Framework that help
 you dump/load fixtures via the automatically-generated admin interface.
 """
 
-VERSION = (0, 2, 'pre')
+VERSION = (0, 2)
 
 def get_version():
     """
     Returns the version as a human-format string.
     """
-    v = '.'.join([str(i) for i in VERSION[:-1]])
-    return '%s-%s' % (v, VERSION[-1])
+    return '.'.join([str(i) for i in VERSION])
 
 __author__ = 'See the file AUTHORS.'
 __license__ = 'GNU Lesser General Public License (GPL), Version 3'
