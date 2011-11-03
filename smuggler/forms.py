@@ -8,6 +8,7 @@
 
 from django import forms
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.serializers import get_serializer_formats
 from django.utils.translation import ugettext as _
 
 class ImportFileForm(forms.Form):
@@ -22,6 +23,6 @@ class ImportFileForm(forms.Form):
         if not isinstance(data, InMemoryUploadedFile):
             return data
         file_format = data.name.split('.')[-1]
-        if not file_format in ['json', 'xml']:
+        if not file_format in get_serializer_formats():
             raise forms.ValidationError(_('Invalid file extension.'))
         return data
