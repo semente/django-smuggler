@@ -9,7 +9,10 @@
 import os
 from django.core import serializers
 from django.core.exceptions import PermissionDenied
+from django.core.management.color import no_style
+from django.db import connections, transaction
 from django.db.models import get_model
+from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
 from smuggler.settings import (SMUGGLER_EXCLUDE_LIST, SMUGGLER_FORMAT,
                                SMUGGLER_INDENT)
@@ -41,6 +44,42 @@ def serialize_to_response(queryset, response=HttpResponse(),
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
     serializers.serialize(format, queryset, indent=indent, stream=response)
     return response
+
+def load_requested_data(data):
+    """
+    Load the given data dumps and return the number of imported objects.
+
+    Wraps the entire action in a big transaction.
+    """
+    style = no_style()
+
+    using = DEFAULT_DB_ALIAS
+    connection = connections[using]
+    cursor = connection.cursor()
+
+    transaction.commit_unless_managed(using=using)
+    transaction.enter_transaction_management(using=using)
+    transaction.managed(True, using=using)
+    counter = 0
+    for format, stream in data:
+        try:
+            objects = serializers.deserialize(format, stream)
+            for i, obj in enumerate(objects):
+                counter += 1
+                obj.save()
+            if i > 0:
+                sequence_sql = connection.ops.sequence_reset_sql(style, objects)
+                if sequence_sql:
+                    for line in sequence_sql:
+                        cursor.execute(line)
+        except Exception, e:
+            transaction.rollback(using=using)
+            transaction.leave_transaction_management(using=using)
+            raise e
+    transaction.commit(using=using)
+    transaction.leave_transaction_management(using=using)
+    connection.close()
+    return counter
 
 def superuser_required(function):
     """
