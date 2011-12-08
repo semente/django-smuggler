@@ -5,6 +5,7 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
+from __future__ import with_statement
 
 import os
 from django.core import serializers
@@ -60,22 +61,28 @@ def load_requested_data(data):
     transaction.commit_unless_managed(using=using)
     transaction.enter_transaction_management(using=using)
     transaction.managed(True, using=using)
+    
+    models = set()
     counter = 0
-    for format, stream in data:
-        try:
+    try:
+        for format, stream in data:
             objects = serializers.deserialize(format, stream)
-            for i, obj in enumerate(objects):
-                counter += 1
-                obj.save()
-            if i > 0:
-                sequence_sql = connection.ops.sequence_reset_sql(style, objects)
-                if sequence_sql:
-                    for line in sequence_sql:
-                        cursor.execute(line)
-        except Exception, e:
-            transaction.rollback(using=using)
-            transaction.leave_transaction_management(using=using)
-            raise e
+            with connection.constraint_checks_disabled():
+                for obj in objects:
+                    models.add(obj.object.__class__)
+                    counter += 1
+                    obj.save(using=using)
+        if counter > 0:
+            sequence_sql = connection.ops.sequence_reset_sql(style, models)
+            if sequence_sql:
+                for line in sequence_sql:
+                    cursor.execute(line)
+        table_names = [model._meta.db_table for model in models]
+        connection.check_constraints(table_names=table_names)
+    except Exception, e:
+        transaction.rollback(using=using)
+        transaction.leave_transaction_management(using=using)
+        raise e
     transaction.commit(using=using)
     transaction.leave_transaction_management(using=using)
     connection.close()
