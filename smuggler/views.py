@@ -10,7 +10,6 @@ import os
 from datetime import datetime
 from django.core import serializers
 from django.db.models import get_app, get_apps, get_model, get_models
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -22,6 +21,17 @@ from smuggler.utils import (get_excluded_models_set, get_file_list,
                             save_uploaded_file_on_disk, serialize_to_response,
                             superuser_required)
 
+
+def dump_to_response(objects, filename_prefix=None):
+    """Utility function that dumps the given objects to an HttpResponse.
+    """
+    filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
+    if filename_prefix:
+        filename = '%s_%s' % (filename_prefix, filename)
+    response = serialize_to_response(objects)
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    return response
+
 def dump_data(request):
     """Exports data from whole project.
     """
@@ -31,10 +41,7 @@ def dump_data(request):
         for model in models:
             if not model._meta.proxy:
                 objects.extend(model._default_manager.all())
-    filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
-    response = HttpResponse(mimetype="text/plain")
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    return serialize_to_response(objects, response)
+    return dump_to_response(objects)
 dump_data = superuser_required(dump_data)
 
 def dump_app_data(request, app_label):
@@ -45,11 +52,7 @@ def dump_app_data(request, app_label):
     for model in models:
         if not model._meta.proxy:
             objects.extend(model._default_manager.all())
-    filename = '%s_%s.%s' % (app_label, datetime.now().isoformat(),
-                             SMUGGLER_FORMAT)
-    response = HttpResponse(mimetype="text/plain")
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    return serialize_to_response(objects, response)
+    return dump_to_response(objects, app_label)
 dump_app_data = superuser_required(dump_app_data)
 
 def dump_model_data(request, app_label, model_label):
@@ -57,11 +60,7 @@ def dump_model_data(request, app_label, model_label):
     """
     model = get_model(app_label, model_label)
     objects = model._default_manager.all()
-    filename = '%s-%s_%s.%s' % (app_label, model_label,
-                                datetime.now().isoformat(), SMUGGLER_FORMAT)
-    response = HttpResponse(mimetype="text/plain")
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    return serialize_to_response(objects, response)
+    return dump_to_response(objects, '-'.join((app_label, model_label)))
 dump_model_data = superuser_required(dump_model_data)
 
 def load_data(request):

@@ -37,7 +37,8 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
         destination.write(chunk)
     destination.close()
 
-def serialize_to_response(queryset, response=HttpResponse(),
+def serialize_to_response(queryset,
+                          response=HttpResponse(mimetype='text/plain'),
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
     serializers.serialize(format, queryset, indent=indent, stream=response)
     return response
