@@ -7,8 +7,8 @@
 # Software Foundation. See the file README for copying conditions.
 
 import os
-from django.core import serializers
 from django.core.exceptions import PermissionDenied
+from django.core.management.commands.dumpdata import Command as DumpData
 from django.db.models import get_model
 from django.http import HttpResponse
 from smuggler.settings import (SMUGGLER_EXCLUDE_LIST, SMUGGLER_FORMAT,
@@ -37,9 +37,15 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
         destination.write(chunk)
     destination.close()
 
-def serialize_to_response(queryset, response=HttpResponse(),
+def serialize_to_response(app_labels=[], exclude=[], response=HttpResponse(),
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
-    serializers.serialize(format, queryset, indent=indent, stream=response)
+    response.write(DumpData().handle(*app_labels, **{
+        'exclude': exclude,
+        'format': format,
+        'indent': indent,
+        'show_traceback': True,
+        'use_natural_keys': True
+    }))
     return response
 
 def superuser_required(function):

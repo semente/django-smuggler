@@ -17,7 +17,8 @@ from django.utils.translation import ugettext as _
 from django.contrib import messages
 
 from smuggler.forms import ImportFileForm
-from smuggler.settings import SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR
+from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR,
+                               SMUGGLER_EXCLUDE_LIST)
 from smuggler.utils import (get_excluded_models_set, get_file_list,
                             save_uploaded_file_on_disk, serialize_to_response,
                             superuser_required)
@@ -25,43 +26,30 @@ from smuggler.utils import (get_excluded_models_set, get_file_list,
 def dump_data(request):
     """Exports data from whole project.
     """
-    objects = []
-    for app in get_apps():
-        models = set(get_models(app)) - get_excluded_models_set()
-        for model in models:
-            if not model._meta.proxy:
-                objects.extend(model._default_manager.all())
     filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    return serialize_to_response(objects, response)
+    return serialize_to_response(exclude=SMUGGLER_EXCLUDE_LIST, response=response)
 dump_data = superuser_required(dump_data)
 
 def dump_app_data(request, app_label):
     """Exports data from a application.
     """
-    objects = []
-    models = set(get_models(get_app(app_label))) - get_excluded_models_set()
-    for model in models:
-        if not model._meta.proxy:
-            objects.extend(model._default_manager.all())
     filename = '%s_%s.%s' % (app_label, datetime.now().isoformat(),
                              SMUGGLER_FORMAT)
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    return serialize_to_response(objects, response)
+    return serialize_to_response([app_label], response=response)
 dump_app_data = superuser_required(dump_app_data)
 
 def dump_model_data(request, app_label, model_label):
     """Exports data from a model.
     """
-    model = get_model(app_label, model_label)
-    objects = model._default_manager.all()
     filename = '%s-%s_%s.%s' % (app_label, model_label,
                                 datetime.now().isoformat(), SMUGGLER_FORMAT)
     response = HttpResponse(mimetype="text/plain")
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    return serialize_to_response(objects, response)
+    return serialize_to_response(['%s.%s' % (app_label, model_label)], response=response)
 dump_model_data = superuser_required(dump_model_data)
 
 def load_data(request):
