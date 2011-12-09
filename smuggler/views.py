@@ -9,7 +9,6 @@
 import os
 from datetime import datetime
 from django.core import serializers
-from django.db.models import get_app, get_apps, get_model, get_models
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -18,7 +17,7 @@ from django.contrib import messages
 from smuggler.forms import ImportFileForm
 from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR,
                                SMUGGLER_EXCLUDE_LIST)
-from smuggler.utils import (get_excluded_models_set, get_file_list,
+from smuggler.utils import (get_file_list,
                             save_uploaded_file_on_disk, serialize_to_response,
                             superuser_required)
 

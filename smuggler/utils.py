@@ -9,17 +9,8 @@
 import os
 from django.core.exceptions import PermissionDenied
 from django.core.management.commands.dumpdata import Command as DumpData
-from django.db.models import get_model
 from django.http import HttpResponse
-from smuggler.settings import (SMUGGLER_EXCLUDE_LIST, SMUGGLER_FORMAT,
-                               SMUGGLER_INDENT)
-
-def get_excluded_models_set():
-    excluded_models = set([])
-    for label in SMUGGLER_EXCLUDE_LIST:
-        app_label, model_label = label.split('.')
-        excluded_models.add(get_model(app_label, model_label))
-    return excluded_models
+from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_INDENT)
 
 def get_file_list(path):
     file_list = []
