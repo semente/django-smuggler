@@ -37,8 +37,9 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
         destination.write(chunk)
     destination.close()
 
-def serialize_to_response(app_labels=[], exclude=[], response=HttpResponse(),
+def serialize_to_response(app_labels=[], exclude=[], response=None,
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
+    response = response or HttpResponse(mimetype='text/plain')
     response.write(DumpData().handle(*app_labels, **{
         'exclude': exclude,
         'format': format,
