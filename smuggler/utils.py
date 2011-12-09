@@ -5,13 +5,11 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
-from __future__ import with_statement
-
 import os
 from django.core import serializers
 from django.core.exceptions import PermissionDenied
 from django.core.management.color import no_style
-from django.db import connections, transaction
+from django.db import connections, router, transaction
 from django.db.models import get_model
 from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
@@ -67,9 +65,10 @@ def load_requested_data(data):
     try:
         for format, stream in data:
             objects = serializers.deserialize(format, stream)
-            with connection.constraint_checks_disabled():
-                for obj in objects:
-                    models.add(obj.object.__class__)
+            for obj in objects:
+                model = obj.object.__class__
+                if router.allow_syncdb(using, model):
+                    models.add(model)
                     counter += 1
                     obj.save(using=using)
         if counter > 0:
@@ -77,8 +76,6 @@ def load_requested_data(data):
             if sequence_sql:
                 for line in sequence_sql:
                     cursor.execute(line)
-        table_names = [model._meta.db_table for model in models]
-        connection.check_constraints(table_names=table_names)
     except Exception, e:
         transaction.rollback(using=using)
         transaction.leave_transaction_management(using=using)
