@@ -5,23 +5,15 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
-import os
-from django.core import serializers
-from django.core.exceptions import PermissionDenied
-from django.core.management.color import no_style
-from django.db import connections, router, transaction
-from django.db.models import get_model
-from django.db.utils import DEFAULT_DB_ALIAS
-from django.http import HttpResponse
-from smuggler.settings import (SMUGGLER_EXCLUDE_LIST, SMUGGLER_FORMAT,
-                               SMUGGLER_INDENT)
 
-def get_excluded_models_set():
-    excluded_models = set([])
-    for label in SMUGGLER_EXCLUDE_LIST:
-        app_label, model_label = label.split('.')
-        excluded_models.add(get_model(app_label, model_label))
-    return excluded_models
+import os
+
+from django.core.exceptions import PermissionDenied
+from django.core.management.commands.dumpdata import Command as DumpData
+from django.http import HttpResponse
+
+from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_INDENT)
+
 
 def get_file_list(path):
     file_list = []
@@ -33,23 +25,33 @@ def get_file_list(path):
     file_list.sort()
     return file_list
 
+
 def save_uploaded_file_on_disk(uploaded_file, destination_path):
     destination = open(destination_path, 'w')
     for chunk in uploaded_file.chunks():
         destination.write(chunk)
     destination.close()
 
-def serialize_to_response(queryset,
-                          response=HttpResponse(mimetype='text/plain'),
+
+def serialize_to_response(app_labels=[], exclude=[], response=None,
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
-    serializers.serialize(format, queryset, indent=indent, stream=response)
+    response = response or HttpResponse(mimetype='text/plain')
+    response.write(DumpData().handle(*app_labels, **{
+        'exclude': exclude,
+        'format': format,
+        'indent': indent,
+        'show_traceback': True,
+        'use_natural_keys': True
+    }))
     return response
+
 
 def load_requested_data(data):
     """
     Load the given data dumps and return the number of imported objects.
 
     Wraps the entire action in a big transaction.
+
     """
     style = no_style()
 
@@ -86,10 +88,12 @@ def load_requested_data(data):
     connection.close()
     return counter
 
+
 def superuser_required(function):
     """
     Decorator for views that checks if the logged user is a superuser. In other
     words, deny access from non-superusers.
+
     """
     def _inner(request, *args, **kwargs):
         if not request.user.is_superuser:
