@@ -19,7 +19,7 @@ from smuggler.forms import ImportFileForm
 from smuggler.settings import SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR
 from smuggler.utils import (get_excluded_models_set, get_file_list,
                             save_uploaded_file_on_disk, serialize_to_response,
-                            superuser_required)
+                            superuser_required, load_requested_data)
 
 
 def dump_to_response(objects, filename_prefix=None):
@@ -99,17 +99,12 @@ def load_data(request):
                 file_format = file_name.split('.')[-1]
                 file_data = open(file_path, 'r')
                 data.append((file_format, file_data))
-        counter = 0
-        for format, stream in data:
-            objects = serializers.deserialize(format, stream)
-            for obj in objects:
-                counter += 1
-                obj.save()
         if data:
+            obj_count = load_requested_data(data)
             user_msg = ('%(obj_count)d object(s) from %(file_count)d file(s) '
                         'loaded with success.') # TODO: pluralize
             user_msg = _(user_msg) % {
-                'obj_count': counter,
+                'obj_count': obj_count,
                 'file_count': len(data)
             }
             messages.add_message(request, messages.INFO, user_msg)
