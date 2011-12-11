@@ -9,58 +9,47 @@
 import os
 from datetime import datetime
 from django.core import serializers
-from django.db.models import get_app, get_apps, get_model, get_models
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.contrib import messages
 
 from smuggler.forms import ImportFileForm
-from smuggler.settings import SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR
-from smuggler.utils import (get_excluded_models_set, get_file_list,
+from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR,
+                               SMUGGLER_EXCLUDE_LIST)
+from smuggler.utils import (get_file_list,
                             save_uploaded_file_on_disk, serialize_to_response,
                             superuser_required)
 
 
-def dump_to_response(objects, filename_prefix=None):
-    """Utility function that dumps the given objects to an HttpResponse.
+def dump_to_response(app_label=None, exclude=[], filename_prefix=None):
+    """Utility function that dumps the given app/model to an HttpResponse.
     """
     filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
     if filename_prefix:
         filename = '%s_%s' % (filename_prefix, filename)
-    response = serialize_to_response(objects)
+    response = serialize_to_response(app_label and [app_label] or [], exclude)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
 
 def dump_data(request):
     """Exports data from whole project.
     """
-    objects = []
-    for app in get_apps():
-        models = set(get_models(app)) - get_excluded_models_set()
-        for model in models:
-            if not model._meta.proxy:
-                objects.extend(model._default_manager.all())
-    return dump_to_response(objects)
+    return dump_to_response(exclude=SMUGGLER_EXCLUDE_LIST)
 dump_data = superuser_required(dump_data)
 
 def dump_app_data(request, app_label):
     """Exports data from a application.
     """
-    objects = []
-    models = set(get_models(get_app(app_label))) - get_excluded_models_set()
-    for model in models:
-        if not model._meta.proxy:
-            objects.extend(model._default_manager.all())
-    return dump_to_response(objects, app_label)
+    return dump_to_response(app_label, SMUGGLER_EXCLUDE_LIST, app_label)
 dump_app_data = superuser_required(dump_app_data)
 
 def dump_model_data(request, app_label, model_label):
     """Exports data from a model.
     """
-    model = get_model(app_label, model_label)
-    objects = model._default_manager.all()
-    return dump_to_response(objects, '-'.join((app_label, model_label)))
+    return dump_to_response('%s.%s' % (app_label, model_label),
+                            [],
+                            '-'.join((app_label, model_label)))
 dump_model_data = superuser_required(dump_model_data)
 
 def load_data(request):
