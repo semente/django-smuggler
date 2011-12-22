@@ -87,16 +87,3 @@ def load_requested_data(data):
     transaction.leave_transaction_management(using=using)
     connection.close()
     return counter
-
-
-def superuser_required(function):
-    """
-    Decorator for views that checks if the logged user is a superuser. In other
-    words, deny access from non-superusers.
-
-    """
-    def _inner(request, *args, **kwargs):
-        if not request.user.is_superuser:
-            raise PermissionDenied
-        return function(request, *args, **kwargs)
-    return _inner
