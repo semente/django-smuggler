@@ -8,6 +8,8 @@
 
 import os
 from datetime import datetime
+from django.core.management.base import CommandError
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -22,38 +24,42 @@ from smuggler.utils import (get_file_list,
                             load_requested_data)
 
 
-def dump_to_response(app_label=None, exclude=[], filename_prefix=None):
+def dump_to_response(request, app_label=None, exclude=[], filename_prefix=None):
     """Utility function that dumps the given app/model to an HttpResponse.
     """
-    filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
-    if filename_prefix:
-        filename = '%s_%s' % (filename_prefix, filename)
-    response = serialize_to_response(app_label and [app_label] or [], exclude)
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    return response
+    try:
+        filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
+        if filename_prefix:
+            filename = '%s_%s' % (filename_prefix, filename)
+        response = serialize_to_response(app_label and [app_label] or [], exclude)
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+        return response
+    except CommandError, e:
+        messages.add_message(request, messages.ERROR, str(e))
+    return HttpResponseRedirect(request.build_absolute_uri().split('dump')[0])
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def dump_data(request):
     """Exports data from whole project.
     """
-    return dump_to_response(exclude=SMUGGLER_EXCLUDE_LIST)
+    return dump_to_response(request, exclude=SMUGGLER_EXCLUDE_LIST)
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def dump_app_data(request, app_label):
     """Exports data from a application.
     """
-    return dump_to_response(app_label, SMUGGLER_EXCLUDE_LIST, app_label)
+    return dump_to_response(request, app_label, SMUGGLER_EXCLUDE_LIST,
+                            app_label)
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def dump_model_data(request, app_label, model_label):
     """Exports data from a model.
     """
-    return dump_to_response('%s.%s' % (app_label, model_label),
-                            [],
-                            '-'.join((app_label, model_label)))
+    return dump_to_response(request, '%s.%s' % (app_label, model_label),
+                            [], '-'.join((app_label, model_label)))
 
 
 @user_passes_test(lambda u: u.is_superuser)
