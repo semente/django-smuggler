@@ -7,8 +7,12 @@
 # Software Foundation. See the file README for copying conditions.
 
 import os
+from django.core import serializers
+from django.core.management.color import no_style
 
 from django.core.management.commands.dumpdata import Command as DumpData
+from django.db import connections, transaction, router
+from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
 
 from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_INDENT)
