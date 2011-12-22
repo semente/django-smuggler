@@ -8,7 +8,6 @@
 
 import os
 
-from django.core.exceptions import PermissionDenied
 from django.core.management.commands.dumpdata import Command as DumpData
 from django.http import HttpResponse
 
