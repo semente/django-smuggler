@@ -133,17 +133,17 @@ Contributing
 If you find any problems in the code or documentation, please take 30 seconds
 to fill out a issue `here <http://github.com/semente/django-smuggler/issues>`_.
 
-The contributing with code or translation is MUCH-APPRECIATED. You feel free to
+The contributing with code or translation is MUCH-APPRECIATED. Feel free to
 fork or send patchs.
 
-You can online translate this application to your language using
-Transifex. Access the `project page
-<https://www.transifex.net/projects/p/django-smuggler/.>`_ on Transifex.
+You can translate this application to your language using Transifex. Access
+the `project page <https://www.transifex.net/projects/p/django-smuggler/.>`_
+on Transifex.
 
-See AUTHORS file for a complete authors list of this application.
+See the AUTHORS file for a complete authors list of this application.
 
 Thanks to `Interaction Consortium <http://interactionconsortium.com/>`_ for
-sponsoring the project.
+sponsoring the first releases of the project.
 
 
 Copying conditions
