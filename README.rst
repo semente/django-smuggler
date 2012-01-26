@@ -8,7 +8,7 @@ interface. Especially useful for transporting data in production for the
 development project and vice versa, but can also be used as a backup tool.
 
 Project page
-    http://github.com/sement/django-smuggler
+    http://github.com/semente/django-smuggler
 Translations
     https://www.transifex.net/projects/p/django-smuggler/
 
