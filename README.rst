@@ -134,10 +134,12 @@ Version 0.3 (2012-01-31)
 * Added Dutch translation.
 
 
-Version 0.2 (2012-01-31)
+Version 0.2 (2011-08-19)
 ------------------------
 
 * Django 1.2+ support;
+
+* Keep uploaded files as alternative choices to import (issues #1 and #6)
 
 * Vulnerability fixed (d73cec6);
 
