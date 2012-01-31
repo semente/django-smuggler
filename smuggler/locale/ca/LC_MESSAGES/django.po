@@ -1,6 +1,6 @@
 # Copyright (c) 2010, 2011, 2012 Guilherme Gondim and contributors
 # This file is distributed under the same license as the django-smuggler package.
-#
+# 
 # Translators:
 # angularcircle <angular.circle+translation@gmail.com>, 2010.
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Django Smuggler\n"
 "Report-Msgid-Bugs-To: http://github.com/semente/django-smuggler/issues\n"
 "POT-Creation-Date: 2012-01-31 08:08-0200\n"
-"PO-Revision-Date: 2012-01-31 09:57-0200\n"
+"PO-Revision-Date: 2012-01-31 11:48+0000\n"
 "Last-Translator: Guilherme Gondim <semente+transifex@taurinus.org>\n"
 "Language-Team: Catalan (http://www.transifex.net/projects/p/django-smuggler/team/ca/)\n"
 "MIME-Version: 1.0\n"
