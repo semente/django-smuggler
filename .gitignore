@@ -5,6 +5,7 @@
 ._*
 .#*
 *#
-dist
-build
+build/
+dist/
+django_smuggler.egg-info/
 README.html
