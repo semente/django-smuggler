@@ -5,18 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Django Smuggler v0.2\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-31 09:59+0100\n"
-"PO-Revision-Date: 2010-10-18 22:31+0100\n"
-"Last-Translator: el_libre - - www.catmidia.cat <el.libre@gmail.com>\n"
+"PO-Revision-Date: 2012-01-31 08:34-0200\n"
+"Last-Translator: el_libre - www.catmidia.cat <el.libre@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: forms.py:17
 msgid "Existing items with same <i>id</i> will be overwritten."
