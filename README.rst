@@ -115,6 +115,41 @@ Load form:
    :align: center
 
 
+Release notes
+=============
+
+Version 0.4 (in development)
+----------------------------
+
+* *Nothing yet*
+
+
+Version 0.3 (2012-01-31)
+------------------------
+
+* Significant bug fixes and improvements during loading and exporting data;
+
+* Allow formats for import besides JSON and XML (aa105b3, needs documentation)
+
+* Added Dutch translation.
+
+
+Version 0.2 (2012-01-31)
+------------------------
+
+* Django 1.2+ support;
+
+* Vulnerability fixed (d73cec6);
+
+* Added Polish, Russian, Catalan and Brazilian Portuguese translations.
+
+
+Version 0.1.1 (2010-01-20)
+--------------------------
+
+* First stable version.
+
+
 
 Backwards-incompatible changes
 ==============================
