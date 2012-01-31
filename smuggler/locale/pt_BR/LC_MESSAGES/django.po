@@ -6,22 +6,33 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: django-l10n-portuguese <django-l10n-portuguese@googlegroups.com>\n"
-"POT-Creation-Date: 2010-02-12 16:36-0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-31 09:59+0100\n"
 "PO-Revision-Date: 2010-02-12 16:40-0200\n"
 "Last-Translator: \n"
-"Language-Team: django-l10n-portuguese <django-l10n-portuguese@googlegroups.com>\n"
+"Language-Team: django-l10n-portuguese <django-l10n-portuguese@googlegroups."
+"com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:16
+#: forms.py:17
 msgid "Existing items with same <i>id</i> will be overwritten."
 msgstr "Itens existentes com o mesmo <i>id</i> serão sobrescritos."
 
-#: forms.py:26
+#: forms.py:27
 msgid "Invalid file extension."
 msgstr "Extensão de arquivo inválida."
+
+#: views.py:41
+#, python-format
+msgid "An exception occurred while dumping data: %s"
+msgstr ""
+
+#: views.py:117
+#, python-format
+msgid "An exception occurred while loading data: %s"
+msgstr ""
 
 #: templates/smuggler/change_list.html:10
 msgid "Dump data"
@@ -43,36 +54,35 @@ msgstr "Adicionar %(name)s"
 msgid "Home"
 msgstr "Início"
 
-#: templates/smuggler/load_data_form.html:35
+#: templates/smuggler/load_data_form.html:36
 msgid "Please correct the error below."
 msgstr "Por favor, corrija o erro abaixo."
 
-#: templates/smuggler/load_data_form.html:38
+#: templates/smuggler/load_data_form.html:39
 msgid "Data from your computer"
 msgstr "Dados de seu computador"
 
-#: templates/smuggler/load_data_form.html:57
-#: templates/smuggler/load_data_form.html:101
+#: templates/smuggler/load_data_form.html:58
+#: templates/smuggler/load_data_form.html:104
 msgid "Load"
 msgstr "Carregar"
 
-#: templates/smuggler/load_data_form.html:60
+#: templates/smuggler/load_data_form.html:61
 msgid "Load fixture and save on disk"
 msgstr "Carregar fixture e salvar no disco"
 
-#: templates/smuggler/load_data_form.html:75
-msgid "You need select at least one."
-msgstr "Você precisa selecionar ao menos um."
-
-#: templates/smuggler/load_data_form.html:80
+#: templates/smuggler/load_data_form.html:83
 #, python-format
 msgid "Data from %(smuggler_fixture_dir)s directory"
 msgstr "Dados do diretório %(smuggler_fixture_dir)s"
 
-#: templates/smuggler/load_data_form.html:84
+#: templates/smuggler/load_data_form.html:87
 msgid "File name"
 msgstr "Nome do arquivo"
 
-#: templates/smuggler/load_data_form.html:85
+#: templates/smuggler/load_data_form.html:88
 msgid "Size"
 msgstr "Tamanho"
+
+#~ msgid "You need select at least one."
+#~ msgstr "Você precisa selecionar ao menos um."

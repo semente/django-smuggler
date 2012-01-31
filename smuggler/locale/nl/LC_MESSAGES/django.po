@@ -2,95 +2,86 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-31 09:59+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: MyFreeWeb <me@myfreeweb.ru>\n"
+"PO-Revision-Date: 2012-01-31 10:05\n"
+"Last-Translator: Jaap Roes <jaap@eight.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Translated-Using: django-rosetta 0.6.5\n"
 
 #: forms.py:17
-#, fuzzy
 msgid "Existing items with same <i>id</i> will be overwritten."
-msgstr ""
-"Файл данных (fixture) для импорта. <b>Внимание! Существующие записи с теми "
-"же <i>id</i> будут перезаписаны.</b>"
+msgstr "Bestaande objecten met dezelfde <i>id</i> worden overschreven!"
 
 #: forms.py:27
 msgid "Invalid file extension."
-msgstr ""
+msgstr "Ongeldige bestandsextensie."
 
 #: views.py:41
 #, python-format
 msgid "An exception occurred while dumping data: %s"
-msgstr ""
+msgstr "Er is een fout opgetreden tijdens het exporteren van de data: %s"
 
 #: views.py:117
 #, python-format
 msgid "An exception occurred while loading data: %s"
-msgstr ""
+msgstr "Er is een fout opgetreden tijdens het importeren van de data: %s"
 
 #: templates/smuggler/change_list.html:10
-#, fuzzy
 msgid "Dump data"
-msgstr "Импортировать данные"
+msgstr "Exporteer data"
 
 #: templates/smuggler/change_list.html:15
 #: templates/smuggler/load_data_form.html:4
 #: templates/smuggler/load_data_form.html:24
 #: templates/smuggler/load_data_form.html:29
-#, fuzzy
 msgid "Load data"
-msgstr "Экспортировать данные"
+msgstr "Importeer data"
 
 #: templates/smuggler/change_list.html:21
 #, python-format
 msgid "Add %(name)s"
-msgstr ""
+msgstr "%(name)s toevoegen"
 
 #: templates/smuggler/load_data_form.html:23
 msgid "Home"
-msgstr "Домой"
+msgstr "Voorpagina"
 
 #: templates/smuggler/load_data_form.html:36
 msgid "Please correct the error below."
-msgstr "Пожалуйста, исправьте следующую ошибку:"
+msgstr "Herstel de fout hieronder"
 
 #: templates/smuggler/load_data_form.html:39
 msgid "Data from your computer"
-msgstr ""
+msgstr "Gegevens van uw computer"
 
 #: templates/smuggler/load_data_form.html:58
 #: templates/smuggler/load_data_form.html:104
 msgid "Load"
-msgstr ""
+msgstr "Importeer"
 
 #: templates/smuggler/load_data_form.html:61
 msgid "Load fixture and save on disk"
-msgstr ""
+msgstr "Fixture importeren en op schijf opslaan"
 
 #: templates/smuggler/load_data_form.html:83
 #, python-format
 msgid "Data from %(smuggler_fixture_dir)s directory"
-msgstr ""
+msgstr "Gegevens uit de directory %(smuggler_fixture_dir)s"
 
 #: templates/smuggler/load_data_form.html:87
 msgid "File name"
-msgstr ""
+msgstr "Bestandsnaam"
 
 #: templates/smuggler/load_data_form.html:88
 msgid "Size"
-msgstr ""
-
-#~ msgid "Data imported with success."
-#~ msgstr "Данные успешно импортированы."
-
-#~ msgid "Import"
-#~ msgstr "Импорт"
+msgstr "Grootte"
