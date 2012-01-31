@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.net
+
+[django-smuggler.master]
+file_filter = smuggler/locale/<lang>/LC_MESSAGES/django.po
+source_file = smuggler/locale/en/LC_MESSAGES/django.po
+source_lang = en
+
