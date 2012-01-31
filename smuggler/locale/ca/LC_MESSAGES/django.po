@@ -1,21 +1,21 @@
-# Django Smuggler locale.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# angularcircle <angular.circle+translation@gmail.com>, 2010.
+# Copyright (c) 2010, 2011, 2012 Guilherme Gondim and contributors
+# This file is distributed under the same license as the django-smuggler package.
 #
+# Translators:
+# angularcircle <angular.circle+translation@gmail.com>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-31 09:59+0100\n"
-"PO-Revision-Date: 2012-01-31 08:34-0200\n"
-"Last-Translator: el_libre - www.catmidia.cat <el.libre@gmail.com>\n"
-"Language-Team: \n"
+"Project-Id-Version: Django Smuggler\n"
+"Report-Msgid-Bugs-To: http://github.com/semente/django-smuggler/issues\n"
+"POT-Creation-Date: 2012-01-31 08:08-0200\n"
+"PO-Revision-Date: 2012-01-31 09:57-0200\n"
+"Last-Translator: Guilherme Gondim <semente+transifex@taurinus.org>\n"
+"Language-Team: Catalan (http://www.transifex.net/projects/p/django-smuggler/team/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: ca\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: forms.py:17
 msgid "Existing items with same <i>id</i> will be overwritten."
@@ -51,7 +51,6 @@ msgstr "Carrega dades"
 msgid "Add %(name)s"
 msgstr "Afegeix %(name)s"
 
-# Following Django admin translation
 #: templates/smuggler/load_data_form.html:23
 msgid "Home"
 msgstr "Inici"
@@ -86,5 +85,4 @@ msgstr "Nom de fitxer"
 msgid "Size"
 msgstr "Mida"
 
-#~ msgid "You need select at least one."
-#~ msgstr "Necessites seleccionar almenys una."
+
