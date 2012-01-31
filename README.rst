@@ -127,7 +127,7 @@ Version 0.4 (in development)
 Version 0.3 (2012-01-31)
 ------------------------
 
-* Significant bug fixes and improvements during loading and exporting data;
+* Significant bug fixes and improvements when loading and exporting data;
 
 * Allow formats for import besides JSON and XML (aa105b3, needs documentation)
 
