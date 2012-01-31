@@ -8,7 +8,9 @@
 
 import os
 from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import CommandError
+from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -35,7 +37,8 @@ def dump_to_response(request, app_label=None, exclude=[], filename_prefix=None):
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
         return response
     except CommandError, e:
-        messages.add_message(request, messages.ERROR, str(e))
+        messages.add_message(request, messages.ERROR,
+             _('An exception occurred while dumping data: %s' % unicode(e)))
     return HttpResponseRedirect(request.build_absolute_uri().split('dump')[0])
 
 
@@ -100,14 +103,19 @@ def load_data(request):
                 file_data = open(file_path, 'r')
                 data.append((file_format, file_data))
         if data:
-            obj_count = load_requested_data(data)
-            user_msg = ('%(obj_count)d object(s) from %(file_count)d file(s) '
-                        'loaded with success.') # TODO: pluralize
-            user_msg = _(user_msg) % {
-                'obj_count': obj_count,
-                'file_count': len(data)
-            }
-            messages.add_message(request, messages.INFO, user_msg)
+            try:
+                obj_count = load_requested_data(data)
+                user_msg = ('%(obj_count)d object(s) from %(file_count)d file(s) '
+                            'loaded with success.') # TODO: pluralize
+                user_msg = _(user_msg) % {
+                    'obj_count': obj_count,
+                    'file_count': len(data)
+                }
+                messages.add_message(request, messages.INFO, user_msg)
+            except (IntegrityError, ObjectDoesNotExist), e:
+                messages.add_message(request, messages.ERROR,
+                    _(u'An exception occurred while loading data: %s')
+                        % unicode(e))
     context = {
         'files_available': get_file_list(SMUGGLER_FIXTURE_DIR) \
             if SMUGGLER_FIXTURE_DIR else [],
