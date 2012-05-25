@@ -2,14 +2,15 @@
 # This file is distributed under the same license as the django-smuggler package.
 # 
 # Translators:
+# Eugene MechanisM <contact@mechanism.name>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Smuggler\n"
 "Report-Msgid-Bugs-To: http://github.com/semente/django-smuggler/issues\n"
 "POT-Creation-Date: 2012-01-31 08:08-0200\n"
-"PO-Revision-Date: 2012-01-31 11:48+0000\n"
-"Last-Translator: Guilherme Gondim <semente+transifex@taurinus.org>\n"
-"Language-Team: Russian (http://www.transifex.net/projects/p/django-smuggler/team/ru/)\n"
+"PO-Revision-Date: 2012-05-25 21:45+0000\n"
+"Last-Translator: Eugene MechanisM <contact@mechanism.name>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/django-smuggler/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,37 +19,37 @@ msgstr ""
 
 #: forms.py:17
 msgid "Existing items with same <i>id</i> will be overwritten."
-msgstr ""
+msgstr "Существующие элементы с одинаковыми <i>id</i> будут перезаписаны."
 
 #: forms.py:27
 msgid "Invalid file extension."
-msgstr ""
+msgstr "Неправильное расширение."
 
 #: views.py:41
 #, python-format
 msgid "An exception occurred while dumping data: %s"
-msgstr ""
+msgstr "Исключение при выгрузке данных: %s"
 
 #: views.py:117
 #, python-format
 msgid "An exception occurred while loading data: %s"
-msgstr ""
+msgstr "Исключение при загрузке данных: %s"
 
 #: templates/smuggler/change_list.html:10
 msgid "Dump data"
-msgstr ""
+msgstr "Выгрузить данные"
 
 #: templates/smuggler/change_list.html:15
 #: templates/smuggler/load_data_form.html:4
 #: templates/smuggler/load_data_form.html:24
 #: templates/smuggler/load_data_form.html:29
 msgid "Load data"
-msgstr ""
+msgstr "Загрузить данные"
 
 #: templates/smuggler/change_list.html:21
 #, python-format
 msgid "Add %(name)s"
-msgstr ""
+msgstr "Добавить %(name)s"
 
 #: templates/smuggler/load_data_form.html:23
 msgid "Home"
@@ -60,28 +61,26 @@ msgstr "Пожалуйста, исправьте следующую ошибку
 
 #: templates/smuggler/load_data_form.html:39
 msgid "Data from your computer"
-msgstr ""
+msgstr "Данные с вашего компьютера"
 
 #: templates/smuggler/load_data_form.html:58
 #: templates/smuggler/load_data_form.html:104
 msgid "Load"
-msgstr ""
+msgstr "Загрузить"
 
 #: templates/smuggler/load_data_form.html:61
 msgid "Load fixture and save on disk"
-msgstr ""
+msgstr "Загрузить фикстуры и сохранить на диске"
 
 #: templates/smuggler/load_data_form.html:83
 #, python-format
 msgid "Data from %(smuggler_fixture_dir)s directory"
-msgstr ""
+msgstr "Данные из директории %(smuggler_fixture_dir)s"
 
 #: templates/smuggler/load_data_form.html:87
 msgid "File name"
-msgstr ""
+msgstr "Имя файла"
 
 #: templates/smuggler/load_data_form.html:88
 msgid "Size"
-msgstr ""
-
-
+msgstr "Размер"
