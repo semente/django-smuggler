@@ -7,6 +7,8 @@
 # Software Foundation. See the file README for copying conditions.
 
 import os
+import sys
+import StringIO
 from django.core import serializers
 from django.core.management.color import no_style
 
@@ -39,13 +41,19 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
 def serialize_to_response(app_labels=[], exclude=[], response=None,
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
     response = response or HttpResponse(mimetype='text/plain')
-    response.write(DumpData().handle(*app_labels, **{
+    out =  StringIO.StringIO()
+    sys.stdout = out
+    returned_output = DumpData().execute(*app_labels, **{
         'exclude': exclude,
         'format': format,
         'indent': indent,
         'show_traceback': True,
         'use_natural_keys': True
-    }))
+    })
+    sys.stdout = sys.__stdout__
+    if returned_output:
+        out.write(returned_output)
+    response.write(out.getvalue())
     return response
 
 
