@@ -41,17 +41,19 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
 def serialize_to_response(app_labels=[], exclude=[], response=None,
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
     response = response or HttpResponse(mimetype='text/plain')
-    dumpdata = DumpData()
-    dumpdata.stdout = StringIO.StringIO()
-    dumpdata.stderr = sys.stderr
-    dumpdata.handle(*app_labels, **{
+    out =  StringIO.StringIO()
+    sys.stdout = out
+    returned_output = DumpData().execute(*app_labels, **{
         'exclude': exclude,
         'format': format,
         'indent': indent,
         'show_traceback': True,
         'use_natural_keys': True
     })
-    response.write(dumpdata.stdout.getvalue())
+    sys.stdout = sys.__stdout__
+    if returned_output:
+        out.write(returned_output)
+    response.write(out.getvalue())
     return response
 
 
