@@ -18,7 +18,7 @@ class BasicDumpTestCase(TestCase, TestCase2):
         f.save()
 
     def normalize(self, out):
-        return re.sub(r'\s\s*', ' ', out)
+        return re.sub(r'\s\s*', ' ', out).strip()
 
     def test_serialize_to_response(self):
         stream = StringIO.StringIO()

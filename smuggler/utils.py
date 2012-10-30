@@ -7,15 +7,19 @@
 # Software Foundation. See the file README for copying conditions.
 
 import os
+import sys
 from django.core import serializers
+from django.core.management import CommandError
 from django.core.management.color import no_style
-
 from django.core.management.commands.dumpdata import Command as DumpData
 from django.db import connections, transaction, router
 from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
-
 from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_INDENT)
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 
 
 def get_file_list(path):
@@ -39,14 +43,38 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
 def serialize_to_response(app_labels=[], exclude=[], response=None,
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
     response = response or HttpResponse(mimetype='text/plain')
-    response.write(DumpData().handle(*app_labels, **{
-        'exclude': exclude,
-        'format': format,
-        'indent': indent,
-        'show_traceback': True,
-        'use_natural_keys': True
-    }))
-    return response
+    # There's some funky output redirecting going on as Django >= 1.5 writes
+    # to a wrapped output stream, instead of just returning the dumped output.
+    stream = StringIO()  # this is going to be our stdout
+    # We need to fake an OutputWrapper as it's only introduced in Django 1.5
+    out = lambda: None
+    out.write = lambda s: stream.write(s)  # this seems to be sufficient.
+    try:
+        # Now make sys.stdout our wrapped StringIO instance and start the dump.
+        sys.stdout = out
+        dumpdata = DumpData()
+        dumpdata.stdout = sys.stdout
+        dumpdata.stderr = sys.stderr
+        output = dumpdata.handle(*app_labels, **{
+            'exclude': exclude,
+            'format': format,
+            'indent': indent,
+            'show_traceback': True,
+            'use_natural_keys': True
+        })
+    except CommandError:
+        # We expect and re-raise CommandErrors, these contain "user friendly"
+        # error messages.
+        raise
+    else:
+        if output:
+            response.write(output)
+        else:
+            response.write(stream.getvalue())
+        return response
+    finally:
+        # Be nice and cleanup!
+        sys.stdout = sys.__stdout__
 
 
 def load_requested_data(data):
