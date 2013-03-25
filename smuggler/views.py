@@ -10,6 +10,7 @@ import os
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import CommandError
+from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -112,7 +113,7 @@ def load_data(request):
                     'file_count': len(data)
                 }
                 messages.add_message(request, messages.INFO, user_msg)
-            except (IntegrityError, ObjectDoesNotExist), e:
+            except (IntegrityError, ObjectDoesNotExist, DeserializationError), e:
                 messages.add_message(request, messages.ERROR,
                     _(u'An exception occurred while loading data: %s')
                         % unicode(e))
