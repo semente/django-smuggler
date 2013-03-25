@@ -1,5 +1,6 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_modify adminmedia %}
+{% load url from future %}
+{% load i18n %}
 
 {% block title %}{% trans "Load data" %} {{ block.super }}{% endblock %}
 
@@ -9,9 +10,8 @@
 {% endblock %}
 
 {% block extrastyle %}
+  {{ import_file_form.media }}
   {{ block.super }}
-  <link rel="stylesheet" type="text/css"
-        href="{% admin_media_prefix %}css/forms.css" />
 {% endblock %}
 
 {% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
@@ -20,7 +20,7 @@
 
 {% block breadcrumbs %}{% if not is_popup %}
 <div class="breadcrumbs">
-     <a href="{% url admin:index %}">{% trans "Home" %}</a> &rsaquo;
+     <a href="{% url 'admin:index' %}">{% trans "Home" %}</a> &rsaquo;
      {% trans "Load data" %}
 </div>
 {% endif %}{% endblock %}
