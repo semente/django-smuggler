@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Smuggler\n"
-"Report-Msgid-Bugs-To: http://github.com/semente/django-smuggler/issues\n"
-"POT-Creation-Date: 2012-01-31 08:08-0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-01 21:22-0300\n"
 "PO-Revision-Date: 2012-01-31 09:57-0200\n"
 "Last-Translator: Guilherme Gondim <semente+smuggler@taurinus.org>\n"
 "Language-Team: English (http://www.transifex.net/projects/p/django-smuggler/team/en/)\n"
@@ -15,20 +15,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:17
+#: forms.py:24
 msgid "Existing items with same <i>id</i> will be overwritten."
 msgstr ""
 
-#: forms.py:27
+#: forms.py:39
 msgid "Invalid file extension."
 msgstr ""
 
-#: views.py:41
+#: views.py:42
 #, python-format
 msgid "An exception occurred while dumping data: %s"
 msgstr ""
 
-#: views.py:117
+#: views.py:118
 #, python-format
 msgid "An exception occurred while loading data: %s"
 msgstr ""
@@ -38,7 +38,7 @@ msgid "Dump data"
 msgstr ""
 
 #: templates/smuggler/change_list.html:15
-#: templates/smuggler/load_data_form.html:4
+#: templates/smuggler/load_data_form.html:5
 #: templates/smuggler/load_data_form.html:24
 #: templates/smuggler/load_data_form.html:29
 msgid "Load data"

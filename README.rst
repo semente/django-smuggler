@@ -129,6 +129,8 @@ Version 0.4 (2013-04-01)
 
 * Django 1.5+ support;
 
+* Added German translation;
+
 * Added some tests.
 
 
