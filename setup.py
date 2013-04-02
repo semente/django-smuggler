@@ -1,4 +1,6 @@
-# Copyright (c) 2009 Guilherme Gondim and contributors
+#/usr/bin/env python
+#
+# Copyright (c) 2009-2013 Guilherme Gondim and contributors
 #
 # This file is part of Django Smuggler.
 #
@@ -6,42 +8,48 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from ez_setup import use_setuptools
-    use_setuptools()
-    from setuptools import setup, find_packages
+import codecs
+import os
+import sys
 
-from smuggler import get_version
+from setuptools import setup, find_packages
+
+
+if 'publish' in sys.argv:
+    os.system('python setup.py sdist upload')
+    sys.exit()
+
+read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
+
+
+# Dynamically calculate the version based on templateapp.VERSION.
+version = __import__('smuggler').get_version()
 
 setup(
-    name = 'django-smuggler',
-    version = get_version(),
-    description = 'dump/load fixtures via Django admin interface',
-    long_description = ('Django Smuggler is a pluggable application for Django '
-                        'Web Framework for you easily dump/load fixtures '
-                        'via the automatically-generated administration '
-                        'interface. Especially useful for transporting data in '
-                        'production for the development project and vice'
-                        'versa, but can also be used as a backup tool.'),
-    keywords = 'django apps tools backup fixtures admin',
-    author = 'Guilherme Gondim',
-    author_email = 'semente@taurinus.org',
-    url = 'http://github.com/semente/django-smuggler',
-    download_url = 'http://github.com/semente/django-smuggler/downloads',
-    license = 'GNU Lesser General Public License (LGPL), Version 3',
-    classifiers = [
-        'Environment :: Plugins',
+    name='django-smuggler',
+    version=version,
+    description='dump/load fixtures via Django admin interface',
+    long_description=read(os.path.join(os.path.dirname(__file__), 'README.rst')),
+    keywords='django apps tools backup fixtures admin',
+    author='Guilherme Gondim',
+    author_email='semente+django-smuggler@taurinus.org',
+    maintainer='Guilherme Gondim',
+    maintainer_email='semente+django-smuggler@taurinus.org',
+    license='GNU Lesser General Public License v3 or later (LGPLv3+)',
+    url='http://github.com/semente/django-smuggler',
+    download_url='http://github.com/semente/django-smuggler/downloads',
+    packages=find_packages(),
+    zip_safe=False,
+    include_package_data=True,
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    packages = find_packages(),
-    include_package_data = True,
-    zip_safe = False,
     tests_require=['unittest2'],
 )
