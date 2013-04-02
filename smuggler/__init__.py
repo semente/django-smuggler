@@ -11,7 +11,8 @@ Django Smuggler is a pluggable application for Django Web Framework that help
 you dump/load fixtures via the automatically-generated admin interface.
 """
 
-VERSION = (0, 3)
+VERSION = (0, 4)
+
 
 def get_version():
     """
