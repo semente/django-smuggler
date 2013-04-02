@@ -22,7 +22,7 @@ if 'publish' in sys.argv:
 read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
 
 
-# Dynamically calculate the version based on templateapp.VERSION.
+# Dynamically calculate the version based on smuggler.VERSION.
 version = __import__('smuggler').get_version()
 
 setup(
