@@ -28,7 +28,8 @@ version = __import__('smuggler').get_version()
 setup(
     name='django-smuggler',
     version=version,
-    description='dump/load fixtures via Django admin interface',
+    description=('Pluggable application for Django that helps you to '
+                 'import/export fixtures via the administration interface'),
     long_description=read(os.path.join(os.path.dirname(__file__), 'README.rst')),
     keywords='django apps tools backup fixtures admin',
     author='Guilherme Gondim',
