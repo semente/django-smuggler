@@ -7,9 +7,9 @@
 # Software Foundation. See the file README for copying conditions.
 
 try:
-    from django.conf.urls.defaults import *
+    from django.conf.urls.defaults import url, patterns
 except:
-    from django.conf.urls import *
+    from django.conf.urls import url, patterns
                             
 from smuggler.views import (dump_data, dump_app_data, dump_model_data,
                             load_data)
