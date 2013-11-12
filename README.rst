@@ -118,10 +118,10 @@ Load form:
 Release notes
 =============
 
-Version 0.4.1 (in development)
-----------------------------
+Version 0.4.1 (2013-11-12)
+--------------------------
 
-* Changelist template is now Django 1.5 compat.
+* Changelist template is now Django 1.6 compatible
 
 
 Version 0.4 (2013-04-01)
