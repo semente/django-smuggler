@@ -4,8 +4,11 @@ Django Smuggler
 
 **Django Smuggler** is a pluggable application for `Django Web Framework`_ for
 you easily dump/load fixtures via the automatically-generated administration
-interface. Especially useful for transporting data in production for the
-development project and vice versa, but can also be used as a backup tool.
+interface. Fixtures are collection of data that Django knows how to import into
+a database. 
+
+Smuggler is especially useful for transporting database data between production
+and development environments, but can also be used as a backup tool.
 
 Project page
     http://github.com/semente/django-smuggler
