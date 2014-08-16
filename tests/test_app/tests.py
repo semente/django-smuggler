@@ -1,3 +1,4 @@
+import json
 import re
 import StringIO
 
@@ -20,23 +21,52 @@ class BasicDumpTestCase(TestCase, TestCase2):
     def normalize(self, out):
         return re.sub(r'\s\s*', ' ', out).strip()
 
+    def dictsMatch(self, d1, d2, parent=''):
+        diff = True
+        for k in d1.keys():
+            if type(d1[k])==type({}):
+                diff = diff and self.dictsMatch(d1[k], d2[k], k)
+            else:
+                if d1[k]!=d2[k]:
+                    diff = False
+
+        return diff
+
     def test_serialize_to_response(self):
         stream = StringIO.StringIO()
         utils.serialize_to_response(response=stream)
         out = self.normalize(stream.getvalue())
-        self.assertEquals(out, self.BASIC_DUMP)
+        basic_out = json.loads(out)
+
+        self.assertTrue(self.dictsMatch(
+            basic_out[0],
+            json.loads(self.SITE_DUMP),
+        ))
+        self.assertTrue(self.dictsMatch(
+            basic_out[1],
+            json.loads(self.FLATPAGE_DUMP),
+        ))
 
     def test_serialize_exclude(self):
         stream = StringIO.StringIO()
         utils.serialize_to_response(exclude=['sites'], response=stream)
         out = self.normalize(stream.getvalue())
-        self.assertEquals(out, '[ %s ]' % self.FLATPAGE_DUMP)
+        out = json.loads(out)
+        self.assertTrue(self.dictsMatch(
+            out[0],
+            json.loads(self.FLATPAGE_DUMP),
+        ))
 
     def test_serialize_include(self):
         stream = StringIO.StringIO()
         utils.serialize_to_response(app_labels=['sites'], response=stream)
         out = self.normalize(stream.getvalue())
-        self.assertEquals(out, '[ %s ]' % self.SITE_DUMP)
+        out = json.loads(out)
+        self.assertTrue(self.dictsMatch(
+            out[0],
+            json.loads(self.SITE_DUMP),
+        ))
 
     def test_serialize_unknown_app_fail(self):
         self.assertRaises(CommandError, utils.serialize_to_response, 'auth')
+
