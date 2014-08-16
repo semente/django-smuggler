@@ -21,43 +21,18 @@ class BasicDumpTestCase(TestCase, TestCase2):
     def normalize(self, out):
         return re.sub(r'\s\s*', ' ', out).strip()
 
-    def dictsMatch(self, d1, d2, parent=''):
-        if len(d1.keys()) != len(d1.keys()):
-            return False
-        d1keys = d1.keys()
-        d1keys.sort()
-        d2keys = d2.keys()
-        d2keys.sort()
-        for k1, k2 in zip(d1keys, d2keys):
-            if k1 != k2:
-                return False
-            else:
-                if type(d1[k1])==type({}):
-                    if not self.dictsMatch(d1[k1], d2[k1], k1):
-                        return False
-                else:
-                    if d1[k1]!=d2[k1]:
-                        return False
-        return True
-
-    def assertDictsMatch(self, d1, d2):
-        try:
-            self.assertTrue(self.dictsMatch(
-                d1, d2))
-        except AssertionError: 
-            self.assertEquals(d1, d2)
-
     def test_serialize_to_response(self):
         stream = StringIO.StringIO()
         utils.serialize_to_response(response=stream)
         out = self.normalize(stream.getvalue())
         basic_out = json.loads(out)
 
-        self.assertDictsMatch(
+        self.assertEquals(
             basic_out[0],
             json.loads(self.SITE_DUMP),
         )
-        self.assertDictsMatch(
+        
+        self.assertEquals(
             basic_out[1],
             json.loads(self.FLATPAGE_DUMP),
         )
@@ -67,7 +42,8 @@ class BasicDumpTestCase(TestCase, TestCase2):
         utils.serialize_to_response(exclude=['sites'], response=stream)
         out = self.normalize(stream.getvalue())
         out = json.loads(out)
-        self.assertDictsMatch(
+        
+        self.assertEquals(
             out[0],
             json.loads(self.FLATPAGE_DUMP),
         )
@@ -77,7 +53,8 @@ class BasicDumpTestCase(TestCase, TestCase2):
         utils.serialize_to_response(app_labels=['sites'], response=stream)
         out = self.normalize(stream.getvalue())
         out = json.loads(out)
-        self.assertDictsMatch(
+        
+        self.assertEquals(
             out[0],
             json.loads(self.SITE_DUMP),
         )
