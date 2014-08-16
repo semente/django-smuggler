@@ -199,6 +199,21 @@ Thanks to `Interaction Consortium <http://interactionconsortium.com/>`_ for
 sponsoring the first releases of the project.
 
 
+Tests
+=====
+
+You can run tests with your current version of python and django with::
+
+    cd /path/to/django-smuggler
+    python tests/run_tests.py
+
+We use `tox <https://pypi.python.org/pypi/tox>` to test against multiple 
+versions of python and django. Please run::
+
+    cd /path/to/django-smuggler
+    tox
+
+
 Copying conditions
 ==================
 

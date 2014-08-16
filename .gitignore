@@ -5,6 +5,7 @@
 ._*
 .#*
 *#
+.tox/
 build/
 dist/
 django_smuggler.egg-info/
