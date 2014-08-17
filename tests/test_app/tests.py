@@ -1,3 +1,4 @@
+import json
 import re
 import StringIO
 
@@ -24,19 +25,40 @@ class BasicDumpTestCase(TestCase, TestCase2):
         stream = StringIO.StringIO()
         utils.serialize_to_response(response=stream)
         out = self.normalize(stream.getvalue())
-        self.assertEquals(out, self.BASIC_DUMP)
+        basic_out = json.loads(out)
+
+        self.assertEquals(
+            basic_out[0],
+            json.loads(self.SITE_DUMP),
+        )
+        
+        self.assertEquals(
+            basic_out[1],
+            json.loads(self.FLATPAGE_DUMP),
+        )
 
     def test_serialize_exclude(self):
         stream = StringIO.StringIO()
         utils.serialize_to_response(exclude=['sites'], response=stream)
         out = self.normalize(stream.getvalue())
-        self.assertEquals(out, '[ %s ]' % self.FLATPAGE_DUMP)
+        out = json.loads(out)
+        
+        self.assertEquals(
+            out[0],
+            json.loads(self.FLATPAGE_DUMP),
+        )
 
     def test_serialize_include(self):
         stream = StringIO.StringIO()
         utils.serialize_to_response(app_labels=['sites'], response=stream)
         out = self.normalize(stream.getvalue())
-        self.assertEquals(out, '[ %s ]' % self.SITE_DUMP)
+        out = json.loads(out)
+        
+        self.assertEquals(
+            out[0],
+            json.loads(self.SITE_DUMP),
+        )
 
     def test_serialize_unknown_app_fail(self):
         self.assertRaises(CommandError, utils.serialize_to_response, 'auth')
+
