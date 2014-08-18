@@ -97,7 +97,8 @@ SMUGGLER_FIXTURE_DIR
     Default: None.
 
 SMUGGLER_FORMAT
-    Format for dumped files. 'json' and 'xml' are supported.
+    Format for dumped files. Any of the serialization formats supported by
+    Django, json, xml and in some cases yaml.
     Default: 'json'.
 
 SMUGGLER_INDENT
