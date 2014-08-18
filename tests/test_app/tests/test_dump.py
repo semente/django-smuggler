@@ -19,7 +19,8 @@ class BasicDumpTestCase(TestCase):
         "pk": 1,
         "model": "test_app.page",
         "fields": {
-            "title": "test", "body": "test body",
+            "title": "test",
+            "body": "test body",
         }
     }]
     BASIC_DUMP = SITE_DUMP + PAGE_DUMP

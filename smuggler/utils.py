@@ -7,7 +7,6 @@
 # Software Foundation. See the file README for copying conditions.
 
 import os
-import sys
 from django.core import serializers
 from django.core.management import CommandError
 from django.core.management.color import no_style
@@ -25,16 +24,15 @@ def get_file_list(path):
         if not os.path.isdir(file_name):
             file_path = os.path.join(path, file_name)
             file_size = os.path.getsize(file_path)
-            file_list.append((file_name, '%0.1f KB'%float(file_size/1024.0)))
+            file_list.append((file_name, '%0.1f KB' % float(file_size/1024.0)))
     file_list.sort()
     return file_list
 
 
 def save_uploaded_file_on_disk(uploaded_file, destination_path):
-    destination = open(destination_path, 'w')
-    for chunk in uploaded_file.chunks():
-        destination.write(chunk)
-    destination.close()
+    with open(destination_path, 'wb') as fp:
+        for chunk in uploaded_file.chunks():
+            fp.write(chunk)
 
 
 def serialize_to_response(app_labels=[], exclude=[], response=None,
@@ -75,14 +73,13 @@ def load_requested_data(data):
     using = DEFAULT_DB_ALIAS
     connection = connections[using]
     cursor = connection.cursor()
-
-    transaction.commit_unless_managed(using=using)
-    transaction.enter_transaction_management(using=using)
-    transaction.managed(True, using=using)
-    
     models = set()
     counter = 0
-    try:
+    # Django < 1.6 has no atomic transaction manager, use commit_on_success
+    atomic = getattr(transaction, 'atomic',
+                     getattr(transaction, 'commit_on_success'))
+
+    with atomic(using=using):
         for format, stream in data:
             objects = serializers.deserialize(format, stream)
             for obj in objects:
@@ -96,11 +93,4 @@ def load_requested_data(data):
             if sequence_sql:
                 for line in sequence_sql:
                     cursor.execute(line)
-    except Exception as e:
-        transaction.rollback(using=using)
-        transaction.leave_transaction_management(using=using)
-        raise e
-    transaction.commit(using=using)
-    transaction.leave_transaction_management(using=using)
-    connection.close()
     return counter
