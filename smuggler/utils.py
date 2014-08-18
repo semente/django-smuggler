@@ -57,7 +57,7 @@ def serialize_to_response(app_labels=[], exclude=[], response=None,
     except SystemExit:
         # Django 1.4's implementation of execute catches CommandErrors and
         # then calls sys.exit(1), we circumvent this here.
-        errors = error_stream.getvalue()
+        errors = error_stream.getvalue().strip().replace('Error: ', '')
         raise CommandError(errors)
     response.write(stream.getvalue())
     return response
