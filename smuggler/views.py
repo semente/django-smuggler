@@ -8,13 +8,14 @@
 
 import os
 from datetime import datetime
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.management.base import CommandError
 from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -38,19 +39,28 @@ def dump_to_response(request, app_label=None, exclude=[], filename_prefix=None):
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
         return response
     except CommandError as e:
-        messages.add_message(request, messages.ERROR,
-             _('An exception occurred while dumping data: %s' % unicode(e)))
+        messages.error(
+            request,
+            _('An exception occurred while dumping data: %s') % force_text(e))
     return HttpResponseRedirect(request.build_absolute_uri().split('dump')[0])
 
 
-@user_passes_test(lambda u: u.is_superuser)
+def is_superuser(u):
+    if u.is_authenticated():
+        if u.is_superuser:
+            return True
+        raise PermissionDenied
+    return False
+
+
+@user_passes_test(is_superuser)
 def dump_data(request):
     """Exports data from whole project.
     """
     return dump_to_response(request, exclude=SMUGGLER_EXCLUDE_LIST)
 
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(is_superuser)
 def dump_app_data(request, app_label):
     """Exports data from a application.
     """
@@ -58,7 +68,7 @@ def dump_app_data(request, app_label):
                             app_label)
 
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(is_superuser)
 def dump_model_data(request, app_label, model_label):
     """Exports data from a model.
     """
@@ -66,7 +76,7 @@ def dump_model_data(request, app_label, model_label):
                             [], '-'.join((app_label, model_label)))
 
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(is_superuser)
 def load_data(request):
     """
     Load data from uploaded file or disk.

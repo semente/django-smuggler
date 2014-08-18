@@ -31,15 +31,10 @@ class BasicDumpTestCase(TestCase):
     def normalize(self, out):
         return json.loads(out)
 
-    def test_serialize_to_response(self):
-        stream = StringIO()
-        utils.serialize_to_response(response=stream)
-        out = self.normalize(stream.getvalue())
-        self.assertEqual(out, self.BASIC_DUMP)
-
     def test_serialize_exclude(self):
         stream = StringIO()
-        utils.serialize_to_response(exclude=['sites'], response=stream)
+        utils.serialize_to_response(exclude=['sites', 'auth', 'contenttypes'],
+                                    response=stream)
         out = self.normalize(stream.getvalue())
         self.assertEqual(out, self.PAGE_DUMP)
 
@@ -50,4 +45,5 @@ class BasicDumpTestCase(TestCase):
         self.assertEqual(out, self.SITE_DUMP)
 
     def test_serialize_unknown_app_fail(self):
-        self.assertRaises(CommandError, utils.serialize_to_response, ['auth'])
+        self.assertRaises(CommandError, utils.serialize_to_response,
+                          ['flatpages'])

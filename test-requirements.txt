@@ -2,3 +2,4 @@ Django
 coverage
 coveralls
 tox
+freezegun
