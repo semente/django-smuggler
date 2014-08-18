@@ -39,39 +39,28 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
 
 def serialize_to_response(app_labels=[], exclude=[], response=None,
                           format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
-    response = response or HttpResponse(mimetype='text/plain')
-    # There's some funky output redirecting going on as Django >= 1.5 writes
-    # to a wrapped output stream, instead of just returning the dumped output.
-    stream = StringIO()  # this is going to be our stdout
-    # We need to fake an OutputWrapper as it's only introduced in Django 1.5
-    out = lambda: None
-    out.write = lambda s: stream.write(s)  # this seems to be sufficient.
+    response = response or HttpResponse(content_type='text/plain')
+    stream = StringIO()
+    error_stream = StringIO()
     try:
-        # Now make sys.stdout our wrapped StringIO instance and start the dump.
-        sys.stdout = out
         dumpdata = DumpData()
-        dumpdata.stdout = sys.stdout
-        dumpdata.stderr = sys.stderr
-        output = dumpdata.handle(*app_labels, **{
+        dumpdata.style = no_style()
+        dumpdata.execute(*app_labels, **{
             'exclude': exclude,
             'format': format,
             'indent': indent,
             'show_traceback': True,
-            'use_natural_keys': True
+            'use_natural_keys': True,
+            'stdout': stream,
+            'stderr': error_stream
         })
-    except CommandError:
-        # We expect and re-raise CommandErrors, these contain "user friendly"
-        # error messages.
-        raise
-    else:
-        if output:
-            response.write(output)
-        else:
-            response.write(stream.getvalue())
-        return response
-    finally:
-        # Be nice and cleanup!
-        sys.stdout = sys.__stdout__
+    except SystemExit:
+        # Django 1.4's implementation of execute catches CommandErrors and
+        # then calls sys.exit(1), we circumvent this here.
+        errors = error_stream.getvalue()
+        raise CommandError(errors)
+    response.write(stream.getvalue())
+    return response
 
 
 def load_requested_data(data):
