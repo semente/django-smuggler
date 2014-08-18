@@ -1,3 +1,4 @@
+import json
 import os.path
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -47,6 +48,15 @@ class TestDumpViewsGenerateDownloadsWithSaneFilenames(TestCase):
         response = self.c.get(url)
         self.assertEqual(response['Content-Disposition'],
                          'attachment; filename=sites-site_2012-01-14T00:00:00.json')
+
+    def test_dump_data_parameters(self):
+        url = reverse('dump-data')
+        response = self.c.get(url, {
+            'app_label': 'auth.user,sites'
+            })
+        content = json.loads(response.content)
+        self.assertTrue([i for i in content if i['model'] == 'auth.user'])
+        self.assertTrue([i for i in content if i['model'] == 'sites.site'])
 
 
 class TestDumpHandlesErrorsGracefully(TestCase):
