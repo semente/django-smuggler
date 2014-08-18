@@ -24,16 +24,15 @@ def get_file_list(path):
         if not os.path.isdir(file_name):
             file_path = os.path.join(path, file_name)
             file_size = os.path.getsize(file_path)
-            file_list.append((file_name, '%0.1f KB'%float(file_size/1024.0)))
+            file_list.append((file_name, '%0.1f KB' % float(file_size/1024.0)))
     file_list.sort()
     return file_list
 
 
 def save_uploaded_file_on_disk(uploaded_file, destination_path):
-    destination = open(destination_path, 'w')
-    for chunk in uploaded_file.chunks():
-        destination.write(chunk)
-    destination.close()
+    with open(destination_path, 'wb') as fp:
+        for chunk in uploaded_file.chunks():
+            fp.write(chunk)
 
 
 def serialize_to_response(app_labels=[], exclude=[], response=None,
