@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.contenttypes',
+    'django.contrib.sessions',
     'smuggler',
     'test_app',
 ]
