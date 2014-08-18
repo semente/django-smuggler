@@ -85,13 +85,13 @@ def load_data(request):
     form = ImportFileForm()
     if request.method == 'POST':
         data = []
-        if request.POST.has_key('_load') or request.POST.has_key('_loadandsave'):
+        if '_load' in request.POST or '_loadandsave' in request.POST:
             form = ImportFileForm(request.POST, request.FILES)
             if form.is_valid():
                 uploaded_file = request.FILES['file']
                 file_name = uploaded_file.name
                 file_format = file_name.split('.')[-1]
-                if request.POST.has_key('_loadandsave'):
+                if '_loadandsave' in request.POST:
                     destination_path = os.path.join(settings.SMUGGLER_FIXTURE_DIR,
                                                     file_name)
                     save_uploaded_file_on_disk(uploaded_file, destination_path)
@@ -101,7 +101,7 @@ def load_data(request):
                 else:
                     file_data = uploaded_file.read()
                 data.append((file_format, file_data))
-        elif request.POST.has_key('_loadfromdisk'):
+        elif '_loadfromdisk' in request.POST:
             query_dict = request.POST.copy()        
             del(query_dict['_loadfromdisk'])
             del(query_dict['csrfmiddlewaretoken'])
