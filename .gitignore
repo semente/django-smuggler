@@ -10,3 +10,8 @@ build/
 dist/
 django_smuggler.egg-info/
 README.html
+
+# coverage
+.coverage
+htmlcov
+
