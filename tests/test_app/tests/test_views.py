@@ -1,8 +1,17 @@
+import os.path
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
+from django.test.utils import override_settings
+from django.utils.six.moves import reload_module
 from freezegun import freeze_time
+from smuggler import settings
+from smuggler.forms import ImportFileForm
+
+
+p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__), *args))
 
 
 class TestDumpViewsGenerateDownloadsWithSaneFilenames(TestCase):
@@ -67,3 +76,66 @@ class TestDumpHandlesErrorsGracefully(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual('http://testserver/admin/flatpages/',
                          response['location'])
+
+
+class TestLoadDataGet(TestCase):
+    def setUp(self):
+        superuser = User(username='superuser')
+        superuser.set_password('test')
+        superuser.is_staff = True
+        superuser.is_superuser = True
+        superuser.save()
+        self.url = reverse('load-data')
+        self.c = Client()
+        self.c.login(username='superuser', password='test')
+
+    def test_renders_correct_template(self):
+        response = self.c.get(self.url)
+        self.assertEqual('smuggler/load_data_form.html', response.template_name)
+
+    def test_has_form_in_context(self):
+        response = self.c.get(self.url)
+        self.assertIsInstance(response.context['import_file_form'],
+                              ImportFileForm)
+
+    @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
+    def test_has_fixture_dir_in_context(self):
+        reload_module(settings)
+        response = self.c.get(self.url)
+        self.assertEqual(p('..', 'smuggler_fixtures'),
+                         response.context['smuggler_fixture_dir'])
+
+    @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
+    def test_has_files_available_in_context(self):
+        reload_module(settings)
+        response = self.c.get(self.url)
+        self.assertEqual([('page_dump.json', '0.1 KB')],
+                         response.context['files_available'])
+
+    def tearDown(self):
+        reload_module(settings)
+
+
+class TestLoadDataPost(TestCase):
+    def setUp(self):
+        superuser = User(username='superuser')
+        superuser.set_password('test')
+        superuser.is_staff = True
+        superuser.is_superuser = True
+        superuser.save()
+        self.url = reverse('load-data')
+        self.c = Client()
+        self.c.login(username='superuser', password='test')
+
+    def test_empty_fixture(self):
+        f = SimpleUploadedFile('valid.json', b'[]')
+        response = self.c.post(self.url, {
+            '_load': True,
+            'file': f
+        })
+        response_messages = list(response.context['messages'])
+        self.assertEqual(1, len(response_messages))
+        self.assertEqual(messages.INFO, response_messages[0].level)
+        self.assertEqual(
+            '0 object(s) from 1 file(s) loaded with success.',
+            response_messages[0].message)

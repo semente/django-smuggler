@@ -13,16 +13,14 @@ from django.core.management.base import CommandError
 from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext as _
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 
 from smuggler.forms import ImportFileForm
-from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_FIXTURE_DIR,
-                               SMUGGLER_EXCLUDE_LIST)
+from smuggler import settings
 from smuggler.utils import (get_file_list,
                             save_uploaded_file_on_disk, serialize_to_response,
                             load_requested_data)
@@ -32,7 +30,7 @@ def dump_to_response(request, app_label=None, exclude=[], filename_prefix=None):
     """Utility function that dumps the given app/model to an HttpResponse.
     """
     try:
-        filename = '%s.%s' % (datetime.now().isoformat(), SMUGGLER_FORMAT)
+        filename = '%s.%s' % (datetime.now().isoformat(), settings.SMUGGLER_FORMAT)
         if filename_prefix:
             filename = '%s_%s' % (filename_prefix, filename)
         response = serialize_to_response(app_label and [app_label] or [], exclude)
@@ -57,14 +55,14 @@ def is_superuser(u):
 def dump_data(request):
     """Exports data from whole project.
     """
-    return dump_to_response(request, exclude=SMUGGLER_EXCLUDE_LIST)
+    return dump_to_response(request, exclude=settings.SMUGGLER_EXCLUDE_LIST)
 
 
 @user_passes_test(is_superuser)
 def dump_app_data(request, app_label):
     """Exports data from a application.
     """
-    return dump_to_response(request, app_label, SMUGGLER_EXCLUDE_LIST,
+    return dump_to_response(request, app_label, settings.SMUGGLER_EXCLUDE_LIST,
                             app_label)
 
 
@@ -94,7 +92,7 @@ def load_data(request):
                 file_name = uploaded_file.name
                 file_format = file_name.split('.')[-1]
                 if request.POST.has_key('_loadandsave'):
-                    destination_path = os.path.join(SMUGGLER_FIXTURE_DIR,
+                    destination_path = os.path.join(settings.SMUGGLER_FIXTURE_DIR,
                                                     file_name)
                     save_uploaded_file_on_disk(uploaded_file, destination_path)
                     file_data = open(destination_path, 'r')
@@ -109,7 +107,7 @@ def load_data(request):
             del(query_dict['csrfmiddlewaretoken'])
             selected_files = query_dict.values()
             for file_name in selected_files:
-                file_path = os.path.join(SMUGGLER_FIXTURE_DIR, file_name)
+                file_path = os.path.join(settings.SMUGGLER_FIXTURE_DIR, file_name)
                 file_format = file_name.split('.')[-1]
                 file_data = open(file_path, 'r')
                 data.append((file_format, file_data))
@@ -128,10 +126,9 @@ def load_data(request):
                     _(u'An exception occurred while loading data: %s')
                         % unicode(e))
     context = {
-        'files_available': get_file_list(SMUGGLER_FIXTURE_DIR) \
-            if SMUGGLER_FIXTURE_DIR else [],
-        'smuggler_fixture_dir': SMUGGLER_FIXTURE_DIR,
+        'files_available': (get_file_list(settings.SMUGGLER_FIXTURE_DIR)
+                            if settings.SMUGGLER_FIXTURE_DIR else []),
+        'smuggler_fixture_dir': settings.SMUGGLER_FIXTURE_DIR,
         'import_file_form': form,
     }
-    return render_to_response('smuggler/load_data_form.html', context,
-                              context_instance=RequestContext(request))
+    return TemplateResponse(request, 'smuggler/load_data_form.html', context)
