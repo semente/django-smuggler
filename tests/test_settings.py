@@ -9,6 +9,10 @@ SECRET_KEY = 'mAtTzVPOV9JY4eJQfqgW8eAS9DWKnt3MkvvpQI2MzkhAz7z3'
 
 ROOT_URLCONF = 'test_app.urls'
 
+SITE_ID = 1
+
+LOGIN_URL = '/admin/'
+
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.admin',
