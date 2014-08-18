@@ -2,7 +2,7 @@ import json
 from django.core.urlresolvers import reverse
 from django.utils.six import StringIO
 from django.core.management import CommandError
-from django.test import TestCase
+from django.test import TestCase, Client
 from test_app.models import Page
 from smuggler import utils
 
@@ -32,15 +32,10 @@ class BasicDumpTestCase(TestCase):
     def normalize(self, out):
         return json.loads(out)
 
-    def test_serialize_to_response(self):
-        stream = StringIO()
-        utils.serialize_to_response(response=stream)
-        out = self.normalize(stream.getvalue())
-        self.assertEqual(out, self.BASIC_DUMP)
-
     def test_serialize_exclude(self):
         stream = StringIO()
-        utils.serialize_to_response(exclude=['sites'], response=stream)
+        utils.serialize_to_response(exclude=['sites', 'auth', 'contenttypes'],
+                                    response=stream)
         out = self.normalize(stream.getvalue())
         self.assertEqual(out, self.PAGE_DUMP)
 
@@ -51,7 +46,8 @@ class BasicDumpTestCase(TestCase):
         self.assertEqual(out, self.SITE_DUMP)
 
     def test_serialize_unknown_app_fail(self):
-        self.assertRaises(CommandError, utils.serialize_to_response, ['auth'])
+        self.assertRaises(CommandError, utils.serialize_to_response,
+                          ['flatpages'])
 
 
 class TestSmugglerUrls(TestCase):
@@ -71,3 +67,40 @@ class TestSmugglerUrls(TestCase):
 
     def test_can_reverse_load_data(self):
         self.assertEqual(reverse('load-data'), '/admin/load/')
+
+
+class TestSmugglerViewsRequireAuthentication(TestCase):
+    def test_dump_data(self):
+        c = Client()
+        url = reverse('dump-data')
+        response = c.get(url, follow=True)
+        self.assertEqual(
+            response.redirect_chain,
+            [('http://testserver/accounts/login/?next=/admin/dump/', 302)])
+
+    def test_dump_app_data(self):
+        c = Client()
+        url = reverse('dump-app-data', kwargs={'app_label': 'sites'})
+        response = c.get(url, follow=True)
+        self.assertEqual(
+            response.redirect_chain,
+            [('http://testserver/accounts/login/?next=/admin/sites/dump/', 302)])
+
+    def test_dump_model_data(self):
+        c = Client()
+        url = reverse('dump-model-data', kwargs={
+            'app_label': 'sites',
+            'model_label': 'site'
+        })
+        response = c.get(url, follow=True)
+        self.assertEqual(
+            response.redirect_chain,
+            [('http://testserver/accounts/login/?next=/admin/sites/site/dump/', 302)])
+
+    def test_load_data(self):
+        c = Client()
+        url = reverse('load-data')
+        response = c.get(url, follow=True)
+        self.assertEqual(
+            response.redirect_chain,
+            [('http://testserver/accounts/login/?next=/admin/load/', 302)])
