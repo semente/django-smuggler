@@ -50,4 +50,4 @@ class BasicDumpTestCase(TestCase):
         self.assertEqual(out, self.SITE_DUMP)
 
     def test_serialize_unknown_app_fail(self):
-        self.assertRaises(CommandError, utils.serialize_to_response, 'auth')
+        self.assertRaises(CommandError, utils.serialize_to_response, ['auth'])
