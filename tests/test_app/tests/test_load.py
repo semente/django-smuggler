@@ -1,5 +1,6 @@
 import json
 from django.contrib.sites.models import Site
+from django.db import IntegrityError
 from django.test import TestCase
 from smuggler.utils import load_requested_data
 from test_app.models import Page
@@ -52,3 +53,22 @@ class SimpleLoadTestCase(TestCase):
         self.assertEqual('test', Page.objects.get(pk=1).title)
         self.assertEqual('test.com', Site.objects.get(pk=1).name)
 
+
+class TestInvalidLoad(TestCase):
+    PAGE_DUMP = [{
+        "pk": 1,
+        "model": "test_app.page",
+        "fields": {
+            "title": "test", "body": "test body",
+        },
+        "pk": 1,
+        "model": "test_app.page",
+        "fields": {
+            "title": None, "body": None,
+        }
+    }]
+
+    def test_load_invalid_data(self):
+        self.assertRaises(IntegrityError, load_requested_data,
+                          [('json', json.dumps(self.PAGE_DUMP))])
+        self.assertEqual(0, Page.objects.count())
