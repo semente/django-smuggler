@@ -1,4 +1,7 @@
-.PHONY: coverage
+.PHONY: coverage tests
+
+tests:
+	python tests/run_tests.py
 
 coverage:
 	coverage run --source smuggler tests/run_tests.py
