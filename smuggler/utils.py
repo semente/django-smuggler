@@ -15,11 +15,8 @@ from django.core.management.commands.dumpdata import Command as DumpData
 from django.db import connections, transaction, router
 from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
+from django.utils.six import StringIO
 from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_INDENT)
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
 
 
 def get_file_list(path):
@@ -110,7 +107,7 @@ def load_requested_data(data):
             if sequence_sql:
                 for line in sequence_sql:
                     cursor.execute(line)
-    except Exception, e:
+    except Exception as e:
         transaction.rollback(using=using)
         transaction.leave_transaction_management(using=using)
         raise e

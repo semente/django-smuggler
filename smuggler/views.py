@@ -37,7 +37,7 @@ def dump_to_response(request, app_label=None, exclude=[], filename_prefix=None):
         response = serialize_to_response(app_label and [app_label] or [], exclude)
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
         return response
-    except CommandError, e:
+    except CommandError as e:
         messages.add_message(request, messages.ERROR,
              _('An exception occurred while dumping data: %s' % unicode(e)))
     return HttpResponseRedirect(request.build_absolute_uri().split('dump')[0])
@@ -113,7 +113,7 @@ def load_data(request):
                     'file_count': len(data)
                 }
                 messages.add_message(request, messages.INFO, user_msg)
-            except (IntegrityError, ObjectDoesNotExist, DeserializationError), e:
+            except (IntegrityError, ObjectDoesNotExist, DeserializationError) as e:
                 messages.add_message(request, messages.ERROR,
                     _(u'An exception occurred while loading data: %s')
                         % unicode(e))

@@ -52,5 +52,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    tests_require=['unittest2'],
+    tests_require=[],
 )
