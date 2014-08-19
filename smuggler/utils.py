@@ -17,6 +17,10 @@ from django.http import HttpResponse
 from django.utils.six import StringIO
 from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_INDENT)
 
+try:
+    allow_migrate = router.allow_migrate
+except AttributeError:  # before django 1.7
+    allow_migrate = router.allow_syncdb
 
 def get_file_list(path):
     file_list = []
@@ -84,7 +88,7 @@ def load_requested_data(data):
             objects = serializers.deserialize(format, stream)
             for obj in objects:
                 model = obj.object.__class__
-                if router.allow_syncdb(using, model):
+                if allow_migrate(using, model):
                     models.add(model)
                     counter += 1
                     obj.save(using=using)
