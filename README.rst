@@ -129,6 +129,18 @@ Load form:
 Release notes
 =============
 
+Version 0.5 (unreleased)
+------------------------
+
+* Added an option to specify a list of app labels to the /dump/ view
+
+* Improved test suite
+
+* Dropped Django 1.3 support
+
+* Preliminary Python 3 support
+
+
 Version 0.4.1 (2013-11-12)
 --------------------------
 
