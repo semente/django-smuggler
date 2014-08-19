@@ -15,15 +15,17 @@ import sys
 from setuptools import setup, find_packages
 
 
+# Dynamically calculate the version based on smuggler.VERSION.
+version = __import__('smuggler').get_version()
+
 if 'publish' in sys.argv:
-    os.system('python setup.py sdist upload')
+    os.system('python setup.py sdist bdist_wheel upload')
+    print("You probably want to also tag the version now:")
+    print("  git tag -a %s -m 'version %s'" % (version, version))
+    print("  git push --tags")
     sys.exit()
 
 read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
-
-
-# Dynamically calculate the version based on smuggler.VERSION.
-version = __import__('smuggler').get_version()
 
 setup(
     name='django-smuggler',
@@ -49,8 +51,12 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3'
     ],
     tests_require=[],
 )
