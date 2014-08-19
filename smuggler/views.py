@@ -26,14 +26,16 @@ from smuggler.utils import (get_file_list,
                             load_requested_data)
 
 
-def dump_to_response(request, app_label=None, exclude=[], filename_prefix=None):
+def dump_to_response(request, app_label=[], exclude=[], filename_prefix=None):
     """Utility function that dumps the given app/model to an HttpResponse.
     """
     try:
         filename = '%s.%s' % (datetime.now().isoformat(), settings.SMUGGLER_FORMAT)
         if filename_prefix:
             filename = '%s_%s' % (filename_prefix, filename)
-        response = serialize_to_response(app_label and [app_label] or [], exclude)
+        if not isinstance(app_label, list):
+            app_label = [app_label]
+        response = serialize_to_response(app_label, exclude)
         response['Content-Disposition'] = 'attachment; filename=%s' % filename
         return response
     except CommandError as e:
@@ -55,7 +57,11 @@ def is_superuser(u):
 def dump_data(request):
     """Exports data from whole project.
     """
-    return dump_to_response(request, exclude=settings.SMUGGLER_EXCLUDE_LIST)
+    # Try to grab app_label data
+    app_label = request.GET.get('app_label', [])
+    if app_label:
+        app_label = app_label.split(',')
+    return dump_to_response(request, app_label=app_label, exclude=settings.SMUGGLER_EXCLUDE_LIST)
 
 
 @user_passes_test(is_superuser)

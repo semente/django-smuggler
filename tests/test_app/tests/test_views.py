@@ -1,3 +1,4 @@
+import json
 import os.path
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -14,7 +15,7 @@ from smuggler.forms import ImportFileForm
 p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__), *args))
 
 
-class TestDumpViewsGenerateDownloadsWithSaneFilenames(TestCase):
+class SuperUserTestCase(TestCase):
     def setUp(self):
         superuser = User(username='superuser')
         superuser.set_password('test')
@@ -24,6 +25,8 @@ class TestDumpViewsGenerateDownloadsWithSaneFilenames(TestCase):
         self.c = Client()
         self.c.login(username='superuser', password='test')
 
+
+class TestDumpViewsGenerateDownloadsWithSaneFilenames(SuperUserTestCase):
     @freeze_time('2012-01-14')
     def test_dump_data(self):
         url = reverse('dump-data')
@@ -49,16 +52,18 @@ class TestDumpViewsGenerateDownloadsWithSaneFilenames(TestCase):
                          'attachment; filename=sites-site_2012-01-14T00:00:00.json')
 
 
-class TestDumpHandlesErrorsGracefully(TestCase):
-    def setUp(self):
-        superuser = User(username='superuser')
-        superuser.set_password('test')
-        superuser.is_staff = True
-        superuser.is_superuser = True
-        superuser.save()
-        self.c = Client()
-        self.c.login(username='superuser', password='test')
+class TestDumpData(SuperUserTestCase):
+    def test_dump_data_parameters(self):
+        url = reverse('dump-data')
+        response = self.c.get(url, {
+            'app_label': 'auth.user,sites'
+        })
+        content = json.loads(response.content.decode('utf-8'))
+        self.assertTrue([i for i in content if i['model'] == 'auth.user'])
+        self.assertTrue([i for i in content if i['model'] == 'sites.site'])
 
+
+class TestDumpHandlesErrorsGracefully(SuperUserTestCase):
     def test_erroneous_dump_has_error_messages(self):
         url = reverse('dump-app-data', kwargs={'app_label': 'flatpages'})
         response = self.c.get(url, follow=True)
@@ -78,17 +83,11 @@ class TestDumpHandlesErrorsGracefully(TestCase):
                          response['location'])
 
 
-class TestLoadDataGet(TestCase):
+class TestLoadDataGet(SuperUserTestCase):
     def setUp(self):
-        superuser = User(username='superuser')
-        superuser.set_password('test')
-        superuser.is_staff = True
-        superuser.is_superuser = True
-        superuser.save()
+        super(TestLoadDataGet, self).setUp()
         self.url = reverse('load-data')
-        self.c = Client()
-        self.c.login(username='superuser', password='test')
-
+        
     def test_renders_correct_template(self):
         response = self.c.get(self.url)
         self.assertEqual('smuggler/load_data_form.html', response.template_name)
@@ -116,16 +115,10 @@ class TestLoadDataGet(TestCase):
         reload_module(settings)
 
 
-class TestLoadDataPost(TestCase):
+class TestLoadDataPost(SuperUserTestCase):
     def setUp(self):
-        superuser = User(username='superuser')
-        superuser.set_password('test')
-        superuser.is_staff = True
-        superuser.is_superuser = True
-        superuser.save()
+        super(TestLoadDataPost, self).setUp()
         self.url = reverse('load-data')
-        self.c = Client()
-        self.c.login(username='superuser', password='test')
 
     def test_empty_fixture(self):
         f = SimpleUploadedFile('valid.json', b'[]')
