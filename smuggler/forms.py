@@ -7,7 +7,7 @@
 # Software Foundation. See the file README for copying conditions.
 from django import forms
 from django.core.serializers import get_serializer_formats
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 
 class ImportFileForm(forms.Form):
