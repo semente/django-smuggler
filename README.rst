@@ -60,6 +60,10 @@ Then try access these urls:
 * `/admin/dump/ <http://127.0.0.1/admin/dump/>`_, to download data from
   whole project;
 
+  You can also pass in a querystring like
+  ``/admin/dump/?app_label=flatpages,auth,yourapp.model`` to specify what
+  must be dumped.
+
 * `/admin/APP_LABEL/dump/ <http://127.0.0.1/admin/APP_LABEL/dump/>`_, to
   download data from a app;
 
