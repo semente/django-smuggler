@@ -5,6 +5,12 @@ Django Smuggler
 .. image:: https://badge.fury.io/py/django-smuggler.svg
     :target: http://badge.fury.io/py/django-smuggler
 
+.. image:: https://travis-ci.org/semente/django-smuggler.svg?branch=master
+    :target: https://travis-ci.org/semente/django-smuggler
+
+.. image:: https://coveralls.io/repos/semente/django-smuggler/badge.png?branch=master
+    :target: https://coveralls.io/r/semente/django-smuggler?branch=master
+
 **Django Smuggler** is a pluggable application for `Django Web Framework`_ for
 you easily dump/load fixtures via the automatically-generated administration
 interface. Fixtures are collection of data that Django knows how to import into
