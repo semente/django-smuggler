@@ -1,0 +1,18 @@
+# Config file for automatic testing at travis-ci.org
+
+language: python
+
+# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install: pip install tox
+
+script:
+  - tox
+
+env:
+  - TOXENV=testenv:py26-dj14
+  - TOXENV=testenv:py26-dj15
+  - TOXENV=testenv:py27-dj16
+  - TOXENV=testenv:py33-dj16
+  - TOXENV=testenv:py27-dj17
+  - TOXENV=testenv:py33-dj17
+  - TOXENV=testenv:coverage
