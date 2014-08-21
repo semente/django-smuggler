@@ -135,7 +135,7 @@ Load form:
 Release notes
 =============
 
-Version 0.5 (unreleased)
+Version 0.5 (2014-08-21)
 ------------------------
 
 * Added an option to specify a list of app labels to the /dump/ view
