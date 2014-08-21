@@ -22,6 +22,7 @@ try:
 except AttributeError:  # before django 1.7
     allow_migrate = router.allow_syncdb
 
+
 def get_file_list(path):
     file_list = []
     for file_name in os.listdir(path):

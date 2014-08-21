@@ -15,4 +15,5 @@ env:
   - TOXENV=py33-dj16
   - TOXENV=py27-dj17
   - TOXENV=py33-dj17
+  - TOXENV=flake8
   - TOXENV=coverage

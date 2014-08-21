@@ -12,10 +12,12 @@ from django.core.exceptions import ImproperlyConfigured
 from smuggler.settings import (SMUGGLER_FIXTURE_DIR, SMUGGLER_FORMAT,
                                SMUGGLER_INDENT)
 
+
 def save_data_on_filesystem(sender, **kwargs):
     if not SMUGGLER_FIXTURE_DIR:
-        raise ImproperlyConfigured('You need to specify SMUGGLER_FIXTURE_DIR in '
-                                   'your Django settings file.')
+        raise ImproperlyConfigured(
+            'You need to specify SMUGGLER_FIXTURE_DIR in your Django '
+            'settings file.')
     objects = sender._default_manager.all()
     app_label, model_label = sender._meta.app_label, sender._meta.module_name
     filename = '%s-%s_%s.%s' % (app_label, model_label,

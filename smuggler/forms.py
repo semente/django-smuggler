@@ -25,6 +25,6 @@ class ImportFileForm(forms.Form):
     def clean_file(self):
         data = self.cleaned_data['file']
         file_format = data.name.split('.')[-1]
-        if not file_format in get_serializer_formats():
+        if file_format not in get_serializer_formats():
             raise forms.ValidationError(_('Invalid file extension.'))
         return data

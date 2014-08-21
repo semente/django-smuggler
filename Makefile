@@ -8,3 +8,6 @@ coverage:
 	coverage report -m
 	coverage html
 	python -mwebbrowser htmlcov/index.html
+
+lint:
+	flake8 smuggler tests

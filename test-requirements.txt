@@ -4,3 +4,4 @@ coveralls
 tox
 freezegun
 wheel
+flake8

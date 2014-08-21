@@ -30,7 +30,8 @@ def dump_to_response(request, app_label=[], exclude=[], filename_prefix=None):
     """Utility function that dumps the given app/model to an HttpResponse.
     """
     try:
-        filename = '%s.%s' % (datetime.now().isoformat(), settings.SMUGGLER_FORMAT)
+        filename = '%s.%s' % (datetime.now().isoformat(),
+                              settings.SMUGGLER_FORMAT)
         if filename_prefix:
             filename = '%s_%s' % (filename_prefix, filename)
         if not isinstance(app_label, list):
@@ -61,7 +62,8 @@ def dump_data(request):
     app_label = request.GET.get('app_label', [])
     if app_label:
         app_label = app_label.split(',')
-    return dump_to_response(request, app_label=app_label, exclude=settings.SMUGGLER_EXCLUDE_LIST)
+    return dump_to_response(request, app_label=app_label,
+                            exclude=settings.SMUGGLER_EXCLUDE_LIST)
 
 
 @user_passes_test(is_superuser)
@@ -98,8 +100,8 @@ def load_data(request):
                 file_name = uploaded_file.name
                 file_format = file_name.split('.')[-1]
                 if '_loadandsave' in request.POST:
-                    destination_path = os.path.join(settings.SMUGGLER_FIXTURE_DIR,
-                                                    file_name)
+                    destination_path = os.path.join(
+                        settings.SMUGGLER_FIXTURE_DIR, file_name)
                     save_uploaded_file_on_disk(uploaded_file, destination_path)
                     file_data = open(destination_path, 'r')
                 elif uploaded_file.multiple_chunks():
@@ -108,29 +110,32 @@ def load_data(request):
                     file_data = uploaded_file.read()
                 data.append((file_format, file_data))
         elif '_loadfromdisk' in request.POST:
-            query_dict = request.POST.copy()        
+            query_dict = request.POST.copy()
             del(query_dict['_loadfromdisk'])
             del(query_dict['csrfmiddlewaretoken'])
             selected_files = query_dict.values()
             for file_name in selected_files:
-                file_path = os.path.join(settings.SMUGGLER_FIXTURE_DIR, file_name)
+                file_path = os.path.join(
+                    settings.SMUGGLER_FIXTURE_DIR, file_name)
                 file_format = file_name.split('.')[-1]
                 file_data = open(file_path, 'r')
                 data.append((file_format, file_data))
         if data:
             try:
                 obj_count = load_requested_data(data)
-                user_msg = ('%(obj_count)d object(s) from %(file_count)d file(s) '
-                            'loaded with success.') # TODO: pluralize
+                user_msg = ('%(obj_count)d object(s) from %(file_count)d'
+                            ' file(s) loaded with success.')  # TODO: pluralize
                 user_msg = _(user_msg) % {
                     'obj_count': obj_count,
                     'file_count': len(data)
                 }
                 messages.add_message(request, messages.INFO, user_msg)
-            except (IntegrityError, ObjectDoesNotExist, DeserializationError) as e:
-                messages.add_message(request, messages.ERROR,
+            except (IntegrityError, ObjectDoesNotExist,
+                    DeserializationError) as e:
+                messages.add_message(
+                    request, messages.ERROR,
                     _(u'An exception occurred while loading data: %s')
-                        % unicode(e))
+                    % str(e))
     context = {
         'files_available': (get_file_list(settings.SMUGGLER_FIXTURE_DIR)
                             if settings.SMUGGLER_FIXTURE_DIR else []),

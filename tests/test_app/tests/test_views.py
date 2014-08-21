@@ -12,7 +12,8 @@ from smuggler import settings
 from smuggler.forms import ImportFileForm
 
 
-p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__), *args))
+p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                               *args))
 
 
 class SuperUserTestCase(TestCase):
@@ -49,7 +50,8 @@ class TestDumpViewsGenerateDownloadsWithSaneFilenames(SuperUserTestCase):
         })
         response = self.c.get(url)
         self.assertEqual(response['Content-Disposition'],
-                         'attachment; filename=sites-site_2012-01-14T00:00:00.json')
+                         'attachment;'
+                         ' filename=sites-site_2012-01-14T00:00:00.json')
 
 
 class TestDumpData(SuperUserTestCase):
@@ -87,10 +89,11 @@ class TestLoadDataGet(SuperUserTestCase):
     def setUp(self):
         super(TestLoadDataGet, self).setUp()
         self.url = reverse('load-data')
-        
+
     def test_renders_correct_template(self):
         response = self.c.get(self.url)
-        self.assertEqual('smuggler/load_data_form.html', response.template_name)
+        self.assertEqual('smuggler/load_data_form.html',
+                         response.template_name)
 
     def test_has_form_in_context(self):
         response = self.c.get(self.url)
