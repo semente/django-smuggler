@@ -5,3 +5,11 @@ include README.rst
 recursive-include etc *
 recursive-include smuggler/locale *.po *.mo
 recursive-include smuggler/templates *.html
+
+include test-requirements.txt
+include .travis.yml
+include Makefile
+include tox.ini
+recursive-include tests *.html
+recursive-include tests *.json
+recursive-include tests *.py
