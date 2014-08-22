@@ -214,10 +214,9 @@ class TestLoadDataPost(SuperUserTestCase):
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        self.assertEqual(
-            'An exception occurred while loading data: '
-            'UNIQUE constraint failed: test_app_page.path',
-            response_messages[0].message)
+        self.assertRegexpMatches(
+            response_messages[0].message,
+            r'(?i)An exception occurred while loading data:.*unique.*')
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_from_disk(self):
