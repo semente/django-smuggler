@@ -129,13 +129,12 @@ def load_data(request):
                     'obj_count': obj_count,
                     'file_count': len(data)
                 }
-                messages.add_message(request, messages.INFO, user_msg)
+                messages.info(request, user_msg)
             except (IntegrityError, ObjectDoesNotExist,
                     DeserializationError) as e:
-                messages.add_message(
-                    request, messages.ERROR,
-                    _(u'An exception occurred while loading data: %s')
-                    % str(e))
+                messages.error(
+                    request,
+                    _('An exception occurred while loading data: %s') % str(e))
     context = {
         'files_available': (get_file_list(settings.SMUGGLER_FIXTURE_DIR)
                             if settings.SMUGGLER_FIXTURE_DIR else []),
