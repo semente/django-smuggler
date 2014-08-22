@@ -39,36 +39,30 @@ class TestSmugglerViewsDeniesNonSuperuser(TestCase):
         staff.set_password('test')
         staff.is_staff = True
         staff.save()
+        self.c = Client()
+        self.c.login(username='staff', password='test')
 
     def test_dump_data(self):
-        c = Client()
-        c.login(username='staff', password='test')
         url = reverse('dump-data')
-        response = c.get(url)
+        response = self.c.get(url)
         self.assertEqual(response.status_code, 403)
 
     def test_dump_app_data(self):
-        c = Client()
-        c.login(username='staff', password='test')
         url = reverse('dump-app-data', kwargs={'app_label': 'sites'})
-        response = c.get(url)
+        response = self.c.get(url)
         self.assertEqual(response.status_code, 403)
 
     def test_dump_model_data(self):
-        c = Client()
-        c.login(username='staff', password='test')
         url = reverse('dump-model-data', kwargs={
             'app_label': 'sites',
             'model_label': 'site'
         })
-        response = c.get(url)
+        response = self.c.get(url)
         self.assertEqual(response.status_code, 403)
 
     def test_load_data(self):
-        c = Client()
-        c.login(username='staff', password='test')
         url = reverse('load-data')
-        response = c.get(url)
+        response = self.c.get(url)
         self.assertEqual(response.status_code, 403)
 
 
@@ -79,34 +73,28 @@ class TestSmugglerViewsAllowsSuperuser(TestCase):
         superuser.is_staff = True
         superuser.is_superuser = True
         superuser.save()
+        self.c = Client()
+        self.c.login(username='superuser', password='test')
 
     def test_dump_data(self):
-        c = Client()
-        c.login(username='superuser', password='test')
         url = reverse('dump-data')
-        response = c.get(url)
+        response = self.c.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_dump_app_data(self):
-        c = Client()
-        c.login(username='superuser', password='test')
         url = reverse('dump-app-data', kwargs={'app_label': 'sites'})
-        response = c.get(url)
+        response = self.c.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_dump_model_data(self):
-        c = Client()
-        c.login(username='superuser', password='test')
         url = reverse('dump-model-data', kwargs={
             'app_label': 'sites',
             'model_label': 'site'
         })
-        response = c.get(url)
+        response = self.c.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_load_data(self):
-        c = Client()
-        c.login(username='superuser', password='test')
         url = reverse('load-data')
-        response = c.get(url)
+        response = self.c.get(url)
         self.assertEqual(response.status_code, 200)
