@@ -10,6 +10,7 @@ from django.utils.six.moves import reload_module
 from freezegun import freeze_time
 from smuggler import settings
 from smuggler.forms import ImportFileForm
+from test_app.models import Page
 
 
 p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -111,8 +112,11 @@ class TestLoadDataGet(SuperUserTestCase):
     def test_has_files_available_in_context(self):
         reload_module(settings)
         response = self.c.get(self.url)
-        self.assertEqual([('page_dump.json', '0.1 KB')],
-                         response.context['files_available'])
+        self.assertEqual(
+            [
+                ('big_file.json', '64.3 KB'),
+                ('page_dump.json', '0.1 KB')
+            ], response.context['files_available'])
 
     def tearDown(self):
         reload_module(settings)
@@ -122,6 +126,14 @@ class TestLoadDataPost(SuperUserTestCase):
     def setUp(self):
         super(TestLoadDataPost, self).setUp()
         self.url = reverse('load-data')
+
+    def test_load_fixture_without_file(self):
+        response = self.c.post(self.url, {
+            '_load': True,
+            'file': None
+        })
+        self.assertTrue(response.context['import_file_form'].is_bound)
+        self.assertFalse(response.context['import_file_form'].is_valid())
 
     def test_empty_fixture(self):
         f = SimpleUploadedFile('valid.json', b'[]')
@@ -135,3 +147,56 @@ class TestLoadDataPost(SuperUserTestCase):
         self.assertEqual(
             '0 object(s) from 1 file(s) loaded with success.',
             response_messages[0].message)
+
+    def test_load_fixture(self):
+        self.assertEqual(0, Page.objects.count())
+        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
+        self.c.post(self.url, {
+            '_load': True,
+            'file': f
+        })
+        self.assertEqual(1, Page.objects.count())
+
+    def test_load_fixture_without_load_param(self):
+        self.assertEqual(0, Page.objects.count())
+        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
+        self.c.post(self.url, {
+            'file': f
+        })
+        self.assertEqual(0, Page.objects.count())
+
+    @override_settings(FILE_UPLOAD_MAX_MEMORY_SIZE=0)
+    def test_load_fixture_with_chunks(self):
+        self.assertEqual(0, Page.objects.count())
+        f = open(p('..', 'smuggler_fixtures', 'big_file.json'), mode='rb')
+        self.c.post(self.url, {
+            '_load': True,
+            'file': f
+        })
+        self.assertEqual(1, Page.objects.count())
+
+    def test_handle_garbage_upload(self):
+        f = open(p('..', 'smuggler_fixtures', 'garbage', 'garbage.json'),
+                 mode='rb')
+        response = self.c.post(self.url, {
+            '_load': True,
+            'file': f
+        })
+        response_messages = list(response.context['messages'])
+        self.assertEqual(1, len(response_messages))
+        self.assertEqual(messages.ERROR, response_messages[0].level)
+        self.assertEqual(
+            'An exception occurred while loading data:'
+            ' No JSON object could be decoded',
+            response_messages[0].message)
+
+    @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
+    def test_load_from_disk(self):
+        reload_module(settings)
+        self.assertEqual(0, Page.objects.count())
+        self.c.post(self.url, {
+            '_loadfromdisk': True,
+            'csrfmiddlewaretoken': '',
+            'file_0': 'page_dump.json'
+        })
+        self.assertEqual(1, Page.objects.count())

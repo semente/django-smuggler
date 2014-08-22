@@ -10,7 +10,11 @@ p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
 class TestGetFileList(TestCase):
     def test_get_file_list(self):
         file_list = get_file_list(p('..', 'smuggler_fixtures'))
-        self.assertEqual([('page_dump.json', '0.1 KB')], file_list)
+        self.assertEqual(
+            [
+                ('big_file.json', '64.3 KB'),
+                ('page_dump.json', '0.1 KB')
+            ], file_list)
 
 
 class TestSaveUploadedFileOnDisk(TestCase):
