@@ -13,11 +13,11 @@ from django.core.management.base import CommandError
 from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.views.generic.edit import FormView
 
 from smuggler.forms import ImportFileForm
 from smuggler import settings
@@ -82,19 +82,26 @@ def dump_model_data(request, app_label, model_label):
                             [], '-'.join((app_label, model_label)))
 
 
-@user_passes_test(is_superuser)
-def load_data(request):
-    """
-    Load data from uploaded file or disk.
+class LoadDataView(FormView):
+    form_class = ImportFileForm
+    template_name = 'smuggler/load_data_form.html'
+    success_url = '.'
 
-    Note: A uploaded file will be saved on `SMUGGLER_FIXTURE_DIR` if the submit
-          button with name "_loadandsave" was pressed.
-    """
-    form = ImportFileForm()
-    if request.method == 'POST':
+    def get_context_data(self, **kwargs):
+        context = super(LoadDataView, self).get_context_data(**kwargs)
+        context.update({
+            'files_available': (get_file_list(settings.SMUGGLER_FIXTURE_DIR)
+                                if settings.SMUGGLER_FIXTURE_DIR else []),
+            'smuggler_fixture_dir': settings.SMUGGLER_FIXTURE_DIR,
+        })
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = form_class()
         data = []
         if '_load' in request.POST or '_loadandsave' in request.POST:
-            form = ImportFileForm(request.POST, request.FILES)
+            form = self.get_form(form_class)
             if form.is_valid():
                 uploaded_file = request.FILES['file']
                 file_name = uploaded_file.name
@@ -135,10 +142,15 @@ def load_data(request):
                 messages.error(
                     request,
                     _('An exception occurred while loading data: %s') % str(e))
-    context = {
-        'files_available': (get_file_list(settings.SMUGGLER_FIXTURE_DIR)
-                            if settings.SMUGGLER_FIXTURE_DIR else []),
-        'smuggler_fixture_dir': settings.SMUGGLER_FIXTURE_DIR,
-        'import_file_form': form,
-    }
-    return TemplateResponse(request, 'smuggler/load_data_form.html', context)
+            return self.form_valid(form)
+        else:
+            return self.render_to_response(
+                self.get_context_data(import_file_form=form))
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form(self.get_form_class())
+        return self.render_to_response(
+            self.get_context_data(import_file_form=form))
+
+
+load_data = user_passes_test(is_superuser)(LoadDataView.as_view())

@@ -145,7 +145,7 @@ class TestLoadDataPost(SuperUserTestCase):
         response = self.c.post(self.url, {
             '_load': True,
             'file': None
-        })
+        }, follow=True)
         self.assertFormError(response, 'import_file_form',
                              'file', ['This field is required.'])
 
@@ -154,7 +154,7 @@ class TestLoadDataPost(SuperUserTestCase):
         response = self.c.post(self.url, {
             '_load': True,
             'file': f
-        })
+        }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.INFO, response_messages[0].level)
@@ -168,7 +168,7 @@ class TestLoadDataPost(SuperUserTestCase):
         self.c.post(self.url, {
             '_load': True,
             'file': f
-        })
+        }, follow=True)
         self.assertEqual(1, Page.objects.count())
 
     def test_load_fixture_without_load_param(self):
@@ -176,7 +176,7 @@ class TestLoadDataPost(SuperUserTestCase):
         f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
         self.c.post(self.url, {
             'file': f
-        })
+        }, follow=True)
         self.assertEqual(0, Page.objects.count())
 
     @override_settings(FILE_UPLOAD_MAX_MEMORY_SIZE=0)
@@ -186,7 +186,7 @@ class TestLoadDataPost(SuperUserTestCase):
         self.c.post(self.url, {
             '_load': True,
             'file': f
-        })
+        }, follow=True)
         self.assertEqual(1, Page.objects.count())
 
     def test_handle_garbage_upload(self):
@@ -195,7 +195,7 @@ class TestLoadDataPost(SuperUserTestCase):
         response = self.c.post(self.url, {
             '_load': True,
             'file': f
-        })
+        }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
@@ -210,7 +210,7 @@ class TestLoadDataPost(SuperUserTestCase):
         response = self.c.post(self.url, {
             '_load': True,
             'file': f
-        })
+        }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
@@ -226,7 +226,7 @@ class TestLoadDataPost(SuperUserTestCase):
             '_loadfromdisk': True,
             'csrfmiddlewaretoken': '',
             'file_0': 'page_dump.json'
-        })
+        }, follow=True)
         self.assertEqual(1, Page.objects.count())
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
@@ -236,7 +236,7 @@ class TestLoadDataPost(SuperUserTestCase):
         self.c.post(self.url, {
             '_loadandsave': True,
             'file': f
-        })
+        }, follow=True)
         self.assertTrue(os.path.exists(
             p('..', 'smuggler_fixtures', 'empty.json')))
         os.unlink(p('..', 'smuggler_fixtures', 'empty.json'))
