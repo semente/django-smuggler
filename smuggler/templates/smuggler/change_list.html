@@ -2,26 +2,18 @@
 {% load url from future %} {# For Django < 1.5 #}
 {% load i18n %}
 
-{% block object-tools %}
-  {% if has_add_permission %}
-    <ul class="object-tools">
-      {% if user.is_superuser %}
-      <li>
+{% block object-tools-items %}
+  {% if user.is_superuser %}
+    <li>
         <a href="dump/">
-          {% trans "Dump data" %}
+            {% trans "Dump data" %}
         </a>
-      </li>
-      <li>
+    </li>
+    <li>
         <a href="{% url 'load-data' %}{% if is_popup %}?_popup=1{% endif %}">
-          {% trans "Load data" %}
+            {% trans "Load data" %}
         </a>
-      </li>
-      {% endif %}
-      <li>
-        <a href="add/{% if is_popup %}?_popup=1{% endif %}" class="addlink">
-          {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
-        </a>
-      </li>
-    </ul>
+    </li>
   {% endif %}
+  {{ block.super }}
 {% endblock %}
