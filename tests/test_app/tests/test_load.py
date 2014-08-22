@@ -61,12 +61,14 @@ class TestInvalidLoad(TestCase):
         "model": "test_app.page",
         "fields": {
             "title": "test",
+            "path": "",
             "body": "test body",
         },
         "pk": 1,
         "model": "test_app.page",
         "fields": {
-            "title": None, "body": None,
+            "title": None,
+            "body": None,
         }
     }]
 

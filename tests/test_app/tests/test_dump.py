@@ -20,6 +20,7 @@ class BasicDumpTestCase(TestCase):
         "model": "test_app.page",
         "fields": {
             "title": "test",
+            "path": "",
             "body": "test body",
         }
     }]

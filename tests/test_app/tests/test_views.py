@@ -81,9 +81,8 @@ class TestDumpHandlesErrorsGracefully(SuperUserTestCase):
     def test_erroneous_dump_redirects(self):
         url = reverse('dump-app-data', kwargs={'app_label': 'flatpages'})
         response = self.c.get(url)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual('http://testserver/admin/flatpages/',
-                         response['location'])
+        self.assertRedirects(response, '/admin/flatpages/',
+                             target_status_code=404)
 
 
 class TestLoadDataGet(SuperUserTestCase):
@@ -93,8 +92,7 @@ class TestLoadDataGet(SuperUserTestCase):
 
     def test_renders_correct_template(self):
         response = self.c.get(self.url)
-        self.assertEqual('smuggler/load_data_form.html',
-                         response.template_name)
+        self.assertTemplateUsed(response, 'smuggler/load_data_form.html')
 
     def test_has_form_in_context(self):
         response = self.c.get(self.url)
@@ -118,6 +116,22 @@ class TestLoadDataGet(SuperUserTestCase):
                 ('page_dump.json', '0.1 KB')
             ], response.context['files_available'])
 
+    @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
+    def test_has_loadfromdisk_button(self):
+        reload_module(settings)
+        response = self.c.get(self.url)
+        self.assertContains(
+            response,
+            '<input class="default" type="submit" name="_loadfromdisk"')
+
+    @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
+    def test_has_loadandsave_button(self):
+        reload_module(settings)
+        response = self.c.get(self.url)
+        self.assertContains(
+            response,
+            '<input type="submit" name="_loadandsave"')
+
     def tearDown(self):
         reload_module(settings)
 
@@ -132,8 +146,8 @@ class TestLoadDataPost(SuperUserTestCase):
             '_load': True,
             'file': None
         })
-        self.assertTrue(response.context['import_file_form'].is_bound)
-        self.assertFalse(response.context['import_file_form'].is_valid())
+        self.assertFormError(response, 'import_file_form',
+                             'file', ['This field is required.'])
 
     def test_empty_fixture(self):
         f = SimpleUploadedFile('valid.json', b'[]')
@@ -190,6 +204,21 @@ class TestLoadDataPost(SuperUserTestCase):
             ' No JSON object could be decoded',
             response_messages[0].message)
 
+    def test_handle_integrity_error(self):
+        f = open(p('..', 'smuggler_fixtures', 'garbage',
+                   'invalid_page_dump.json'), mode='rb')
+        response = self.c.post(self.url, {
+            '_load': True,
+            'file': f
+        })
+        response_messages = list(response.context['messages'])
+        self.assertEqual(1, len(response_messages))
+        self.assertEqual(messages.ERROR, response_messages[0].level)
+        self.assertEqual(
+            'An exception occurred while loading data: '
+            'UNIQUE constraint failed: test_app_page.path',
+            response_messages[0].message)
+
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_from_disk(self):
         reload_module(settings)
@@ -200,3 +229,18 @@ class TestLoadDataPost(SuperUserTestCase):
             'file_0': 'page_dump.json'
         })
         self.assertEqual(1, Page.objects.count())
+
+    @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
+    def test_load_and_save(self):
+        reload_module(settings)
+        f = SimpleUploadedFile('empty.json', b'[]')
+        self.c.post(self.url, {
+            '_loadandsave': True,
+            'file': f
+        })
+        self.assertTrue(os.path.exists(
+            p('..', 'smuggler_fixtures', 'empty.json')))
+        os.unlink(p('..', 'smuggler_fixtures', 'empty.json'))
+
+    def tearDown(self):
+        reload_module(settings)

@@ -19,7 +19,7 @@ MIDDLEWARE_CLASSES = (
 
 SITE_ID = 1
 
-LOGIN_URL = '/admin/'
+LOGIN_URL = '/admin/login/'
 
 INSTALLED_APPS = [
     'django.contrib.auth',

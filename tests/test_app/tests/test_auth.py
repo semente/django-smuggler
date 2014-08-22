@@ -7,18 +7,14 @@ class TestSmugglerViewsRequireAuthentication(TestCase):
     def test_dump_data(self):
         c = Client()
         url = reverse('dump-data')
-        response = c.get(url, follow=True)
-        self.assertEqual(
-            response.redirect_chain[0],
-            ('http://testserver/admin/?next=/admin/dump/', 302))
+        response = c.get(url)
+        self.assertRedirects(response, '/admin/login/?next=/admin/dump/')
 
     def test_dump_app_data(self):
         c = Client()
         url = reverse('dump-app-data', kwargs={'app_label': 'sites'})
-        response = c.get(url, follow=True)
-        self.assertEqual(
-            response.redirect_chain[0],
-            ('http://testserver/admin/?next=/admin/sites/dump/', 302))
+        response = c.get(url)
+        self.assertRedirects(response, '/admin/login/?next=/admin/sites/dump/')
 
     def test_dump_model_data(self):
         c = Client()
@@ -26,18 +22,15 @@ class TestSmugglerViewsRequireAuthentication(TestCase):
             'app_label': 'sites',
             'model_label': 'site'
         })
-        response = c.get(url, follow=True)
-        self.assertEqual(
-            response.redirect_chain[0],
-            ('http://testserver/admin/?next=/admin/sites/site/dump/', 302))
+        response = c.get(url)
+        self.assertRedirects(response,
+                             '/admin/login/?next=/admin/sites/site/dump/')
 
     def test_load_data(self):
         c = Client()
         url = reverse('load-data')
         response = c.get(url, follow=True)
-        self.assertEqual(
-            response.redirect_chain[0],
-            ('http://testserver/admin/?next=/admin/load/', 302))
+        self.assertRedirects(response, '/admin/login/?next=/admin/load/')
 
 
 class TestSmugglerViewsDeniesNonSuperuser(TestCase):
