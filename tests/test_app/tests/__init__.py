@@ -1,4 +1,5 @@
 # Django < 1.6 won't discover tests unless they are imported here.
+from .test_admin import TestAdminNormalUser, TestAdminSuperUser
 from .test_auth import (TestSmugglerViewsAllowsSuperuser,
                         TestSmugglerViewsDeniesNonSuperuser,
                         TestSmugglerViewsRequireAuthentication)
@@ -15,6 +16,8 @@ from .test_views import (TestDumpData,
 
 # This list exist to prevent flake8 from complaining.
 __tests__ = [
+    TestAdminNormalUser,
+    TestAdminSuperUser,
     TestSmugglerViewsAllowsSuperuser,
     TestSmugglerViewsDeniesNonSuperuser,
     TestSmugglerViewsRequireAuthentication,
