@@ -26,7 +26,7 @@ except AttributeError:  # before django 1.7
 def get_file_list(path):
     file_list = []
     for file_name in os.listdir(path):
-        if not os.path.isdir(file_name):
+        if os.path.isfile(os.path.join(path, file_name)):
             file_path = os.path.join(path, file_name)
             file_size = os.path.getsize(file_path)
             file_list.append((file_name, '%0.1f KB' % float(file_size/1024.0)))
