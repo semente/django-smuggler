@@ -132,6 +132,18 @@ Load form (with SMUGGLER_FIXTURE_DIR configured):
 Release notes
 =============
 
+Version 0.6 (unreleased)
+------------------------
+
+* HTML5 multiple file upload is now supported for fixture uploads
+
+* Support loading fixtures from SMUGGLER_FIXTURE_DIR and upload at the same time
+
+* Recognize fixtures with upper case file extension correctly
+
+* Cleaner code and better tests :-)
+
+
 Version 0.5 (2014-08-21)
 ------------------------
 
