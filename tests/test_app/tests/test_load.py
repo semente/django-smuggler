@@ -1,44 +1,29 @@
-import json
+import os.path
 from django.contrib.sites.models import Site
 from django.db import IntegrityError
-from django.test import TestCase
-from smuggler.utils import load_requested_data
+from django.test import TestCase, TransactionTestCase
+from smuggler.utils import load_fixtures
 from test_app.models import Page
 
 
-class SimpleLoadTestCase(TestCase):
-    PAGE_DUMP = [{
-        "pk": 1,
-        "model": "test_app.page",
-        "fields": {
-            "title": "test",
-            "body": "test body",
-        }
-    }]
-    SITE_DUMP = [{
-        "pk": 1,
-        "model": "sites.site",
-        "fields": {
-            "domain": "example.com",
-            "name": "test.com"
-        }
-    }]
-    ALL_DUMP = PAGE_DUMP + SITE_DUMP
+p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                               *args))
 
+
+class SimpleLoadTestCase(TestCase):
     def test_load_page(self):
         self.assertEqual(0, Page.objects.count())
-        count = load_requested_data([
-            ('json', json.dumps(self.PAGE_DUMP))
-        ])
+        count = load_fixtures([
+            p('..', 'smuggler_fixtures', 'page_dump.json')])
         self.assertEqual(count, 1)
         self.assertEqual('test', Page.objects.get(pk=1).title)
 
     def test_load_page_and_site(self):
         self.assertEqual(0, Page.objects.count())
         self.assertEqual(Site.objects.get(pk=1).name, 'example.com')
-        count = load_requested_data([
-            ('json', json.dumps(self.PAGE_DUMP)),
-            ('json', json.dumps(self.SITE_DUMP))
+        count = load_fixtures([
+            p('..', 'smuggler_fixtures', 'page_dump.json'),
+            p('..', 'smuggler_fixtures', 'site_dump.json')
         ])
         self.assertEqual(count, 2)
         self.assertEqual('test', Page.objects.get(pk=1).title)
@@ -47,32 +32,17 @@ class SimpleLoadTestCase(TestCase):
     def test_load_all(self):
         self.assertEqual(0, Page.objects.count())
         self.assertEqual(Site.objects.get(pk=1).name, 'example.com')
-        count = load_requested_data([
-            ('json', json.dumps(self.ALL_DUMP))
+        count = load_fixtures([
+            p('..', 'smuggler_fixtures', 'all_dump.json')
         ])
         self.assertEqual(count, 2)
         self.assertEqual('test', Page.objects.get(pk=1).title)
         self.assertEqual('test.com', Site.objects.get(pk=1).name)
 
 
-class TestInvalidLoad(TestCase):
-    PAGE_DUMP = [{
-        "pk": 1,
-        "model": "test_app.page",
-        "fields": {
-            "title": "test",
-            "path": "",
-            "body": "test body",
-        },
-        "pk": 1,
-        "model": "test_app.page",
-        "fields": {
-            "title": None,
-            "body": None,
-        }
-    }]
-
+class TestInvalidLoad(TransactionTestCase):
     def test_load_invalid_data(self):
-        self.assertRaises(IntegrityError, load_requested_data,
-                          [('json', json.dumps(self.PAGE_DUMP))])
+        self.assertRaises(IntegrityError, load_fixtures,
+                          [p('..', 'smuggler_fixtures',
+                             'garbage', 'invalid_page_dump.json')])
         self.assertEqual(0, Page.objects.count())

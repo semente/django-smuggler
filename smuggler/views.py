@@ -7,6 +7,7 @@
 # Software Foundation. See the file README for copying conditions.
 import os.path
 from datetime import datetime
+import tempfile
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.management.base import CommandError
 from django.core.serializers.base import DeserializationError
@@ -20,7 +21,7 @@ from django.views.generic.edit import FormView
 from smuggler.forms import ImportForm
 from smuggler import settings
 from smuggler.utils import (save_uploaded_file_on_disk, serialize_to_response,
-                            load_requested_data)
+                            load_fixtures)
 
 
 def dump_to_response(request, app_label=[], exclude=[], filename_prefix=None):
@@ -89,25 +90,24 @@ class LoadDataView(FormView):
         store = form.cleaned_data.get('store', False)
         picked_files = form.cleaned_data.get('picked_files', [])
         fixtures = []
+        tmp_fixtures = []
         for upload in uploads:
             file_name = upload.name
-            file_format = os.path.splitext(file_name)[1][1:].lower()
-            if store:
+            if store:  # Store the file in SMUGGLER_FIXTURE_DIR
                 destination_path = os.path.join(
                     settings.SMUGGLER_FIXTURE_DIR, file_name)
                 save_uploaded_file_on_disk(upload, destination_path)
-                file_data = open(destination_path, 'r')
-            elif upload.multiple_chunks():
-                file_data = open(upload.temporary_file_path(), 'r')
-            else:
-                file_data = upload.read()
-            fixtures.append((file_format, file_data))
+            else:  # Store the file in a tmp file
+                prefix, suffix = os.path.splitext(file_name)
+                destination_path = tempfile.mkstemp(
+                    suffix=suffix, prefix=prefix + '_')[1]
+                save_uploaded_file_on_disk(upload, destination_path)
+                tmp_fixtures.append(destination_path)
+            fixtures.append(destination_path)
         for file_name in picked_files:
-            file_format = os.path.splitext(file_name)[1][1:].lower()
-            file_data = open(file_name, 'r')
-            fixtures.append((file_format, file_data))
+            fixtures.append(file_name)
         try:
-            obj_count = load_requested_data(fixtures)
+            obj_count = load_fixtures(fixtures)
             user_msg = ('%(obj_count)d object(s) from %(file_count)d'
                         ' file(s) loaded with success.')  # TODO: pluralize
             user_msg = _(user_msg) % {
@@ -116,10 +116,14 @@ class LoadDataView(FormView):
             }
             messages.info(self.request, user_msg)
         except (IntegrityError, ObjectDoesNotExist,
-                DeserializationError) as e:
+                DeserializationError, CommandError) as e:
             messages.error(
                 self.request,
                 _('An exception occurred while loading data: %s') % str(e))
+        finally:
+            # Remove our tmp files
+            for tmp_file in tmp_fixtures:
+                os.unlink(tmp_file)
         return super(LoadDataView, self).form_valid(form)
 
 

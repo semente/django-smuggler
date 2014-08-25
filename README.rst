@@ -141,6 +141,8 @@ Version 0.6 (unreleased)
 
 * Recognize fixtures with upper case file extension correctly
 
+* Loading fixtures now uses loaddata management command
+
 * Cleaner code and better tests :-)
 
 
@@ -203,11 +205,7 @@ Version 0.1.1 (2010-01-20)
 Backwards-incompatible changes
 ==============================
 
-Since version 0.1
------------------
-
-2010-02-11
-    Renamed urls from import/export to load/dump
+* Renamed urls from import/export to load/dump (Version 0.1)
 
 
 Contributing

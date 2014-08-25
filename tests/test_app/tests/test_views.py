@@ -4,9 +4,10 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
-from django.test import TestCase, Client
+from django.test import TestCase, TransactionTestCase, Client
 from django.test.utils import override_settings
 from django.utils.six.moves import reload_module
+from django.utils.six import assertRegex
 from freezegun import freeze_time
 from smuggler import settings
 from smuggler.forms import ImportForm
@@ -17,8 +18,9 @@ p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                *args))
 
 
-class SuperUserTestCase(TestCase):
+class SuperUserTestCase(object):
     def setUp(self):
+        super(SuperUserTestCase, self).setUp()
         superuser = User(username='superuser')
         superuser.set_password('test')
         superuser.is_staff = True
@@ -28,7 +30,8 @@ class SuperUserTestCase(TestCase):
         self.c.login(username='superuser', password='test')
 
 
-class TestDumpViewsGenerateDownloadsWithSaneFilenames(SuperUserTestCase):
+class TestDumpViewsGenerateDownloadsWithSaneFilenames(SuperUserTestCase,
+                                                      TestCase):
     @freeze_time('2012-01-14')
     def test_dump_data(self):
         url = reverse('dump-data')
@@ -55,7 +58,7 @@ class TestDumpViewsGenerateDownloadsWithSaneFilenames(SuperUserTestCase):
                          ' filename=sites-site_2012-01-14T00:00:00.json')
 
 
-class TestDumpData(SuperUserTestCase):
+class TestDumpData(SuperUserTestCase, TestCase):
     def test_dump_data_parameters(self):
         url = reverse('dump-data')
         response = self.c.get(url, {
@@ -66,7 +69,7 @@ class TestDumpData(SuperUserTestCase):
         self.assertTrue([i for i in content if i['model'] == 'sites.site'])
 
 
-class TestDumpHandlesErrorsGracefully(SuperUserTestCase):
+class TestDumpHandlesErrorsGracefully(SuperUserTestCase, TestCase):
     def test_erroneous_dump_has_error_messages(self):
         url = reverse('dump-app-data', kwargs={'app_label': 'flatpages'})
         response = self.c.get(url, follow=True)
@@ -85,7 +88,7 @@ class TestDumpHandlesErrorsGracefully(SuperUserTestCase):
                              target_status_code=404)
 
 
-class TestLoadDataGet(SuperUserTestCase):
+class TestLoadDataGet(SuperUserTestCase, TestCase):
     def setUp(self):
         super(TestLoadDataGet, self).setUp()
         self.url = reverse('load-data')
@@ -100,22 +103,10 @@ class TestLoadDataGet(SuperUserTestCase):
                               ImportForm)
 
 
-class TestLoadDataPost(SuperUserTestCase):
+class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
     def setUp(self):
         super(TestLoadDataPost, self).setUp()
         self.url = reverse('load-data')
-
-    def test_empty_fixture(self):
-        f = SimpleUploadedFile('valid.json', b'[]')
-        response = self.c.post(self.url, {
-            'uploads': f
-        }, follow=True)
-        response_messages = list(response.context['messages'])
-        self.assertEqual(1, len(response_messages))
-        self.assertEqual(messages.INFO, response_messages[0].level)
-        self.assertEqual(
-            '0 object(s) from 1 file(s) loaded with success.',
-            response_messages[0].message)
 
     def test_load_fixture(self):
         self.assertEqual(0, Page.objects.count())
@@ -143,10 +134,9 @@ class TestLoadDataPost(SuperUserTestCase):
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        self.assertEqual(
-            'An exception occurred while loading data:'
-            ' No JSON object could be decoded',
-            response_messages[0].message)
+        assertRegex(self, response_messages[0].message,
+                    ' Problem installing fixture \'.+\.json\':'
+                    ' No JSON object could be decoded')
 
     def test_handle_integrity_error(self):
         f = open(p('..', 'smuggler_fixtures', 'garbage',
@@ -157,9 +147,8 @@ class TestLoadDataPost(SuperUserTestCase):
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        self.assertRegexpMatches(
-            response_messages[0].message,
-            r'(?i)An exception occurred while loading data:.*unique.*')
+        assertRegex(self, response_messages[0].message,
+                    r'(?i)An exception occurred while loading data:.*unique.*')
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_from_disk(self):
@@ -173,14 +162,17 @@ class TestLoadDataPost(SuperUserTestCase):
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_and_save(self):
         reload_module(settings)
-        f = SimpleUploadedFile('empty.json', b'[]')
+        f = SimpleUploadedFile('uploaded.json',
+                               b'[{"pk": 1, "model": "test_app.page",'
+                               b' "fields": {"title": "test",'
+                               b' "path": "", "body": "test body"}}]')
         self.c.post(self.url, {
             'store': True,
             'uploads': f
         }, follow=True)
         self.assertTrue(os.path.exists(
-            p('..', 'smuggler_fixtures', 'empty.json')))
-        os.unlink(p('..', 'smuggler_fixtures', 'empty.json'))
+            p('..', 'smuggler_fixtures', 'uploaded.json')))
+        os.unlink(p('..', 'smuggler_fixtures', 'uploaded.json'))
 
     def tearDown(self):
         reload_module(settings)

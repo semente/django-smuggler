@@ -6,11 +6,11 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 
-from django.core import serializers
 from django.core.management import CommandError
 from django.core.management.color import no_style
 from django.core.management.commands.dumpdata import Command as DumpData
-from django.db import connections, transaction, router
+from django.core.management.commands.loaddata import Command as LoadData
+from django.db import router
 from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
 from django.utils.six import StringIO
@@ -54,36 +54,22 @@ def serialize_to_response(app_labels=[], exclude=[], response=None,
     return response
 
 
-def load_requested_data(data):
-    """
-    Load the given data dumps and return the number of imported objects.
-
-    Wraps the entire action in a big transaction.
-
-    """
-    style = no_style()
-
-    using = DEFAULT_DB_ALIAS
-    connection = connections[using]
-    cursor = connection.cursor()
-    models = set()
-    counter = 0
-    # Django < 1.6 has no atomic transaction manager, use commit_on_success
-    atomic = getattr(transaction, 'atomic',
-                     getattr(transaction, 'commit_on_success'))
-
-    with atomic(using=using):
-        for format, stream in data:
-            objects = serializers.deserialize(format, stream)
-            for obj in objects:
-                model = obj.object.__class__
-                if allow_migrate(using, model):
-                    models.add(model)
-                    counter += 1
-                    obj.save(using=using)
-        if counter > 0:
-            sequence_sql = connection.ops.sequence_reset_sql(style, models)
-            if sequence_sql:
-                for line in sequence_sql:
-                    cursor.execute(line)
-    return counter
+def load_fixtures(fixtures):
+    stream = StringIO()
+    error_stream = StringIO()
+    try:
+        loaddata = LoadData()
+        loaddata.style = no_style()
+        loaddata.execute(*fixtures, **{
+            'stdout': stream,
+            'stderr': error_stream,
+            'ignore': True,
+            'database': DEFAULT_DB_ALIAS,
+            'verbosity': 0
+        })
+        return loaddata.loaded_object_count
+    except SystemExit:
+        # Django 1.4's implementation of execute catches CommandErrors and
+        # then calls sys.exit(1), we circumvent this here.
+        errors = error_stream.getvalue().strip().replace('Error: ', '')
+        raise CommandError(errors)
