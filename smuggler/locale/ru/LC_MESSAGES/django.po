@@ -1,86 +1,106 @@
 # Copyright (c) 2010, 2011, 2012 Guilherme Gondim and contributors
 # This file is distributed under the same license as the django-smuggler package.
-# 
+#
 # Translators:
 # Eugene MechanisM <contact@mechanism.name>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Smuggler\n"
-"Report-Msgid-Bugs-To: http://github.com/semente/django-smuggler/issues\n"
-"POT-Creation-Date: 2012-01-31 08:08-0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-08-25 14:44+0200\n"
 "PO-Revision-Date: 2012-05-25 21:45+0000\n"
 "Last-Translator: Eugene MechanisM <contact@mechanism.name>\n"
-"Language-Team: Russian (http://www.transifex.net/projects/p/django-smuggler/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/django-smuggler/"
+"language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: forms.py:17
-msgid "Existing items with same <i>id</i> will be overwritten."
-msgstr "Существующие элементы с одинаковыми <i>id</i> будут перезаписаны."
-
-#: forms.py:27
-msgid "Invalid file extension."
+#: forms.py:47
+#, fuzzy, python-format
+msgid "Invalid file extension: .%(extension)s."
 msgstr "Неправильное расширение."
 
-#: views.py:41
+#: forms.py:92
+msgid "Upload"
+msgstr ""
+
+#: forms.py:100
+msgid "Save in fixture directory"
+msgstr ""
+
+#: forms.py:103
+#, python-format
+msgid "Uploads will be saved to \"%(fixture_dir)s\"."
+msgstr ""
+
+#: forms.py:109
+#, fuzzy
+msgid "From fixture directory"
+msgstr "Данные из директории %(smuggler_fixture_dir)s"
+
+#: forms.py:112
+#, fuzzy, python-format
+msgid "Data files from \"%(fixture_dir)s\"."
+msgstr "Данные из директории %(smuggler_fixture_dir)s"
+
+#: forms.py:126
+msgid "At least one fixture file needs to be uploaded or selected."
+msgstr ""
+
+#: views.py:42
 #, python-format
 msgid "An exception occurred while dumping data: %s"
 msgstr "Исключение при выгрузке данных: %s"
 
-#: views.py:117
+#: views.py:122
 #, python-format
 msgid "An exception occurred while loading data: %s"
 msgstr "Исключение при загрузке данных: %s"
 
-#: templates/smuggler/change_list.html:10
+#: templates/smuggler/change_list.html:9
 msgid "Dump data"
 msgstr "Выгрузить данные"
 
-#: templates/smuggler/change_list.html:15
-#: templates/smuggler/load_data_form.html:4
-#: templates/smuggler/load_data_form.html:24
-#: templates/smuggler/load_data_form.html:29
+#: templates/smuggler/change_list.html:14
+#: templates/smuggler/load_data_form.html:6
+#: templates/smuggler/load_data_form.html:18
+#: templates/smuggler/load_data_form.html:23
 msgid "Load data"
 msgstr "Загрузить данные"
 
-#: templates/smuggler/change_list.html:21
-#, python-format
-msgid "Add %(name)s"
-msgstr "Добавить %(name)s"
-
-#: templates/smuggler/load_data_form.html:23
+#: templates/smuggler/load_data_form.html:17
 msgid "Home"
 msgstr "Домой"
 
-#: templates/smuggler/load_data_form.html:36
+#: templates/smuggler/load_data_form.html:26
+#, fuzzy
+msgid ""
+"Existing items with same <strong>primary key</strong> will be overwritten."
+msgstr "Существующие элементы с одинаковыми <i>id</i> будут перезаписаны."
+
+#: templates/smuggler/load_data_form.html:34
 msgid "Please correct the error below."
 msgstr "Пожалуйста, исправьте следующую ошибку:"
 
-#: templates/smuggler/load_data_form.html:39
-msgid "Data from your computer"
-msgstr "Данные с вашего компьютера"
-
-#: templates/smuggler/load_data_form.html:58
-#: templates/smuggler/load_data_form.html:104
+#: templates/smuggler/load_data_form.html:55
 msgid "Load"
 msgstr "Загрузить"
 
-#: templates/smuggler/load_data_form.html:61
-msgid "Load fixture and save on disk"
-msgstr "Загрузить фикстуры и сохранить на диске"
+#~ msgid "Add %(name)s"
+#~ msgstr "Добавить %(name)s"
 
-#: templates/smuggler/load_data_form.html:83
-#, python-format
-msgid "Data from %(smuggler_fixture_dir)s directory"
-msgstr "Данные из директории %(smuggler_fixture_dir)s"
+#~ msgid "Data from your computer"
+#~ msgstr "Данные с вашего компьютера"
 
-#: templates/smuggler/load_data_form.html:87
-msgid "File name"
-msgstr "Имя файла"
+#~ msgid "Load fixture and save on disk"
+#~ msgstr "Загрузить фикстуры и сохранить на диске"
 
-#: templates/smuggler/load_data_form.html:88
-msgid "Size"
-msgstr "Размер"
+#~ msgid "File name"
+#~ msgstr "Имя файла"
+
+#~ msgid "Size"
+#~ msgstr "Размер"
