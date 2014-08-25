@@ -218,7 +218,7 @@ The contributing with code or translation is MUCH-APPRECIATED. Feel free to
 fork or send patchs.
 
 You can translate this application to your language using Transifex. Access
-the `project page <https://www.transifex.net/projects/p/django-smuggler/.>`_
+the `project page <https://www.transifex.com/projects/p/django-smuggler/.>`_
 on Transifex.
 
 See the AUTHORS file for a complete authors list of this application.
