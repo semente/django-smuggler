@@ -22,7 +22,7 @@ and development environments, but can also be used as a backup tool.
 Project page
     http://github.com/semente/django-smuggler
 Translations
-    https://www.transifex.net/projects/p/django-smuggler/
+    https://www.transifex.com/projects/p/django-smuggler/
 
 .. _`Django Web Framework`: http://www.djangoproject.com
 
