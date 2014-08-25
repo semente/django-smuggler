@@ -11,10 +11,10 @@ Django Smuggler
 .. image:: https://coveralls.io/repos/semente/django-smuggler/badge.png?branch=master
     :target: https://coveralls.io/r/semente/django-smuggler?branch=master
 
-**Django Smuggler** is a pluggable application for `Django Web Framework`_ for
-you easily dump/load fixtures via the automatically-generated administration
-interface. Fixtures are collection of data that Django knows how to import into
-a database. 
+**Django Smuggler** is a pluggable application for `Django Web Framework`_ to
+easily dump/load fixtures via the automatically-generated administration
+interface. A fixture is file with model data serialized to e.g. JSON or XML
+that Django knows how to import to the database.
 
 Smuggler is especially useful for transporting database data between production
 and development environments, but can also be used as a backup tool.
@@ -42,7 +42,6 @@ or::
 
 .. _`Python Package Index (PyPI)`: http://pypi.python.org
 
-
 Alternatively, you can install Smuggler from source code running the follow
 command on directory that contains the file ``setup.py``::
 
@@ -54,7 +53,7 @@ the project *URLConf* like follow::
 
   urlpatterns = patterns('',
       # ...
-      (r'^admin/', include('smuggler.urls')), # put it before admin url patterns
+      (r'^admin/', include('smuggler.urls')),  # before admin url patterns!
       (r'^admin/', include(admin.site.urls)),
   )
 
@@ -88,8 +87,6 @@ interested like follow::
         change_list_template = 'smuggler/change_list.html'
         ...
 
-*Note: on directory "etc/sample_templates/" you have some template examples
-to put Smuggler's buttons on app indexes and admin index page.*
 
 Settings
 --------
@@ -125,7 +122,7 @@ Buttons on change_list.html:
    :alt: buttons on change_list.html
    :align: center
 
-Load form:
+Load form (with SMUGGLER_FIXTURE_DIR configured):
 
 .. image:: https://github.com/semente/django-smuggler/raw/master/etc/screenshot-1.png
    :alt: load form
@@ -191,7 +188,6 @@ Version 0.1.1 (2010-01-20)
 * First stable version.
 
 
-
 Backwards-incompatible changes
 ==============================
 
@@ -199,8 +195,7 @@ Since version 0.1
 -----------------
 
 2010-02-11
-    Renamed urls from import/export to load/dump to reflect recent
-    changes (c276b07)
+    Renamed urls from import/export to load/dump
 
 
 Contributing
@@ -225,17 +220,28 @@ sponsoring the first releases of the project.
 Tests
 =====
 
-You can run tests with your current version of python and django with::
+If you are contributing to django-smuggler we recommend setting up a
+virtualenv en running::
 
-    cd /path/to/django-smuggler
-    python tests/run_tests.py
+    pip install -f test-requirements.txt
 
-We use `tox <https://pypi.python.org/pypi/tox>` to test against multiple 
-versions of python and django. Please run::
+You can then run the tests with::
 
-    cd /path/to/django-smuggler
+    make tests
+
+Before submitting a pull request please test against our supported versions
+of Python and Django by running::
+
     tox
 
+To see if you need to add tests we use coverage. You can generate a coverage
+report with::
+
+    make coverage
+
+To check if your code follows the style guide you can run::
+
+   make lint
 
 Copying conditions
 ==================
