@@ -6,7 +6,6 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 
-import os
 from django.core import serializers
 from django.core.management import CommandError
 from django.core.management.color import no_style
@@ -21,17 +20,6 @@ try:
     allow_migrate = router.allow_migrate
 except AttributeError:  # before django 1.7
     allow_migrate = router.allow_syncdb
-
-
-def get_file_list(path):
-    file_list = []
-    for file_name in os.listdir(path):
-        if os.path.isfile(os.path.join(path, file_name)):
-            file_path = os.path.join(path, file_name)
-            file_size = os.path.getsize(file_path)
-            file_list.append((file_name, '%0.1f KB' % float(file_size/1024.0)))
-    file_list.sort()
-    return file_list
 
 
 def save_uploaded_file_on_disk(uploaded_file, destination_path):

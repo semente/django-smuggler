@@ -1,4 +1,10 @@
+import os.path
+p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                               *args))
+
 DEBUG = True
+STATIC_ROOT = p('')
+STATIC_URL = '/static/'
 
 DATABASES = {
     'default': {
@@ -30,6 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
     'smuggler',
     'test_app',
 ]
+
+# SMUGGLER_FIXTURE_DIR = p('test_app', 'smuggler_fixtures')

@@ -1,20 +1,10 @@
 import os
 from unittest import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from smuggler.utils import get_file_list, save_uploaded_file_on_disk
+from smuggler.utils import save_uploaded_file_on_disk
 
 p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                *args))
-
-
-class TestGetFileList(TestCase):
-    def test_get_file_list(self):
-        file_list = get_file_list(p('..', 'smuggler_fixtures'))
-        self.assertEqual(
-            [
-                ('big_file.json', '64.3 KB'),
-                ('page_dump.json', '0.1 KB')
-            ], file_list)
 
 
 class TestSaveUploadedFileOnDisk(TestCase):

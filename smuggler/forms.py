@@ -8,7 +8,11 @@
 import os.path
 from django import forms
 from django.core.serializers import get_serializer_formats
+from django.utils.encoding import force_text
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from smuggler import settings
 
 
 class MultiFileInput(forms.FileInput):
@@ -46,13 +50,82 @@ class MultiFixtureField(forms.FileField):
         return data
 
 
+class CheckboxFieldTableRenderer(forms.widgets.ChoiceFieldRenderer):
+    choice_input_class = forms.widgets.CheckboxChoiceInput
+
+    def render(self):
+        id_ = self.attrs.get('id', None)
+        output = [
+            format_html('<table id="{0}" class="module">', id_)
+            if id_ else '<table class="module">'
+        ]
+        for widget in self:
+            output += [
+                '<tr>',
+                format_html('<td>{0}</td>', force_text(widget)),
+                '<td></td>',
+                '</tr>'
+            ]
+        output.append('</table>')
+        return mark_safe('\n'.join(output))
+
+
+class CheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+    renderer = CheckboxFieldTableRenderer
+
+
+class FixturePathField(forms.MultipleChoiceField, forms.FilePathField):
+    widget = CheckboxSelectMultiple
+
+    def __init__(self, path, match=None, **kwargs):
+        match = match or (
+            '(?i)^.+(%s)$' % '|'.join(
+                ['\.%s' % ext for ext in get_serializer_formats()])
+        )  # Generate a regex string like: (?i)^.+(\.xml|\.json)$
+        super(FixturePathField, self).__init__(path, match=match, **kwargs)
+        if not self.required:
+            del self.choices[0]  # Remove the empty option
+
+
 class ImportForm(forms.Form):
     uploads = MultiFixtureField(
-        label=_('Fixture(s) to load'),
-        help_text=_('Existing items with same <em>primary key</em>'
-                    ' will be overwritten.'),
-        required=True
+        label=_('Upload'),
+        required=False
     )
+
+    def __init__(self, *args, **kwargs):
+        super(ImportForm, self).__init__(*args, **kwargs)
+        if settings.SMUGGLER_FIXTURE_DIR:
+            self.fields['store'] = forms.BooleanField(
+                label=_('Save in fixture directory'),
+                required=False,
+                help_text=(
+                    _('Uploads will be saved to "%(fixture_dir)s".') % {
+                        'fixture_dir': settings.SMUGGLER_FIXTURE_DIR
+                    })
+            )
+            self.fields['picked_files'] = FixturePathField(
+                settings.SMUGGLER_FIXTURE_DIR,
+                label=_('From fixture directory'),
+                required=False,
+                help_text=(
+                    _('Data files from "%(fixture_dir)s".') % {
+                        'fixture_dir': settings.SMUGGLER_FIXTURE_DIR
+                    })
+            )
+        else:
+            self.fields['uploads'].required = True
+
+    def clean(self):
+        super(ImportForm, self).clean()
+        if settings.SMUGGLER_FIXTURE_DIR:
+            uploads = self.cleaned_data['uploads']
+            picked_files = self.cleaned_data['picked_files']
+            if not uploads and not picked_files:
+                raise forms.ValidationError(
+                    _('At least one fixture file needs to be'
+                      ' uploaded or selected.'))
+        return self.cleaned_data
 
     class Media:
         css = {

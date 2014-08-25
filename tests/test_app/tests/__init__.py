@@ -7,7 +7,7 @@ from .test_dump import BasicDumpTestCase
 from .test_forms import TestForm
 from .test_load import TestInvalidLoad, SimpleLoadTestCase
 from .test_urls import TestSmugglerUrls
-from .test_utils import TestGetFileList, TestSaveUploadedFileOnDisk
+from .test_utils import TestSaveUploadedFileOnDisk
 from .test_views import (TestDumpData,
                          TestDumpHandlesErrorsGracefully,
                          TestDumpViewsGenerateDownloadsWithSaneFilenames,
@@ -26,7 +26,6 @@ __tests__ = [
     TestInvalidLoad,
     SimpleLoadTestCase,
     TestSmugglerUrls,
-    TestGetFileList,
     TestSaveUploadedFileOnDisk,
     TestDumpData,
     TestDumpHandlesErrorsGracefully,

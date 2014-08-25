@@ -19,8 +19,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.edit import FormView
 from smuggler.forms import ImportForm
 from smuggler import settings
-from smuggler.utils import (get_file_list,
-                            save_uploaded_file_on_disk, serialize_to_response,
+from smuggler.utils import (save_uploaded_file_on_disk, serialize_to_response,
                             load_requested_data)
 
 
@@ -85,17 +84,10 @@ class LoadDataView(FormView):
     template_name = 'smuggler/load_data_form.html'
     success_url = '.'
 
-    def get_context_data(self, **kwargs):
-        context = super(LoadDataView, self).get_context_data(**kwargs)
-        context.update({
-            'files_available': (get_file_list(settings.SMUGGLER_FIXTURE_DIR)
-                                if settings.SMUGGLER_FIXTURE_DIR else []),
-            'smuggler_fixture_dir': settings.SMUGGLER_FIXTURE_DIR,
-        })
-        return context
-
-    def handle_uploaded_files(self, form, store=False):
-        uploads = form.cleaned_data['uploads']
+    def form_valid(self, form):
+        uploads = form.cleaned_data.get('uploads', [])
+        store = form.cleaned_data.get('store', False)
+        picked_files = form.cleaned_data.get('picked_files', [])
         fixtures = []
         for upload in uploads:
             file_name = upload.name
@@ -110,53 +102,25 @@ class LoadDataView(FormView):
             else:
                 file_data = upload.read()
             fixtures.append((file_format, file_data))
-        return fixtures
-
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = form_class()
-        data = []
-        if '_load' in request.POST or '_loadandsave' in request.POST:
-            form = self.get_form(form_class)
-            store = (settings.SMUGGLER_FIXTURE_DIR and
-                     '_loadandsave' in request.POST)
-            if form.is_valid():
-                data += self.handle_uploaded_files(form, store=store)
-        elif '_loadfromdisk' in request.POST:
-            query_dict = request.POST.copy()
-            del(query_dict['_loadfromdisk'])
-            del(query_dict['csrfmiddlewaretoken'])
-            selected_files = query_dict.values()
-            for file_name in selected_files:
-                file_path = os.path.join(
-                    settings.SMUGGLER_FIXTURE_DIR, file_name)
-                file_format = file_name.split('.')[-1]
-                file_data = open(file_path, 'r')
-                data.append((file_format, file_data))
-        if data:
-            try:
-                obj_count = load_requested_data(data)
-                user_msg = ('%(obj_count)d object(s) from %(file_count)d'
-                            ' file(s) loaded with success.')  # TODO: pluralize
-                user_msg = _(user_msg) % {
-                    'obj_count': obj_count,
-                    'file_count': len(data)
-                }
-                messages.info(request, user_msg)
-            except (IntegrityError, ObjectDoesNotExist,
-                    DeserializationError) as e:
-                messages.error(
-                    request,
-                    _('An exception occurred while loading data: %s') % str(e))
-            return self.form_valid(form)
-        else:
-            return self.render_to_response(
-                self.get_context_data(import_file_form=form))
-
-    def get(self, request, *args, **kwargs):
-        form = self.get_form(self.get_form_class())
-        return self.render_to_response(
-            self.get_context_data(import_file_form=form))
+        for file_name in picked_files:
+            file_format = os.path.splitext(file_name)[1][1:].lower()
+            file_data = open(file_name, 'r')
+            fixtures.append((file_format, file_data))
+        try:
+            obj_count = load_requested_data(fixtures)
+            user_msg = ('%(obj_count)d object(s) from %(file_count)d'
+                        ' file(s) loaded with success.')  # TODO: pluralize
+            user_msg = _(user_msg) % {
+                'obj_count': obj_count,
+                'file_count': len(fixtures)
+            }
+            messages.info(self.request, user_msg)
+        except (IntegrityError, ObjectDoesNotExist,
+                DeserializationError) as e:
+            messages.error(
+                self.request,
+                _('An exception occurred while loading data: %s') % str(e))
+        return super(LoadDataView, self).form_valid(form)
 
 
 load_data = user_passes_test(is_superuser)(LoadDataView.as_view())

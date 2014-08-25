@@ -5,17 +5,10 @@
 
 {% block title %}{% trans "Load data" %} {{ block.super }}{% endblock %}
 
-{% block extrahead %}
-  {{ block.super }}
-  {{ media }}
-{% endblock %}
-
 {% block extrastyle %}
-  {{ import_file_form.media }}
+  {{ form.media }}
   {{ block.super }}
 {% endblock %}
-
-{% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
 
 {% block bodyclass %}change-form{% endblock %}
 
@@ -29,16 +22,20 @@
 {% block content %}
 <h1>{% trans "Load data" %}</h1>
 
+<div class="system-message">
+  <p class="description">{% trans 'Existing items with same <strong>primary key</strong> will be overwritten.' %}</p>
+</div>
+
 <div>
-  <form enctype="multipart/form-data" method="post" action="">
+  <form enctype="multipart/form-data" method="post" action=".">
     {% csrf_token %}
     <div>
-      {% if import_file_form.errors %}
+      {% if form.errors %}
         <p class="errornote">{% trans "Please correct the error below." %}</p>
+        {{ form.non_field_errors }}
       {% endif %}
-      <fieldset class="module aligned">
-        {% if files_available %}<h2>{% trans "Data from your computer" %}</h2>{% endif %}
-        {% for field in import_file_form %}
+      <fieldset class="module aligned wide">
+        {% for field in form %}
           <div class="form-row{% if field.errors %} errors{% endif %}">
             <div>
               {% if field.errors %}
@@ -55,55 +52,9 @@
         {% endfor %}
       </fieldset>
       <div class="submit-row">
-        <input class="default" type="submit" name="_load"
-               value="{% trans "Load" %}" />
-        {% if smuggler_fixture_dir %}
-          <input type="submit" name="_loadandsave"
-                 value="{% trans "Load fixture and save on disk" %}"
-                 title="Load fixture file and save it on {{ smuggler_fixture_dir }} for future loads." />
-        {% endif %}
+        <input class="default" type="submit" name="_load" value="{% trans "Load" %}" />
       </div>
     </div>
   </form>
 </div>
-
-{% if files_available %}
-<div>
-  <form method="post" action="">
-    {% csrf_token %}
-    <div class="inline-group">
-    {% comment %}
-    # TODO: implement this error message
-    {% if none_selected %}
-      <p class="errornote">{% trans "You need select at least one." %}</p>
-    {% endif %}
-    {% endcomment %}
-      <div class="tabular inline-related">
-        <fieldset class="module aligned">
-          <h2>{% blocktrans %}Data from {{ smuggler_fixture_dir }} directory{% endblocktrans %}</h2>
-          <table>
-            <thead>
-              <tr>
-                <th colspan="2">{% trans "File name" %}</th>
-                <th>{% trans "Size" %}</th>
-              </tr>
-            </thead>
-            {% for file in files_available %}
-              <tr class="{% cycle 'row1', 'row2' %}">
-                <td><input type="checkbox" name="file_{{ forloop.counter }}" id="id_file_{{ forloop.counter }}" value="{{ file.0 }}" /></td>
-                <td>{{ file.0 }}</td>
-                <td>{{ file.1 }}</td>
-              </tr>
-            {% endfor %}
-          </table>
-        </fieldset>
-      </div>
-    </div>
-    <div class="submit-row">
-      <input class="default" type="submit" name="_loadfromdisk"
-             value="{% trans "Load" %}" />
-    </div>
-  </form>
-</div>
-{% endif %}
 {% endblock %}
