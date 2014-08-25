@@ -5,8 +5,7 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
-
-import os
+import os.path
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.management.base import CommandError
@@ -18,8 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.edit import FormView
-
-from smuggler.forms import ImportFileForm
+from smuggler.forms import ImportForm
 from smuggler import settings
 from smuggler.utils import (get_file_list,
                             save_uploaded_file_on_disk, serialize_to_response,
@@ -83,7 +81,7 @@ def dump_model_data(request, app_label, model_label):
 
 
 class LoadDataView(FormView):
-    form_class = ImportFileForm
+    form_class = ImportForm
     template_name = 'smuggler/load_data_form.html'
     success_url = '.'
 
@@ -96,26 +94,34 @@ class LoadDataView(FormView):
         })
         return context
 
+    def handle_uploaded_files(self, form, store=False):
+        uploads = form.cleaned_data['uploads']
+        fixtures = []
+        for upload in uploads:
+            file_name = upload.name
+            file_format = os.path.splitext(file_name)[1][1:].lower()
+            if store:
+                destination_path = os.path.join(
+                    settings.SMUGGLER_FIXTURE_DIR, file_name)
+                save_uploaded_file_on_disk(upload, destination_path)
+                file_data = open(destination_path, 'r')
+            elif upload.multiple_chunks():
+                file_data = open(upload.temporary_file_path(), 'r')
+            else:
+                file_data = upload.read()
+            fixtures.append((file_format, file_data))
+        return fixtures
+
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = form_class()
         data = []
         if '_load' in request.POST or '_loadandsave' in request.POST:
             form = self.get_form(form_class)
+            store = (settings.SMUGGLER_FIXTURE_DIR and
+                     '_loadandsave' in request.POST)
             if form.is_valid():
-                uploaded_file = request.FILES['file']
-                file_name = uploaded_file.name
-                file_format = file_name.split('.')[-1]
-                if '_loadandsave' in request.POST:
-                    destination_path = os.path.join(
-                        settings.SMUGGLER_FIXTURE_DIR, file_name)
-                    save_uploaded_file_on_disk(uploaded_file, destination_path)
-                    file_data = open(destination_path, 'r')
-                elif uploaded_file.multiple_chunks():
-                    file_data = open(uploaded_file.temporary_file_path(), 'r')
-                else:
-                    file_data = uploaded_file.read()
-                data.append((file_format, file_data))
+                data += self.handle_uploaded_files(form, store=store)
         elif '_loadfromdisk' in request.POST:
             query_dict = request.POST.copy()
             del(query_dict['_loadfromdisk'])
