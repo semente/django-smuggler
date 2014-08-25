@@ -5,7 +5,7 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
-
+import re
 from django.core.management import CommandError
 from django.core.management.color import no_style
 from django.core.management.commands.dumpdata import Command as DumpData
@@ -37,13 +37,12 @@ def serialize_to_response(app_labels=[], exclude=[], response=None,
         dumpdata = DumpData()
         dumpdata.style = no_style()
         dumpdata.execute(*app_labels, **{
+            'stdout': stream,
+            'stderr': error_stream,
             'exclude': exclude,
             'format': format,
             'indent': indent,
-            'show_traceback': True,
-            'use_natural_keys': True,
-            'stdout': stream,
-            'stderr': error_stream
+            'use_natural_keys': True
         })
     except SystemExit:
         # Django 1.4's implementation of execute catches CommandErrors and
@@ -57,19 +56,23 @@ def serialize_to_response(app_labels=[], exclude=[], response=None,
 def load_fixtures(fixtures):
     stream = StringIO()
     error_stream = StringIO()
-    try:
-        loaddata = LoadData()
-        loaddata.style = no_style()
-        loaddata.execute(*fixtures, **{
-            'stdout': stream,
-            'stderr': error_stream,
-            'ignore': True,
-            'database': DEFAULT_DB_ALIAS,
-            'verbosity': 0
-        })
+    loaddata = LoadData()
+    loaddata.style = no_style()
+    loaddata.execute(*fixtures, **{
+        'stdout': stream,
+        'stderr': error_stream,
+        'ignore': True,
+        'database': DEFAULT_DB_ALIAS,
+        'verbosity': 1
+    })
+    if hasattr(loaddata, 'loaded_object_count'):
         return loaddata.loaded_object_count
-    except SystemExit:
-        # Django 1.4's implementation of execute catches CommandErrors and
-        # then calls sys.exit(1), we circumvent this here.
-        errors = error_stream.getvalue().strip().replace('Error: ', '')
-        raise CommandError(errors)
+    else:
+        # Django < 1.6 has no loaded_object_count attribute, we need
+        # to fetch it from stdout :(
+        errors = error_stream.getvalue()
+        out = stream.getvalue()
+        if errors:
+            # The only way to handle errors in Django 1.4 is to inspect stdout
+            raise CommandError(errors.strip().splitlines()[-1])
+        return int(re.search('Installed ([0-9]+)', out.strip()).group(1))
