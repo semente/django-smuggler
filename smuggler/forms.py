@@ -5,11 +5,12 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
+from itertools import chain
 import os.path
 from django import forms
 from django.core.serializers import get_serializer_formats
 from django.utils.encoding import force_text
-from django.utils.html import format_html
+from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from smuggler import settings
@@ -50,28 +51,40 @@ class MultiFixtureField(forms.FileField):
         return data
 
 
-class CheckboxFieldTableRenderer(forms.widgets.ChoiceFieldRenderer):
-    choice_input_class = forms.widgets.CheckboxChoiceInput
-
-    def render(self):
-        id_ = self.attrs.get('id', None)
+class CheckboxSelectMultiple(forms.widgets.CheckboxSelectMultiple):
+    def render(self, name, value, attrs=None, choices=()):
+        if value is None: value = []
+        has_id = attrs and 'id' in attrs
+        final_attrs = self.build_attrs(attrs, name=name)
         output = [
-            format_html('<table id="{0}" class="module">', id_)
-            if id_ else '<table class="module">'
+            '<table id="%s" class="module">' % attrs['id']
+            if has_id else '<table class="module">'
         ]
-        for widget in self:
+        # Normalize to strings
+        str_values = set([force_text(v) for v in value])
+        for i, (option_value, option_label) in enumerate(chain(self.choices,
+                                                               choices)):
+            # If an ID attribute was given, add a numeric index as a suffix,
+            # so that the checkboxes don't all have the same ID attribute.
+            if has_id:
+                final_attrs = dict(final_attrs, id='%s_%s' % (attrs['id'], i))
+                label_for = u' for="%s"' % final_attrs['id']
+            else:
+                label_for = ''
+
+            cb = forms.widgets.CheckboxInput(
+                final_attrs, check_test=lambda value: value in str_values)
+            option_value = force_text(option_value)
+            rendered_cb = cb.render(name, option_value)
+            option_label = conditional_escape(force_text(option_label))
             output += [
                 '<tr>',
-                format_html('<td>{0}</td>', force_text(widget)),
-                '<td></td>',
+                '<td><label%s>%s %s</label></td>' % (label_for, rendered_cb,
+                                                     option_label),
                 '</tr>'
             ]
         output.append('</table>')
         return mark_safe('\n'.join(output))
-
-
-class CheckboxSelectMultiple(forms.CheckboxSelectMultiple):
-    renderer = CheckboxFieldTableRenderer
 
 
 class FixturePathField(forms.MultipleChoiceField, forms.FilePathField):
