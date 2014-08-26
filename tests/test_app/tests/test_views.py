@@ -111,10 +111,21 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
     def test_load_fixture(self):
         self.assertEqual(0, Page.objects.count())
         f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
-        self.c.post(self.url, {
+        response = self.c.post(self.url, {
             'uploads': f
         }, follow=True)
         self.assertEqual(1, Page.objects.count())
+
+    def test_load_fixture_message(self):
+        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
+        response = self.c.post(self.url, {
+            'uploads': f
+        }, follow=True)
+        response_messages = list(response.context['messages'])
+        self.assertEqual(1, len(response_messages))
+        self.assertEqual(messages.INFO, response_messages[0].level)
+        self.assertEqual(response_messages[0].message,
+                         'Successfully imported 1 file. Loaded 1 object.')
 
     @override_settings(FILE_UPLOAD_MAX_MEMORY_SIZE=0)
     def test_load_fixture_with_chunks(self):
@@ -157,6 +168,20 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
             'picked_files': p('..', 'smuggler_fixtures', 'page_dump.json')
         }, follow=True)
         self.assertEqual(1, Page.objects.count())
+
+    @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
+    def test_load_from_disk_and_upload(self):
+        reload_module(settings)
+        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
+        response = self.c.post(self.url, {
+            'uploads': f,
+            'picked_files': p('..', 'smuggler_fixtures', 'page_dump.json')
+        }, follow=True)
+        response_messages = list(response.context['messages'])
+        self.assertEqual(1, len(response_messages))
+        self.assertEqual(messages.INFO, response_messages[0].level)
+        self.assertEqual(response_messages[0].message,
+                         'Successfully imported 2 files. Loaded 2 objects.')
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_and_save(self):
