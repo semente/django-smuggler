@@ -70,7 +70,7 @@ def load_fixtures(fixtures):
         return loaddata.loaded_object_count
     else:
         # Django < 1.6 has no loaded_object_count attribute, we need
-        # to fetch it from stdout :(
+        # to fetch it from stderror :(
         errors = error_stream.getvalue()
         out = stream.getvalue()
         if errors:
