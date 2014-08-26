@@ -111,7 +111,7 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
     def test_load_fixture(self):
         self.assertEqual(0, Page.objects.count())
         f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
-        response = self.c.post(self.url, {
+        self.c.post(self.url, {
             'uploads': f
         }, follow=True)
         self.assertEqual(1, Page.objects.count())
