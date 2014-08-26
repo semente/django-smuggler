@@ -14,7 +14,7 @@ from django.db import router
 from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
 from django.utils.six import StringIO
-from smuggler.settings import (SMUGGLER_FORMAT, SMUGGLER_INDENT)
+from smuggler import settings
 
 try:
     allow_migrate = router.allow_migrate
@@ -29,7 +29,8 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
 
 
 def serialize_to_response(app_labels=[], exclude=[], response=None,
-                          format=SMUGGLER_FORMAT, indent=SMUGGLER_INDENT):
+                          format=settings.SMUGGLER_FORMAT,
+                          indent=settings.SMUGGLER_INDENT):
     response = response or HttpResponse(content_type='text/plain')
     stream = StringIO()
     error_stream = StringIO()
