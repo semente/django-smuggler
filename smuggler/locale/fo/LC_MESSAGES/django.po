@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Django Smuggler\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-25 14:44+0200\n"
+"POT-Creation-Date: 2014-08-26 10:01+0200\n"
 "PO-Revision-Date: 2012-01-31 11:48+0000\n"
 "Last-Translator: Guilherme Gondim <semente+transifex@taurinus.org>\n"
 "Language-Team: Faroese (http://www.transifex.net/projects/p/django-smuggler/"
@@ -18,43 +18,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: forms.py:47
+#: forms.py:48
 #, python-format
 msgid "Invalid file extension: .%(extension)s."
 msgstr ""
 
-#: forms.py:92
+#: forms.py:106
 msgid "Upload"
 msgstr ""
 
-#: forms.py:100
+#: forms.py:114
 msgid "Save in fixture directory"
 msgstr ""
 
-#: forms.py:103
+#: forms.py:117
 #, python-format
 msgid "Uploads will be saved to \"%(fixture_dir)s\"."
 msgstr ""
 
-#: forms.py:109
+#: forms.py:123
 msgid "From fixture directory"
 msgstr ""
 
-#: forms.py:112
+#: forms.py:126
 #, python-format
 msgid "Data files from \"%(fixture_dir)s\"."
 msgstr ""
 
-#: forms.py:126
+#: forms.py:140
 msgid "At least one fixture file needs to be uploaded or selected."
 msgstr ""
 
-#: views.py:42
+#: views.py:43
 #, python-format
 msgid "An exception occurred while dumping data: %s"
 msgstr ""
 
-#: views.py:122
+#: views.py:113
+#, python-format
+msgid "Successfully imported %(count)d file."
+msgid_plural "Successfully imported %(count)d files."
+msgstr[0] ""
+msgstr[1] ""
+
+#: views.py:118
+#, python-format
+msgid "Loaded %(count)d object."
+msgid_plural "Loaded %(count)d objects."
+msgstr[0] ""
+msgstr[1] ""
+
+#: views.py:127
 #, python-format
 msgid "An exception occurred while loading data: %s"
 msgstr ""
