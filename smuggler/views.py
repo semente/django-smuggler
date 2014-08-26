@@ -14,7 +14,7 @@ from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ungettext_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.edit import FormView
@@ -108,12 +108,17 @@ class LoadDataView(FormView):
             fixtures.append(file_name)
         try:
             obj_count = load_fixtures(fixtures)
-            user_msg = ('%(obj_count)d object(s) from %(file_count)d'
-                        ' file(s) loaded with success.')  # TODO: pluralize
-            user_msg = _(user_msg) % {
-                'obj_count': obj_count,
-                'file_count': len(fixtures)
-            }
+            user_msg = ' '.join([
+                ungettext_lazy(
+                    'Successfully imported %(count)d file.',
+                    'Successfully imported %(count)d files.',
+                    len(fixtures)
+                ) % {'count': len(fixtures)},
+                ungettext_lazy(
+                    'Loaded %(count)d object.',
+                    'Loaded %(count)d objects.',
+                    obj_count
+                ) % {'count': obj_count}])
             messages.info(self.request, user_msg)
         except (IntegrityError, ObjectDoesNotExist,
                 DeserializationError, CommandError) as e:
