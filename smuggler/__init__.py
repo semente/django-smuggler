@@ -22,5 +22,5 @@ def get_version():
 
 __author__ = 'See the file AUTHORS.'
 __license__ = 'GNU Lesser General Public License v3 or later (LGPLv3+)'
-__url__ = 'http://github.com/semente/django-smuggler'
+__url__ = 'https://github.com/semente/django-smuggler'
 __version__ = get_version()

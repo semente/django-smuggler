@@ -212,7 +212,7 @@ Contributing
 ============
 
 If you find any problems in the code or documentation, please take 30 seconds
-to fill out a issue `here <http://github.com/semente/django-smuggler/issues>`_.
+to fill out a issue `here <https://github.com/semente/django-smuggler/issues>`_.
 
 The contributing with code or translation is MUCH-APPRECIATED. Feel free to
 fork or send patchs.
