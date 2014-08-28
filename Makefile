@@ -1,4 +1,4 @@
-.PHONY: coverage tests
+.PHONY: coverage tests lint
 
 tests:
 	python tests/run_tests.py
