@@ -15,7 +15,7 @@ DATABASES = {
 
 SECRET_KEY = 'mAtTzVPOV9JY4eJQfqgW8eAS9DWKnt3MkvvpQI2MzkhAz7z3'
 
-ROOT_URLCONF = 'test_app.urls'
+ROOT_URLCONF = 'tests.test_app.urls'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'smuggler',
-    'test_app',
+    'tests.test_app',
 ]
 
 # SMUGGLER_FIXTURE_DIR = p('test_app', 'smuggler_fixtures')

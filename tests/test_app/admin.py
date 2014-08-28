@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 from django.contrib import admin
-from test_app.models import Page
+from tests.test_app.models import Page
 
 
 class PageAdmin(admin.ModelAdmin):

@@ -2,7 +2,7 @@ import json
 from django.utils.six import StringIO
 from django.core.management import CommandError
 from django.test import TestCase
-from test_app.models import Page
+from tests.test_app.models import Page
 from smuggler import utils
 
 

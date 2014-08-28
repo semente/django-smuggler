@@ -2,7 +2,7 @@ import os.path
 from django.contrib.sites.models import Site
 from django.test import TestCase, TransactionTestCase
 from smuggler.utils import load_fixtures
-from test_app.models import Page
+from tests.test_app.models import Page
 
 
 p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),

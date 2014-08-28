@@ -1,10 +1,10 @@
 .PHONY: coverage tests lint
 
 tests:
-	python tests/run_tests.py
+	python python manage.py test
 
 coverage:
-	coverage run --source smuggler --branch tests/run_tests.py
+	coverage run --source smuggler --branch manage.py test
 	coverage report -m
 	coverage html
 	python -mwebbrowser htmlcov/index.html
