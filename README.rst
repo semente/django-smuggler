@@ -99,8 +99,7 @@ SMUGGLER_EXCLUDE_LIST
     Default: [].
                                 
 SMUGGLER_FIXTURE_DIR
-    Saved files will be stored on this directory. The signal
-    ``smuggler.signals.save_data_on_filesystem`` uses this value too.
+    Uploaded fixtures are stored in this directory (if requested).
     Default: None.
 
 SMUGGLER_FORMAT
@@ -142,6 +141,10 @@ Version 0.6 (unreleased)
 * Recognize fixtures with upper case file extension correctly
 
 * Loading fixtures now uses loaddata management command
+
+* Removed signals.py
+
+* Removed sample templates
 
 * Cleaner code and better tests :-)
 
@@ -204,6 +207,8 @@ Version 0.1.1 (2010-01-20)
 
 Backwards-incompatible changes
 ==============================
+
+* Removed signals.py (Version 0.6)
 
 * Renamed urls from import/export to load/dump (Version 0.1)
 
