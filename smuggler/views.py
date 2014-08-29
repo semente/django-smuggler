@@ -8,6 +8,7 @@
 import os.path
 from datetime import datetime
 import tempfile
+from django.contrib.admin.helpers import AdminForm
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.management.base import CommandError
 from django.core.serializers.base import DeserializationError
@@ -130,6 +131,16 @@ class LoadDataView(FormView):
             for tmp_file in tmp_fixtures:
                 os.unlink(tmp_file)
         return super(LoadDataView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(LoadDataView, self).get_context_data(
+            adminform=self.get_admin_form(kwargs['form']),
+            **kwargs)
+        return context
+
+    def get_admin_form(self, form):
+        fields = form.fields.keys()
+        return AdminForm(form, [(None, {'fields': fields})], {})
 
 
 load_data = user_passes_test(is_superuser)(LoadDataView.as_view())
