@@ -1,7 +1,7 @@
 .PHONY: coverage tests lint
 
 tests:
-	python python manage.py test
+	python manage.py test
 
 coverage:
 	coverage run --source smuggler --branch manage.py test

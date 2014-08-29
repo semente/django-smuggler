@@ -79,11 +79,12 @@ class CheckboxSelectMultiple(forms.widgets.CheckboxSelectMultiple):
             rendered_cb = cb.render(name, option_value)
             option_label = conditional_escape(force_text(option_label))
             output += [
-                '<tr>',
-                '<td>%(cb)s<label%(for)s class="vCheckboxLabel">%(label)s</label></td>' % {
-                    'for': label_for, 'cb': rendered_cb, 'label': option_label
+                '<tr><td>',
+                rendered_cb,
+                '<label%(for)s class="vCheckboxLabel">%(label)s</label>' % {
+                    'for': label_for, 'label': option_label
                 },
-                '</tr>'
+                '</td></tr>'
             ]
         output.append('</table>')
         return mark_safe('\n'.join(output))
