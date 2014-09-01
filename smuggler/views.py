@@ -81,7 +81,25 @@ def dump_model_data(request, app_label, model_label):
                             [], '-'.join((app_label, model_label)))
 
 
-class LoadDataView(FormView):
+class AdminFormMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(AdminFormMixin, self).get_context_data(
+            adminform=self.get_admin_form(kwargs['form']),
+            **kwargs)
+        return context
+
+    def get_fieldsets(self, form):
+        if hasattr(self, 'fieldsets'):
+            return self.fieldsets
+        else:
+            fields = form.fields.keys()
+            return [(None, {'fields': fields})]
+
+    def get_admin_form(self, form):
+        return AdminForm(form, self.get_fieldsets(form), {})
+
+
+class LoadDataView(AdminFormMixin, FormView):
     form_class = ImportForm
     template_name = 'smuggler/load_data_form.html'
     success_url = '.'
@@ -132,15 +150,13 @@ class LoadDataView(FormView):
                 os.unlink(tmp_file)
         return super(LoadDataView, self).form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(LoadDataView, self).get_context_data(
-            adminform=self.get_admin_form(kwargs['form']),
-            **kwargs)
-        return context
-
-    def get_admin_form(self, form):
+    def get_fieldsets(self, form):
         fields = form.fields.keys()
-        return AdminForm(form, [(None, {'fields': fields})], {})
-
+        if 'picked_files' in fields:
+            return [
+                (_('Upload'), {'fields': ['uploads', 'store']}),
+                (_('From fixture directory'), {'fields': ['picked_files']})
+            ]
+        return [(None, {'fields': fields})]
 
 load_data = user_passes_test(is_superuser)(LoadDataView.as_view())
