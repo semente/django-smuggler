@@ -121,7 +121,7 @@ Buttons on change_list.html:
    :alt: buttons on change_list.html
    :align: center
 
-Load form (with SMUGGLER_FIXTURE_DIR configured):
+Load form (with ``SMUGGLER_FIXTURE_DIR`` configured):
 
 .. image:: https://github.com/semente/django-smuggler/raw/master/etc/screenshot-1.png
    :alt: load form
@@ -136,7 +136,7 @@ Version 0.6 (unreleased)
 
 * HTML5 multiple file upload is now supported for fixture uploads
 
-* Support loading fixtures from SMUGGLER_FIXTURE_DIR and upload at the same time
+* Support loading fixtures from ``SMUGGLER_FIXTURE_DIR`` and upload at the same time
 
 * Recognize fixtures with upper case file extension correctly
 
