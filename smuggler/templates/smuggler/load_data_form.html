@@ -5,9 +5,15 @@
 
 {% block title %}{% trans "Load data" %} {{ block.super }}{% endblock %}
 
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+    {{ form.media.js }}
+{% endblock %}
+
 {% block extrastyle %}
   {{ block.super }}
-  {{ form.media }}
+  {{ form.media.css }}
 {% endblock %}
 
 {% block bodyclass %}change-form{% endblock %}
