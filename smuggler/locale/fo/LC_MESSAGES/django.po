@@ -1,22 +1,21 @@
 # Copyright (c) 2010, 2011, 2012 Guilherme Gondim and contributors
 # This file is distributed under the same license as the django-smuggler package.
-#
+# 
 # Translators:
-# Gunleif Joensen <fo.umseting@gmail.com>, 2011.
+# Gunleif Joensen <fo.umseting@gmail.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Smuggler\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-26 10:01+0200\n"
-"PO-Revision-Date: 2012-01-31 11:48+0000\n"
-"Last-Translator: Guilherme Gondim <semente+transifex@taurinus.org>\n"
-"Language-Team: Faroese (http://www.transifex.net/projects/p/django-smuggler/"
-"team/fo/)\n"
-"Language: fo\n"
+"PO-Revision-Date: 2014-08-26 08:15+0000\n"
+"Last-Translator: Guilherme Gondim <semente@taurinus.org>\n"
+"Language-Team: Faroese (http://www.transifex.com/projects/p/django-smuggler/language/fo/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: fo\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: forms.py:48
 #, python-format
@@ -100,6 +99,3 @@ msgstr "Vinarliga rætta villuna niðanfyri."
 #: templates/smuggler/load_data_form.html:55
 msgid "Load"
 msgstr ""
-
-#~ msgid "Add %(name)s"
-#~ msgstr "Legg %(name)s til"

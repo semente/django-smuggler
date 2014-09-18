@@ -1,118 +1,101 @@
 # Copyright (c) 2010, 2011, 2012 Guilherme Gondim and contributors
 # This file is distributed under the same license as the django-smuggler package.
-#
+# 
 # Translators:
+# jaap3 <jaap.roes@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Smuggler\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-26 10:01+0200\n"
-"PO-Revision-Date: 2012-01-31 11:48+0000\n"
-"Last-Translator: Guilherme Gondim <semente+transifex@taurinus.org>\n"
-"Language-Team: English (http://www.transifex.net/projects/p/django-smuggler/"
-"team/en/)\n"
-"Language: nl\n"
+"PO-Revision-Date: 2014-08-26 14:02+0000\n"
+"Last-Translator: jaap3 <jaap.roes@gmail.com>\n"
+"Language-Team: Dutch (http://www.transifex.com/projects/p/django-smuggler/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: forms.py:48
-#, fuzzy, python-format
+#, python-format
 msgid "Invalid file extension: .%(extension)s."
-msgstr "Ongeldige bestandsextensie."
+msgstr "Ongeldige bestandsextensie: .%(extension)s."
 
 #: forms.py:106
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: forms.py:114
 msgid "Save in fixture directory"
-msgstr ""
+msgstr "In fixture directory opslaan"
 
 #: forms.py:117
 #, python-format
 msgid "Uploads will be saved to \"%(fixture_dir)s\"."
-msgstr ""
+msgstr "Uploads worden in \"%(fixture_dir)s\" opgeslagen."
 
 #: forms.py:123
-#, fuzzy
 msgid "From fixture directory"
-msgstr "Gegevens uit de directory %(smuggler_fixture_dir)s"
+msgstr "Vanuit de fixture directory"
 
 #: forms.py:126
-#, fuzzy, python-format
+#, python-format
 msgid "Data files from \"%(fixture_dir)s\"."
-msgstr "Gegevens uit de directory %(smuggler_fixture_dir)s"
+msgstr "Gegevens uit de directory \"%(fixture_dir)s\"."
 
 #: forms.py:140
 msgid "At least one fixture file needs to be uploaded or selected."
-msgstr ""
+msgstr "Selecteer of upload op zijn minst één fixture bestand."
 
 #: views.py:43
 #, python-format
 msgid "An exception occurred while dumping data: %s"
-msgstr "Er is een fout opgetreden tijdens het exporteren van de data: %s"
+msgstr "Er is een fout opgetreden tijdens het dumpen van de data: %s"
 
 #: views.py:113
 #, python-format
 msgid "Successfully imported %(count)d file."
 msgid_plural "Successfully imported %(count)d files."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d bestand met succes geïmporteerd."
+msgstr[1] "%(count)d bestanden met succes geïmporteerd."
 
 #: views.py:118
 #, python-format
 msgid "Loaded %(count)d object."
 msgid_plural "Loaded %(count)d objects."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d object geladen."
+msgstr[1] "%(count)d objecten geladen."
 
 #: views.py:127
 #, python-format
 msgid "An exception occurred while loading data: %s"
-msgstr "Er is een fout opgetreden tijdens het importeren van de data: %s"
+msgstr "Er is een fout opgetreden tijdens het laden van de data: %s"
 
 #: templates/smuggler/change_list.html:9
 msgid "Dump data"
-msgstr "Exporteer data"
+msgstr "Dump data"
 
 #: templates/smuggler/change_list.html:14
 #: templates/smuggler/load_data_form.html:6
 #: templates/smuggler/load_data_form.html:18
 #: templates/smuggler/load_data_form.html:23
 msgid "Load data"
-msgstr "Importeer data"
+msgstr "Laad data"
 
 #: templates/smuggler/load_data_form.html:17
 msgid "Home"
 msgstr "Voorpagina"
 
 #: templates/smuggler/load_data_form.html:26
-#, fuzzy
 msgid ""
 "Existing items with same <strong>primary key</strong> will be overwritten."
-msgstr "Bestaande objecten met dezelfde <i>id</i> worden overschreven!"
+msgstr "Bestaande objecten met dezelfde <strong>primary key</strong> worden overschreven!"
 
 #: templates/smuggler/load_data_form.html:34
 msgid "Please correct the error below."
-msgstr "Herstel de fout hieronder"
+msgstr "Herstel de fout hieronder."
 
 #: templates/smuggler/load_data_form.html:55
 msgid "Load"
 msgstr "Importeer"
-
-#~ msgid "Add %(name)s"
-#~ msgstr "%(name)s toevoegen"
-
-#~ msgid "Data from your computer"
-#~ msgstr "Gegevens van uw computer"
-
-#~ msgid "Load fixture and save on disk"
-#~ msgstr "Fixture importeren en op schijf opslaan"
-
-#~ msgid "File name"
-#~ msgstr "Bestandsnaam"
-
-#~ msgid "Size"
-#~ msgstr "Grootte"

@@ -1,53 +1,52 @@
 # Copyright (c) 2010, 2011, 2012 Guilherme Gondim and contributors
 # This file is distributed under the same license as the django-smuggler package.
-#
+# 
 # Translators:
+# Tobias Paepke <tobias.paepke@paepke.net>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Smuggler\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-26 10:01+0200\n"
-"PO-Revision-Date: 2012-11-30 22:21+0000\n"
+"PO-Revision-Date: 2014-08-28 12:24+0000\n"
 "Last-Translator: Tobias Paepke <tobias.paepke@paepke.net>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/django-smuggler/"
-"language/de/)\n"
-"Language: de\n"
+"Language-Team: German (http://www.transifex.com/projects/p/django-smuggler/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: forms.py:48
-#, fuzzy, python-format
+#, python-format
 msgid "Invalid file extension: .%(extension)s."
-msgstr "Ungültige Dateierweiterung"
+msgstr "Ungültige Datei-Endung: .%(extension)s."
 
 #: forms.py:106
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: forms.py:114
 msgid "Save in fixture directory"
-msgstr ""
+msgstr "In Fixture Verzeichnis speichern"
 
 #: forms.py:117
 #, python-format
 msgid "Uploads will be saved to \"%(fixture_dir)s\"."
-msgstr ""
+msgstr "Uploads werden gespeicher in \"%(fixture_dir)s\"."
 
 #: forms.py:123
-#, fuzzy
 msgid "From fixture directory"
-msgstr "Daten aus dem %(smuggler_fixture_dir)s Verzeichnis"
+msgstr "Vom Fixture Verzeichnis"
 
 #: forms.py:126
-#, fuzzy, python-format
+#, python-format
 msgid "Data files from \"%(fixture_dir)s\"."
-msgstr "Daten aus dem %(smuggler_fixture_dir)s Verzeichnis"
+msgstr "Daten-Dateien aus \"%(fixture_dir)s\"."
 
 #: forms.py:140
 msgid "At least one fixture file needs to be uploaded or selected."
-msgstr ""
+msgstr "Mindestens eine Fixture-Datei muss hochgeladen oder ausgewählt werden."
 
 #: views.py:43
 #, python-format
@@ -58,15 +57,15 @@ msgstr "Während dem Ausgeben der Daten ist eine Ausnahme aufgetreten: %s"
 #, python-format
 msgid "Successfully imported %(count)d file."
 msgid_plural "Successfully imported %(count)d files."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Erfolgreich %(count)d Datei importiert."
+msgstr[1] "Erfolgreich %(count)d Dateien importiert."
 
 #: views.py:118
 #, python-format
 msgid "Loaded %(count)d object."
 msgid_plural "Loaded %(count)d objects."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " %(count)d Objekt geladen."
+msgstr[1] " %(count)d Objekte geladen."
 
 #: views.py:127
 #, python-format
@@ -89,10 +88,9 @@ msgid "Home"
 msgstr "Start"
 
 #: templates/smuggler/load_data_form.html:26
-#, fuzzy
 msgid ""
 "Existing items with same <strong>primary key</strong> will be overwritten."
-msgstr "Existierende Datensätze mit derselben <i>id</i> werden überschrieben."
+msgstr "Existierende Datensätze mit dem selben <strong>Primärschlüssel</strong> werden überschrieben."
 
 #: templates/smuggler/load_data_form.html:34
 msgid "Please correct the error below."
@@ -101,18 +99,3 @@ msgstr "Bitte den nachfolgenden Fehler korrigieren."
 #: templates/smuggler/load_data_form.html:55
 msgid "Load"
 msgstr "Laden"
-
-#~ msgid "Add %(name)s"
-#~ msgstr "%(name)s hinzufügen"
-
-#~ msgid "Data from your computer"
-#~ msgstr "Daten vom lokalen Computers"
-
-#~ msgid "Load fixture and save on disk"
-#~ msgstr "Fixture laden und auf der Festplatte speichern."
-
-#~ msgid "File name"
-#~ msgstr "Dateiname"
-
-#~ msgid "Size"
-#~ msgstr "Größe"

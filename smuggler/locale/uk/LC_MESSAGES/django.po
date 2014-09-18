@@ -1,55 +1,52 @@
 # Copyright (c) 2010, 2011, 2012 Guilherme Gondim and contributors
 # This file is distributed under the same license as the django-smuggler package.
-#
+# 
 # Translators:
-# Sergey Lysach <sergikoff88@gmail.com>, 2011,2013.
+# Sergey Lysach <sergikoff88@gmail.com>, 2011,2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Django Smuggler\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-26 10:01+0200\n"
-"PO-Revision-Date: 2013-01-12 18:14+0000\n"
+"PO-Revision-Date: 2014-09-16 13:04+0000\n"
 "Last-Translator: Sergey Lysach <sergikoff88@gmail.com>\n"
-"Language-Team: Ukrainian (http://www.transifex.com/projects/p/django-"
-"smuggler/language/uk/)\n"
-"Language: uk\n"
+"Language-Team: Ukrainian (http://www.transifex.com/projects/p/django-smuggler/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: forms.py:48
-#, fuzzy, python-format
+#, python-format
 msgid "Invalid file extension: .%(extension)s."
-msgstr "Невірне розширення файлу."
+msgstr "Невірне розширення файлу: .%(extension)s."
 
 #: forms.py:106
 msgid "Upload"
-msgstr ""
+msgstr "Завантажити"
 
 #: forms.py:114
 msgid "Save in fixture directory"
-msgstr ""
+msgstr "Зберегти у директорію з фікстурами"
 
 #: forms.py:117
 #, python-format
 msgid "Uploads will be saved to \"%(fixture_dir)s\"."
-msgstr ""
+msgstr "Завантаження будуть збережені до \"%(fixture_dir)s\"."
 
 #: forms.py:123
-#, fuzzy
 msgid "From fixture directory"
-msgstr "Дані з каталогу %(smuggler_fixture_dir)s"
+msgstr "З директорії фікстур"
 
 #: forms.py:126
-#, fuzzy, python-format
+#, python-format
 msgid "Data files from \"%(fixture_dir)s\"."
-msgstr "Дані з каталогу %(smuggler_fixture_dir)s"
+msgstr "Файли даних з \"%(fixture_dir)s\"."
 
 #: forms.py:140
 msgid "At least one fixture file needs to be uploaded or selected."
-msgstr ""
+msgstr "Принаймні один файл з фікстурами повинен бути завантажений або вибраний."
 
 #: views.py:43
 #, python-format
@@ -60,17 +57,17 @@ msgstr "Виникла помилка при вивантаженні даних
 #, python-format
 msgid "Successfully imported %(count)d file."
 msgid_plural "Successfully imported %(count)d files."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Успішно імпортовано %(count)d файл."
+msgstr[1] "Успішно імпортовано %(count)d файли."
+msgstr[2] "Успішно імпортовано %(count)d файлів."
 
 #: views.py:118
 #, python-format
 msgid "Loaded %(count)d object."
 msgid_plural "Loaded %(count)d objects."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Завантажено %(count)d об'єкт."
+msgstr[1] "Завантажено %(count)d об'єкти."
+msgstr[2] "Завантажено %(count)d об'єктів."
 
 #: views.py:127
 #, python-format
@@ -93,10 +90,9 @@ msgid "Home"
 msgstr "Головна"
 
 #: templates/smuggler/load_data_form.html:26
-#, fuzzy
 msgid ""
 "Existing items with same <strong>primary key</strong> will be overwritten."
-msgstr "Існуючі елементи з таким же <i>id</i> будуть перезаписані."
+msgstr "Існуючі записи з однаковим <strong>первинним ключем</strong> будуть перезаписані."
 
 #: templates/smuggler/load_data_form.html:34
 msgid "Please correct the error below."
@@ -105,18 +101,3 @@ msgstr "Будь-ласка, виправте помилку, зазначену
 #: templates/smuggler/load_data_form.html:55
 msgid "Load"
 msgstr "Завантажити"
-
-#~ msgid "Add %(name)s"
-#~ msgstr "Додати %(name)s"
-
-#~ msgid "Data from your computer"
-#~ msgstr "Данні з вашого комп'ютера"
-
-#~ msgid "Load fixture and save on disk"
-#~ msgstr "Завантажити фікстури і зберегти на диску"
-
-#~ msgid "File name"
-#~ msgstr "Ім'я файлу"
-
-#~ msgid "Size"
-#~ msgstr "Розмір"
