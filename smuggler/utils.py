@@ -43,7 +43,8 @@ def serialize_to_response(app_labels=[], exclude=[], response=None,
             'exclude': exclude,
             'format': format,
             'indent': indent,
-            'use_natural_keys': True
+            'use_natural_foreign_keys': True,
+            'use_natural_primary_keys': True
         })
     except SystemExit:
         # Django 1.4's implementation of execute catches CommandErrors and
