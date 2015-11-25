@@ -131,6 +131,13 @@ Load form (with ``SMUGGLER_FIXTURE_DIR`` configured):
 Release notes
 =============
 
+Version 0.6.1 (2015-11-25)
+--------------------------
+
+* Increase Django 1.7 compatibilty by supporting
+  use_natural_foreign_keys and use_natural_primary_keys arguments
+  for dumpdata
+
 Version 0.6 (2014-09-18)
 ------------------------
 
