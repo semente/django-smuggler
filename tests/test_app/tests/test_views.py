@@ -82,8 +82,9 @@ class TestDumpHandlesErrorsGracefully(SuperUserTestCase, TestCase):
     def test_erroneous_dump_redirects(self):
         url = reverse('dump-app-data', kwargs={'app_label': 'flatpages'})
         response = self.c.get(url)
-        self.assertRedirects(response, '/admin/flatpages/',
-                             target_status_code=404)
+        self.assertRedirects(
+            response, 'http://testserver/admin/flatpages/',
+            target_status_code=404)
 
 
 class TestLoadDataGet(SuperUserTestCase, TestCase):
