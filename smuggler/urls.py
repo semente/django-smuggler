@@ -6,20 +6,17 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 
-from django.conf.urls import url
+from django.conf.urls import url, include
+
+from smuggler.views import dump_app_data, dump_data, dump_model_data, load_data
 
 
 urlpatterns = [
-    url(r'^dump/$',
-        'smuggler.views.dump_data',
-        name='dump-data'),
-    url(r'^(?P<app_label>\w+)/dump/$',
-        'smuggler.views.dump_app_data',
-        name='dump-app-data'),
-    url(r'^(?P<app_label>\w+)/(?P<model_label>\w+)/dump/$',
-        'smuggler.views.dump_model_data',
-        name='dump-model-data'),
-    url(r'^load/$',
-        'smuggler.views.load_data',
-        name='load-data')
+    url(r'^dump/$', dump_data, name='dump-data'),
+    url(r'^(?P<app_label>\w+)/', include([
+        url(r'^dump/$', dump_app_data, name='dump-app-data'),
+        url(r'^(?P<model_label>\w+)/dump/$', dump_model_data,
+            name='dump-model-data'),
+    ])),
+    url(r'^load/$', load_data, name='load-data')
 ]
