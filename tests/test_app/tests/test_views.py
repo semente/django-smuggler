@@ -146,7 +146,8 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
         assertRegex(self, response_messages[0].message,
-                    ' No JSON object could be decoded')
+                    'An exception occurred while loading data: '
+                    'Problem installing fixture .*')
 
     def test_handle_integrity_error(self):
         f = open(p('..', 'smuggler_fixtures', 'garbage',
