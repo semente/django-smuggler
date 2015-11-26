@@ -5,20 +5,13 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
-import re
 from django.core.management.color import no_style
 from django.core.management.commands.dumpdata import Command as DumpData
 from django.core.management.commands.loaddata import Command as LoadData
-from django.db import router
 from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
 from django.utils.six import StringIO
 from smuggler import settings
-
-try:
-    allow_migrate = router.allow_migrate
-except AttributeError:  # before django 1.7
-    allow_migrate = router.allow_syncdb
 
 
 def save_uploaded_file_on_disk(uploaded_file, destination_path):
