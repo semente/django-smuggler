@@ -83,9 +83,8 @@ def dump_model_data(request, app_label, model_label):
 
 class AdminFormMixin(object):
     def get_context_data(self, **kwargs):
-        context = super(AdminFormMixin, self).get_context_data(
-            adminform=self.get_admin_form(kwargs['form']),
-            **kwargs)
+        context = super(AdminFormMixin, self).get_context_data(**kwargs)
+        context['adminform'] = self.get_admin_form(context['form'])
         return context
 
     def get_fieldsets(self, form):
