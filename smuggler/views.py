@@ -25,12 +25,9 @@ from smuggler.utils import (save_uploaded_file_on_disk, serialize_to_response,
                             load_fixtures)
 
 
-def dump_to_response(request, app_label=None, exclude=None,
-                     filename_prefix=None):
+def dump_to_response(request, app_label=[], exclude=[], filename_prefix=None):
     """Utility function that dumps the given app/model to an HttpResponse.
     """
-    app_label = app_label or []
-    exclude = exclude
     try:
         filename = '%s.%s' % (datetime.now().isoformat(),
                               settings.SMUGGLER_FORMAT)
@@ -86,8 +83,9 @@ def dump_model_data(request, app_label, model_label):
 
 class AdminFormMixin(object):
     def get_context_data(self, **kwargs):
-        context = super(AdminFormMixin, self).get_context_data(**kwargs)
-        context['adminform'] = self.get_admin_form(context['form'])
+        context = super(AdminFormMixin, self).get_context_data(
+            adminform=self.get_admin_form(kwargs['form']),
+            **kwargs)
         return context
 
     def get_fieldsets(self, form):
