@@ -6,7 +6,6 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 import re
-from django.core.management import CommandError
 from django.core.management.color import no_style
 from django.core.management.commands.dumpdata import Command as DumpData
 from django.core.management.commands.loaddata import Command as LoadData
@@ -36,24 +35,17 @@ def serialize_to_response(app_labels=None, exclude=None, response=None,
     response = response or HttpResponse(content_type='text/plain')
     stream = StringIO()
     error_stream = StringIO()
-    try:
-        dumpdata = DumpData()
-        dumpdata.style = no_style()
-        dumpdata.execute(*app_labels, **{
-            'stdout': stream,
-            'stderr': error_stream,
-            'exclude': exclude,
-            'format': format,
-            'indent': indent,
-            'use_natural_keys': True,
-            'use_natural_foreign_keys': True,
-            'use_natural_primary_keys': True
-        })
-    except SystemExit:
-        # Django 1.4's implementation of execute catches CommandErrors and
-        # then calls sys.exit(1), we circumvent this here.
-        errors = error_stream.getvalue().strip().replace('Error: ', '')
-        raise CommandError(errors)
+    dumpdata = DumpData()
+    dumpdata.style = no_style()
+    dumpdata.execute(*app_labels, **{
+        'stdout': stream,
+        'stderr': error_stream,
+        'exclude': exclude,
+        'format': format,
+        'indent': indent,
+        'use_natural_foreign_keys': True,
+        'use_natural_primary_keys': True
+    })
     response.write(stream.getvalue())
     return response
 
@@ -77,7 +69,4 @@ def load_fixtures(fixtures):
         # to fetch it from stderror :(
         errors = error_stream.getvalue()
         out = stream.getvalue()
-        if errors:
-            # The only way to handle errors in Django 1.4 is to inspect stdout
-            raise CommandError(errors.strip().splitlines()[-1])
         return int(re.search('Installed ([0-9]+)', out.strip()).group(1))
