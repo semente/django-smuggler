@@ -55,11 +55,4 @@ def load_fixtures(fixtures):
         'database': DEFAULT_DB_ALIAS,
         'verbosity': 1
     })
-    if hasattr(loaddata, 'loaded_object_count'):
-        return loaddata.loaded_object_count
-    else:
-        # Django < 1.6 has no loaded_object_count attribute, we need
-        # to fetch it from stderror :(
-        errors = error_stream.getvalue()
-        out = stream.getvalue()
-        return int(re.search('Installed ([0-9]+)', out.strip()).group(1))
+    return loaddata.loaded_object_count
