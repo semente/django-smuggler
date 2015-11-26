@@ -28,9 +28,11 @@ def save_uploaded_file_on_disk(uploaded_file, destination_path):
             fp.write(chunk)
 
 
-def serialize_to_response(app_labels=[], exclude=[], response=None,
+def serialize_to_response(app_labels=None, exclude=None, response=None,
                           format=settings.SMUGGLER_FORMAT,
                           indent=settings.SMUGGLER_INDENT):
+    app_labels = app_labels or []
+    exclude = exclude or []
     response = response or HttpResponse(content_type='text/plain')
     stream = StringIO()
     error_stream = StringIO()

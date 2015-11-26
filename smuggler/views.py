@@ -25,9 +25,12 @@ from smuggler.utils import (save_uploaded_file_on_disk, serialize_to_response,
                             load_fixtures)
 
 
-def dump_to_response(request, app_label=[], exclude=[], filename_prefix=None):
+def dump_to_response(request, app_label=None, exclude=None,
+                     filename_prefix=None):
     """Utility function that dumps the given app/model to an HttpResponse.
     """
+    app_label = app_label or []
+    exclude = exclude
     try:
         filename = '%s.%s' % (datetime.now().isoformat(),
                               settings.SMUGGLER_FORMAT)
