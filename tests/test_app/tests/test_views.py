@@ -76,10 +76,8 @@ class TestDumpHandlesErrorsGracefully(SuperUserTestCase, TestCase):
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        self.assertEqual(
-            'An exception occurred while dumping data: '
-            'Unknown application: flatpages',
-            response_messages[0].message)
+        assertRegex(self, response_messages[0].message,
+                    r'An exception occurred while dumping data:.*flatpages.*')
 
     def test_erroneous_dump_redirects(self):
         url = reverse('dump-app-data', kwargs={'app_label': 'flatpages'})
