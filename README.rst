@@ -253,7 +253,7 @@ Tests
 If you are contributing to django-smuggler we recommend setting up a
 virtualenv en running::
 
-    pip install -f test-requirements.txt
+    pip install -r test-requirements.txt
 
 You can then run the tests with::
 
