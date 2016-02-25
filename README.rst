@@ -223,6 +223,8 @@ Version 0.1.1 (2010-01-20)
 Backwards-incompatible changes
 ==============================
 
+* Removed AdminFormMixin (Version 0.7)
+
 * Removed signals.py (Version 0.6)
 
 * Renamed urls from import/export to load/dump (Version 0.1)

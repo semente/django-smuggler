@@ -84,24 +84,7 @@ def dump_model_data(request, app_label, model_label):
                             [], '-'.join((app_label, model_label)))
 
 
-class AdminFormMixin(object):
-    def get_context_data(self, **kwargs):
-        context = super(AdminFormMixin, self).get_context_data(**kwargs)
-        context['adminform'] = self.get_admin_form(context['form'])
-        return context
-
-    def get_fieldsets(self, form):
-        if hasattr(self, 'fieldsets'):
-            return self.fieldsets
-        else:
-            fields = form.fields.keys()
-            return [(None, {'fields': fields})]
-
-    def get_admin_form(self, form):
-        return AdminForm(form, self.get_fieldsets(form), {})
-
-
-class LoadDataView(AdminFormMixin, FormView):
+class LoadDataView(FormView):
     form_class = ImportForm
     template_name = 'smuggler/load_data_form.html'
     success_url = '.'
@@ -151,6 +134,14 @@ class LoadDataView(AdminFormMixin, FormView):
             for tmp_file in tmp_fixtures:
                 os.unlink(tmp_file)
         return super(LoadDataView, self).form_valid(form)
+
+    def get_admin_form(self, form):
+        return AdminForm(form, self.get_fieldsets(form), {})
+
+    def get_context_data(self, **kwargs):
+        context = super(LoadDataView, self).get_context_data(**kwargs)
+        context['adminform'] = self.get_admin_form(context['form'])
+        return context
 
     def get_fieldsets(self, form):
         fields = form.fields.keys()
