@@ -1,14 +1,15 @@
 import json
+
 from django.utils.six import StringIO
 from django.core.management import CommandError
 from django.test import TestCase
 from tests.test_app.models import Page
+
 from smuggler import utils
 
 
 class BasicDumpTestCase(TestCase):
     SITE_DUMP = [{
-        "pk": 1,
         "model": "sites.site",
         "fields": {
             "domain": "example.com",

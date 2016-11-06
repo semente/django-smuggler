@@ -8,9 +8,11 @@
 from django.core.management.color import no_style
 from django.core.management.commands.dumpdata import Command as DumpData
 from django.core.management.commands.loaddata import Command as LoadData
+from django.core.management import call_command
 from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
 from django.utils.six import StringIO
+
 from smuggler import settings
 
 
@@ -30,7 +32,7 @@ def serialize_to_response(app_labels=None, exclude=None, response=None,
     error_stream = StringIO()
     dumpdata = DumpData()
     dumpdata.style = no_style()
-    dumpdata.execute(*app_labels, **{
+    call_command(dumpdata, *app_labels, **{
         'stdout': stream,
         'stderr': error_stream,
         'exclude': exclude,
@@ -48,7 +50,7 @@ def load_fixtures(fixtures):
     error_stream = StringIO()
     loaddata = LoadData()
     loaddata.style = no_style()
-    loaddata.execute(*fixtures, **{
+    call_command(loaddata, *fixtures, **{
         'stdout': stream,
         'stderr': error_stream,
         'ignore': True,
