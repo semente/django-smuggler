@@ -5,6 +5,7 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
+
 import django
 from django.core.management.color import no_style
 from django.core.management.commands.dumpdata import Command as DumpData
