@@ -4,17 +4,22 @@ from django.core.management import CommandError
 from django.test import TestCase
 from tests.test_app.models import Page
 from smuggler import utils
+from distutils.version import StrictVersion
+import django
 
 
 class BasicDumpTestCase(TestCase):
-    SITE_DUMP = [{
-        "pk": 1,
+    SITE_DICT = {
         "model": "sites.site",
         "fields": {
             "domain": "example.com",
             "name": "example.com"
         }
-    }]
+    }
+
+    if django.VERSION[0:2] < (1, 10):
+        SITE_DICT.update({"pk": 1})
+    SITE_DUMP = [SITE_DICT]
     PAGE_DUMP = [{
         "pk": 1,
         "model": "test_app.page",
