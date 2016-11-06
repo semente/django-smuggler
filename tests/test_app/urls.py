@@ -8,6 +8,6 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', include('smuggler.urls')),
     url(r'^admin/login/$', admin.site.login,
-        name='login', prefix='admin'),  # for Django < 1.7
+        name='login'),
     url(r'^admin/', include(admin.site.urls))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
