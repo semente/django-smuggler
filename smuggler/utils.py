@@ -5,9 +5,9 @@
 # Django Smuggler is free software under terms of the GNU Lesser
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
+import re
+
 from django.core.management.color import no_style
-from django.core.management.commands.dumpdata import Command as DumpData
-from django.core.management.commands.loaddata import Command as LoadData
 from django.core.management import call_command
 from django.db.utils import DEFAULT_DB_ALIAS
 from django.http import HttpResponse
@@ -30,9 +30,7 @@ def serialize_to_response(app_labels=None, exclude=None, response=None,
     response = response or HttpResponse(content_type='text/plain')
     stream = StringIO()
     error_stream = StringIO()
-    dumpdata = DumpData()
-    dumpdata.style = no_style()
-    call_command(dumpdata, *app_labels, **{
+    call_command('dumpdata', *app_labels, **{
         'stdout': stream,
         'stderr': error_stream,
         'exclude': exclude,
@@ -48,13 +46,13 @@ def serialize_to_response(app_labels=None, exclude=None, response=None,
 def load_fixtures(fixtures):
     stream = StringIO()
     error_stream = StringIO()
-    loaddata = LoadData()
-    loaddata.style = no_style()
-    call_command(loaddata, *fixtures, **{
+    call_command('loaddata', *fixtures, **{
         'stdout': stream,
         'stderr': error_stream,
         'ignore': True,
         'database': DEFAULT_DB_ALIAS,
         'verbosity': 1
     })
-    return loaddata.loaded_object_count
+    stream.seek(0)
+    result = stream.read()
+    return int(re.match(r'Installed\s([0-9]+)\s.*', result).groups()[0])
