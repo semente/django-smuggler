@@ -1,5 +1,9 @@
 from django.contrib.auth.models import User, Permission
-from django.core.urlresolvers import reverse
+try:
+    from django.core.urlresolvers import reverse
+except:
+    # Django 2.0
+    from django.urls import reverse
 from django.test import TestCase, Client
 
 

@@ -1,5 +1,9 @@
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+try:
+    from django.core.urlresolvers import reverse
+except:
+    # Django 2.0
+    from django.urls import reverse
 from django.test import TestCase, Client
 
 
@@ -9,16 +13,20 @@ class TestSmugglerViewsRequireAuthentication(TestCase):
         url = reverse('dump-data')
         response = c.get(url)
         self.assertRedirects(
-            response, 'http://testserver/admin/login/'
-                      '?next=/admin/dump/')
+            response,
+            # 'http://testserver/admin/login/'
+            '/admin/login/'
+            '?next=/admin/dump/')
 
     def test_dump_app_data(self):
         c = Client()
         url = reverse('dump-app-data', kwargs={'app_label': 'sites'})
         response = c.get(url)
         self.assertRedirects(
-            response, 'http://testserver/admin/login/'
-                      '?next=/admin/sites/dump/')
+            response,
+            # 'http://testserver/admin/login/'
+            '/admin/login/'
+            '?next=/admin/sites/dump/')
 
     def test_dump_model_data(self):
         c = Client()
@@ -28,16 +36,20 @@ class TestSmugglerViewsRequireAuthentication(TestCase):
         })
         response = c.get(url)
         self.assertRedirects(
-            response, 'http://testserver/admin/login/'
-                      '?next=/admin/sites/site/dump/')
+            response,
+            # 'http://testserver/admin/login/'
+            '/admin/login/'
+            '?next=/admin/sites/site/dump/')
 
     def test_load_data(self):
         c = Client()
         url = reverse('load-data')
         response = c.get(url, follow=True)
         self.assertRedirects(
-            response, 'http://testserver/admin/login/'
-                      '?next=/admin/load/')
+            response,
+            # 'http://testserver/admin/login/'
+            '/admin/login/'
+            '?next=/admin/load/')
 
 
 class TestSmugglerViewsDeniesNonSuperuser(TestCase):

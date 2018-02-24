@@ -25,6 +25,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
+# Django 2.0 uses MIDDLEWARE instead of MIDDLEWARE_CLASSES
+MIDDLEWARE = MIDDLEWARE_CLASSES
+
 SITE_ID = 1
 
 LOGIN_URL = '/admin/login/'
