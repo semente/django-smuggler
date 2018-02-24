@@ -48,8 +48,13 @@ def dump_to_response(request, app_label=None, exclude=None,
     return HttpResponseRedirect(request.build_absolute_uri().split('dump')[0])
 
 
+def is_authenticated(u):
+    if callable(u.is_authenticated):
+        return u.is_authenticated()
+    return u.is_authenticated
+
 def is_superuser(u):
-    if u.is_authenticated():
+    if is_authenticated(u):
         if u.is_superuser:
             return True
         raise PermissionDenied
