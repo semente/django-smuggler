@@ -53,6 +53,7 @@ def is_authenticated(u):
         return u.is_authenticated()
     return u.is_authenticated
 
+
 def is_superuser(u):
     if is_authenticated(u):
         if u.is_superuser:
