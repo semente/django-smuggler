@@ -3,11 +3,7 @@ import os.path
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-try:
-    from django.core.urlresolvers import reverse
-except:
-    # Django 2.0
-    from django.urls import reverse
+from django.urls import reverse
 from django.test import TestCase, TransactionTestCase, Client
 from django.test.utils import override_settings
 from django.utils.six.moves import reload_module

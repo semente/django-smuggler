@@ -17,16 +17,13 @@ SECRET_KEY = 'mAtTzVPOV9JY4eJQfqgW8eAS9DWKnt3MkvvpQI2MzkhAz7z3'
 
 ROOT_URLCONF = 'tests.test_app.urls'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
-
-# Django 2.0 uses MIDDLEWARE instead of MIDDLEWARE_CLASSES
-MIDDLEWARE = MIDDLEWARE_CLASSES
 
 SITE_ID = 1
 
