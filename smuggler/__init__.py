@@ -20,6 +20,7 @@ def get_version():
     """
     return '.'.join([str(i) for i in VERSION])
 
+
 __author__ = 'See the file AUTHORS.'
 __license__ = 'GNU Lesser General Public License v3 or later (LGPLv3+)'
 __url__ = 'https://github.com/semente/django-smuggler'

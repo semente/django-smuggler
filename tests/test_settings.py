@@ -1,7 +1,10 @@
 import os.path
 
-p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                               *args))
+
+def p(*args):
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), *args))
+
 
 DEBUG = True
 STATIC_ROOT = p('')
