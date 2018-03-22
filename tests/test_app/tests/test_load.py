@@ -1,5 +1,6 @@
 import os.path
 from django.contrib.sites.models import Site
+from django.db import IntegrityError
 from django.test import TestCase, TransactionTestCase
 from smuggler.utils import load_fixtures
 from tests.test_app.models import Page
@@ -41,8 +42,7 @@ class SimpleLoadTestCase(TestCase):
 
 class TestInvalidLoad(TransactionTestCase):
     def test_load_invalid_data(self):
-        # Would test for IntegrityError but we need to support Django 1.4
-        self.assertRaises(Exception, load_fixtures,
+        self.assertRaises(IntegrityError, load_fixtures,
                           [p('..', 'smuggler_fixtures',
                              'garbage', 'invalid_page_dump.json')])
         self.assertEqual(0, Page.objects.count())
