@@ -97,7 +97,7 @@ Smuggler has the following settings available. You can set them in your project
 SMUGGLER_EXCLUDE_LIST
     List of models to be excluded from dump. Use the form 'app_label.ModelName'.
     Default: [].
-                                
+
 SMUGGLER_FIXTURE_DIR
     Uploaded fixtures are stored in this directory (if requested).
     Default: None.
