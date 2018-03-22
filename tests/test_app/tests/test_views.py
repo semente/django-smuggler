@@ -1,14 +1,16 @@
 import json
 import os.path
+
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.urls import reverse
 from django.test import TestCase, TransactionTestCase
 from django.test.utils import override_settings
-from django.utils.six.moves import reload_module
+from django.urls import reverse
 from django.utils.six import assertRegex
+from django.utils.six.moves import reload_module
 from freezegun import freeze_time
+
 from smuggler import settings
 from smuggler.forms import ImportForm
 from tests.test_app.models import Page

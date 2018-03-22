@@ -1,6 +1,8 @@
 import os
 from unittest import TestCase
+
 from django.core.files.uploadedfile import SimpleUploadedFile
+
 from smuggler.utils import save_uploaded_file_on_disk
 
 

@@ -1,6 +1,6 @@
-from django.contrib.auth.models import User, Permission
-from django.urls import reverse
+from django.contrib.auth.models import Permission, User
 from django.test import TestCase
+from django.urls import reverse
 
 
 class TestAdminNormalUser(TestCase):

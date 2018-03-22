@@ -1,7 +1,9 @@
 import os.path
+
 from django.contrib.sites.models import Site
 from django.db import IntegrityError
 from django.test import TestCase, TransactionTestCase
+
 from smuggler.utils import load_fixtures
 from tests.test_app.models import Page
 

@@ -12,8 +12,7 @@ import codecs
 import os
 import sys
 
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 # Dynamically calculate the version based on smuggler.VERSION.
 version = __import__('smuggler').get_version()

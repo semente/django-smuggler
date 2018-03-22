@@ -1,11 +1,11 @@
 import json
 
-from django.utils.six import StringIO
 from django.core.management import CommandError
 from django.test import TestCase
-from tests.test_app.models import Page
+from django.utils.six import StringIO
 
 from smuggler import utils
+from tests.test_app.models import Page
 
 
 class BasicDumpTestCase(TestCase):
