@@ -32,10 +32,7 @@ class BasicDumpTestCase(TestCase):
         p.save()
 
     def normalize(self, out):
-        data = json.loads(out)
-        if data[0]['model'] == 'sites.site' and 'pk' in data[0]:
-            del data[0]['pk']  # Django < 1.10 dumps pk
-        return data
+        return json.loads(out)
 
     def test_serialize_exclude(self):
         stream = StringIO()
