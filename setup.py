@@ -24,7 +24,10 @@ if 'publish' in sys.argv:
     print("  git push --tags")
     sys.exit()
 
-read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
+
+def read(filepath):
+    return codecs.open(filepath, 'r', 'utf-8').read()
+
 
 setup(
     name='django-smuggler',
