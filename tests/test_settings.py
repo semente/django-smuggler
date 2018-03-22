@@ -1,4 +1,5 @@
 import os.path
+
 p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                *args))
 
@@ -17,7 +18,7 @@ SECRET_KEY = 'mAtTzVPOV9JY4eJQfqgW8eAS9DWKnt3MkvvpQI2MzkhAz7z3'
 
 ROOT_URLCONF = 'tests.test_app.urls'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

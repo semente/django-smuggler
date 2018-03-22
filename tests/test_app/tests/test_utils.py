@@ -1,10 +1,14 @@
 import os
 from unittest import TestCase
+
 from django.core.files.uploadedfile import SimpleUploadedFile
+
 from smuggler.utils import save_uploaded_file_on_disk
 
-p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                               *args))
+
+def p(*args):
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), *args))
 
 
 class TestSaveUploadedFileOnDisk(TestCase):

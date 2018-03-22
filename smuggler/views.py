@@ -6,23 +6,26 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 import os.path
-from datetime import datetime
 import tempfile
+from datetime import datetime
+
+from django.contrib import messages
 from django.contrib.admin.helpers import AdminForm
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.management.base import CommandError
 from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _, ungettext_lazy
-from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ungettext_lazy
 from django.views.generic.edit import FormView
-from smuggler.forms import ImportForm
+
 from smuggler import settings
-from smuggler.utils import (save_uploaded_file_on_disk, serialize_to_response,
-                            load_fixtures)
+from smuggler.forms import ImportForm
+from smuggler.utils import (load_fixtures, save_uploaded_file_on_disk,
+                            serialize_to_response)
 
 
 def dump_to_response(request, app_label=None, exclude=None,
@@ -49,7 +52,7 @@ def dump_to_response(request, app_label=None, exclude=None,
 
 
 def is_superuser(u):
-    if u.is_authenticated():
+    if u.is_authenticated:
         if u.is_superuser:
             return True
         raise PermissionDenied
@@ -151,5 +154,6 @@ class LoadDataView(FormView):
                 (_('From fixture directory'), {'fields': ['picked_files']})
             ]
         return [(None, {'fields': fields})]
+
 
 load_data = user_passes_test(is_superuser)(LoadDataView.as_view())

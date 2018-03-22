@@ -12,8 +12,7 @@ import codecs
 import os
 import sys
 
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 # Dynamically calculate the version based on smuggler.VERSION.
 version = __import__('smuggler').get_version()
@@ -25,7 +24,10 @@ if 'publish' in sys.argv:
     print("  git push --tags")
     sys.exit()
 
-read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
+
+def read(filepath):
+    return codecs.open(filepath, 'r', 'utf-8').read()
+
 
 setup(
     name='django-smuggler',
@@ -55,7 +57,9 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4'
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     tests_require=[],
 )

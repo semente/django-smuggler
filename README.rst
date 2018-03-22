@@ -97,7 +97,7 @@ Smuggler has the following settings available. You can set them in your project
 SMUGGLER_EXCLUDE_LIST
     List of models to be excluded from dump. Use the form 'app_label.ModelName'.
     Default: [].
-                                
+
 SMUGGLER_FIXTURE_DIR
     Uploaded fixtures are stored in this directory (if requested).
     Default: None.
@@ -130,6 +130,12 @@ Load form (with ``SMUGGLER_FIXTURE_DIR`` configured):
 
 Release notes
 =============
+
+Version 0.9.0 (2018-??-??)
+--------------------------
+
+* Support Django 2.0
+* Drop support for Django < 1.10
 
 Version 0.8.0 (2016-11-09)
 --------------------------

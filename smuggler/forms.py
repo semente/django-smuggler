@@ -6,10 +6,12 @@
 # General Public License version 3 (LGPLv3) as published by the Free
 # Software Foundation. See the file README for copying conditions.
 import os.path
+
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.serializers import get_serializer_formats
 from django.utils.translation import ugettext_lazy as _
+
 from smuggler import settings
 
 

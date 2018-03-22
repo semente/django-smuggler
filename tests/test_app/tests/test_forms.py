@@ -1,16 +1,19 @@
 import os.path
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.forms import BooleanField, FilePathField
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils.datastructures import MultiValueDict
 from django.utils.six.moves import reload_module
+
 from smuggler import settings
 from smuggler.forms import ImportForm
 
 
-p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                               *args))
+def p(*args):
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), *args))
 
 
 class TestForm(TestCase):
