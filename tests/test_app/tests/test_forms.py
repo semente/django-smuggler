@@ -9,8 +9,9 @@ from smuggler import settings
 from smuggler.forms import ImportForm
 
 
-p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                               *args))
+def p(*args):
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), *args))
 
 
 class TestForm(TestCase):

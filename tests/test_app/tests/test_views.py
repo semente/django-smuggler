@@ -14,8 +14,9 @@ from smuggler.forms import ImportForm
 from tests.test_app.models import Page
 
 
-p = lambda *args: os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                               *args))
+def p(*args):
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), *args))
 
 
 class SuperUserTestCase(object):
