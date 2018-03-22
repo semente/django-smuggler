@@ -155,4 +155,5 @@ class LoadDataView(FormView):
             ]
         return [(None, {'fields': fields})]
 
+
 load_data = user_passes_test(is_superuser)(LoadDataView.as_view())
