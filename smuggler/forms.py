@@ -16,10 +16,10 @@ from smuggler import settings
 
 
 class MultiFileInput(forms.FileInput):
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, **kwargs):
         attrs = attrs or {}
         attrs['multiple'] = 'multiple'
-        return super(MultiFileInput, self).render(name, None, attrs=attrs)
+        return super(MultiFileInput, self).render(name, None, attrs=attrs, **kwargs)
 
     def value_from_datadict(self, data, files, name):
         if hasattr(files, 'getlist'):
