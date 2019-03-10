@@ -110,7 +110,7 @@ class ImportForm(forms.Form):
 
         js = [
             'admin/js/core.js',
-            'admin/js/jquery.min.js',
+            'admin/js/vendor/jquery/jquery.min.js',
             'admin/js/jquery.init.js',
             'admin/js/SelectBox.js',
             'admin/js/SelectFilter2.js'
