@@ -17,7 +17,7 @@ from django.core.management.base import CommandError
 from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy
 from django.views.generic.edit import FormView
@@ -47,7 +47,7 @@ def dump_to_response(request, app_label=None, exclude=None,
     except CommandError as e:
         messages.error(
             request,
-            _('An exception occurred while dumping data: %s') % force_text(e))
+            _('An exception occurred while dumping data: %s') % force_str(e))
     return HttpResponseRedirect(request.build_absolute_uri().split('dump')[0])
 
 
