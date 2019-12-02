@@ -8,6 +8,7 @@
 import os.path
 
 from django import forms
+from django.conf import settings as django_settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.serializers import get_serializer_formats
 from django.utils.translation import gettext_lazy as _
@@ -19,7 +20,7 @@ class MultiFileInput(forms.FileInput):
     def render(self, name, value, attrs=None, **kwargs):
         attrs = attrs or {}
         attrs['multiple'] = 'multiple'
-        return super(MultiFileInput, self).render(name, None, attrs=attrs, **kwargs)
+        return super().render(name, None, attrs=attrs, **kwargs)
 
     def value_from_datadict(self, data, files, name):
         if hasattr(files, 'getlist'):
@@ -107,11 +108,12 @@ class ImportForm(forms.Form):
         css = {
             'all': ['admin/css/forms.css']
         }
-
         js = [
+            'admin/js/vendor/jquery/jquery%s.js' % (
+                '' if django_settings.DEBUG else '.min'
+            ),
+            'admin/js/jquery.init.js'
             'admin/js/core.js',
-            'admin/js/jquery.min.js',
-            'admin/js/jquery.init.js',
             'admin/js/SelectBox.js',
             'admin/js/SelectFilter2.js'
         ]
