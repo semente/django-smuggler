@@ -10,7 +10,7 @@ import os.path
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.serializers import get_serializer_formats
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from smuggler import settings
 

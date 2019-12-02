@@ -18,8 +18,8 @@ from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ungettext_lazy
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext_lazy
 from django.views.generic.edit import FormView
 
 from smuggler import settings
@@ -116,12 +116,12 @@ class LoadDataView(FormView):
         try:
             obj_count = load_fixtures(fixtures)
             user_msg = ' '.join([
-                ungettext_lazy(
+                ngettext_lazy(
                     'Successfully imported %(count)d file.',
                     'Successfully imported %(count)d files.',
                     len(fixtures)
                 ) % {'count': len(fixtures)},
-                ungettext_lazy(
+                ngettext_lazy(
                     'Loaded %(count)d object.',
                     'Loaded %(count)d objects.',
                     obj_count
