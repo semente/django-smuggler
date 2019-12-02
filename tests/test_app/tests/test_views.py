@@ -7,7 +7,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, TransactionTestCase
 from django.test.utils import override_settings
 from django.urls import reverse
-from django.utils.six import assertRegex
 from django.utils.six.moves import reload_module
 from freezegun import freeze_time
 
@@ -78,7 +77,7 @@ class TestDumpHandlesErrorsGracefully(SuperUserTestCase, TestCase):
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        assertRegex(self, response_messages[0].message,
+        self.assertRegex(response_messages[0].message,
                     r'An exception occurred while dumping data:.*flatpages.*')
 
     def test_erroneous_dump_redirects(self):
@@ -153,7 +152,7 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        assertRegex(self, response_messages[0].message,
+        self.assertRegex(response_messages[0].message,
                     'An exception occurred while loading data: '
                     'Problem installing fixture .*')
 
@@ -168,7 +167,7 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        assertRegex(self, response_messages[0].message,
+        self.assertRegex(response_messages[0].message,
                     r'(?i)An exception occurred while loading data:.*unique.*')
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
