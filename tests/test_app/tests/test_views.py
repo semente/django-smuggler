@@ -111,17 +111,21 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
 
     def test_load_fixture(self):
         self.assertEqual(0, Page.objects.count())
-        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
-        self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb'
+        ) as f:
+            self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         self.assertEqual(1, Page.objects.count())
 
     def test_load_fixture_message(self):
-        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
-        response = self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb'
+        ) as f:
+            response = self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.INFO, response_messages[0].level)
@@ -131,18 +135,21 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
     @override_settings(FILE_UPLOAD_MAX_MEMORY_SIZE=0)
     def test_load_fixture_with_chunks(self):
         self.assertEqual(0, Page.objects.count())
-        f = open(p('..', 'smuggler_fixtures', 'big_file.json'), mode='rb')
-        self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'big_file.json'), mode='rb'
+        ) as f:
+            self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         self.assertEqual(1, Page.objects.count())
 
     def test_handle_garbage_upload(self):
-        f = open(p('..', 'smuggler_fixtures', 'garbage', 'garbage.json'),
-                 mode='rb')
-        response = self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'garbage', 'garbage.json'), mode='rb'
+        ) as f:
+            response = self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
@@ -151,11 +158,13 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
                     'Problem installing fixture .*')
 
     def test_handle_integrity_error(self):
-        f = open(p('..', 'smuggler_fixtures', 'garbage',
-                   'invalid_page_dump.json'), mode='rb')
-        response = self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'garbage', 'invalid_page_dump.json'),
+            mode='rb'
+        ) as f:
+            response = self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
@@ -174,11 +183,13 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_from_disk_and_upload(self):
         reload_module(settings)
-        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
-        response = self.client.post(self.url, {
-            'uploads': f,
-            'picked_files': p('..', 'smuggler_fixtures', 'page_dump.json')
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb'
+        ) as f:
+            response = self.client.post(self.url, {
+                'uploads': f,
+                'picked_files': p('..', 'smuggler_fixtures', 'page_dump.json')
+            }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.INFO, response_messages[0].level)
