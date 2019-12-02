@@ -55,8 +55,8 @@ class FixturePathField(forms.MultipleChoiceField, forms.FilePathField):
 
     def __init__(self, path, match=None, **kwargs):
         match = match or (
-            '(?i)^.+(%s)$' % '|'.join(
-                ['\.%s' % ext for ext in get_serializer_formats()])
+            r'(?i)^.+(%s)$' % '|'.join(
+                [r'\.%s' % ext for ext in get_serializer_formats()])
         )  # Generate a regex string like: (?i)^.+(\.xml|\.json)$
         super(FixturePathField, self).__init__(path, match=match, **kwargs)
         if not self.required:
