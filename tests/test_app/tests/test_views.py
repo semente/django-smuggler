@@ -18,9 +18,9 @@ def p(*args):
         os.path.join(os.path.dirname(__file__), *args))
 
 
-class SuperUserTestCase(object):
+class SuperUserTestCase:
     def setUp(self):
-        super(SuperUserTestCase, self).setUp()
+        super().setUp()
         superuser = User(username='superuser')
         superuser.set_password('test')
         superuser.is_staff = True
@@ -88,7 +88,7 @@ class TestDumpHandlesErrorsGracefully(SuperUserTestCase, TestCase):
 
 class TestLoadDataGet(SuperUserTestCase, TestCase):
     def setUp(self):
-        super(TestLoadDataGet, self).setUp()
+        super().setUp()
         self.url = reverse('load-data')
 
     def test_renders_correct_template(self):
@@ -103,7 +103,7 @@ class TestLoadDataGet(SuperUserTestCase, TestCase):
 
 class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
     def setUp(self):
-        super(TestLoadDataPost, self).setUp()
+        super().setUp()
         self.url = reverse('load-data')
 
     def test_load_fixture(self):

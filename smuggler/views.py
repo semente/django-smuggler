@@ -136,13 +136,13 @@ class LoadDataView(FormView):
             # Remove our tmp files
             for tmp_file in tmp_fixtures:
                 os.unlink(tmp_file)
-        return super(LoadDataView, self).form_valid(form)
+        return super().form_valid(form)
 
     def get_admin_form(self, form):
         return AdminForm(form, self.get_fieldsets(form), {})
 
     def get_context_data(self, **kwargs):
-        context = super(LoadDataView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['adminform'] = self.get_admin_form(context['form'])
         return context
 

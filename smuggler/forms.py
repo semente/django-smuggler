@@ -36,7 +36,7 @@ class MultiFixtureField(forms.FileField):
     def to_python(self, data):
         files = []
         for item in data:
-            files.append(super(MultiFixtureField, self).to_python(item))
+            files.append(super().to_python(item))
         return files
 
     def validate(self, data):
@@ -59,7 +59,7 @@ class FixturePathField(forms.MultipleChoiceField, forms.FilePathField):
             r'(?i)^.+(%s)$' % '|'.join(
                 [r'\.%s' % ext for ext in get_serializer_formats()])
         )  # Generate a regex string like: (?i)^.+(\.xml|\.json)$
-        super(FixturePathField, self).__init__(path, match=match, **kwargs)
+        super().__init__(path, match=match, **kwargs)
         if not self.required:
             del self.choices[0]  # Remove the empty option
 
@@ -71,7 +71,7 @@ class ImportForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(ImportForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if settings.SMUGGLER_FIXTURE_DIR:
             self.fields['store'] = forms.BooleanField(
                 label=_('Save in fixture directory'),
@@ -94,7 +94,7 @@ class ImportForm(forms.Form):
             self.fields['uploads'].required = True
 
     def clean(self):
-        super(ImportForm, self).clean()
+        super().clean()
         if settings.SMUGGLER_FIXTURE_DIR:
             uploads = self.cleaned_data['uploads']
             picked_files = self.cleaned_data['picked_files']
