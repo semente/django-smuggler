@@ -7,10 +7,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, TransactionTestCase
 from django.test.utils import override_settings
 from django.urls import reverse
-from django.utils.six.moves import reload_module
 from freezegun import freeze_time
 
-from smuggler import settings
 from smuggler.forms import ImportForm
 from tests.test_app.models import Page
 
@@ -172,7 +170,6 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_from_disk(self):
-        reload_module(settings)
         self.assertEqual(0, Page.objects.count())
         self.client.post(self.url, {
             'picked_files': p('..', 'smuggler_fixtures', 'page_dump.json')
@@ -181,7 +178,6 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_from_disk_and_upload(self):
-        reload_module(settings)
         with open(
             p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb'
         ) as f:
@@ -197,7 +193,6 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_and_save(self):
-        reload_module(settings)
         f = SimpleUploadedFile('uploaded.json',
                                b'[{"pk": 1, "model": "test_app.page",'
                                b' "fields": {"title": "test",'
@@ -209,6 +204,3 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
         self.assertTrue(os.path.exists(
             p('..', 'smuggler_fixtures', 'uploaded.json')))
         os.unlink(p('..', 'smuggler_fixtures', 'uploaded.json'))
-
-    def tearDown(self):
-        reload_module(settings)

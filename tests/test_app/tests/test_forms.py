@@ -5,7 +5,6 @@ from django.forms import BooleanField, FilePathField
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils.datastructures import MultiValueDict
-from django.utils.six.moves import reload_module
 
 from smuggler import settings
 from smuggler.forms import ImportForm
@@ -59,25 +58,19 @@ class TestForm(TestCase):
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_store_checkbox(self):
-        reload_module(settings)
         form = ImportForm()
         self.assertIsInstance(form['store'].field, BooleanField)
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_picked_files(self):
-        reload_module(settings)
         form = ImportForm()
         self.assertIsInstance(form['picked_files'].field, FilePathField)
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_requires_at_least_one_field(self):
-        reload_module(settings)
         form = ImportForm({}, {})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {
             '__all__': [
                 'At least one fixture file needs to be uploaded or selected.'
             ]})
-
-    def tearDown(self):
-        reload_module(settings)
