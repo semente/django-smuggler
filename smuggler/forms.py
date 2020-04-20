@@ -8,9 +8,10 @@
 import os.path
 
 from django import forms
+from django.conf import settings as django_settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.serializers import get_serializer_formats
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from smuggler import settings
 
@@ -19,7 +20,7 @@ class MultiFileInput(forms.FileInput):
     def render(self, name, value, attrs=None, **kwargs):
         attrs = attrs or {}
         attrs['multiple'] = 'multiple'
-        return super(MultiFileInput, self).render(name, None, attrs=attrs, **kwargs)
+        return super().render(name, None, attrs=attrs, **kwargs)
 
     def value_from_datadict(self, data, files, name):
         if hasattr(files, 'getlist'):
@@ -35,7 +36,7 @@ class MultiFixtureField(forms.FileField):
     def to_python(self, data):
         files = []
         for item in data:
-            files.append(super(MultiFixtureField, self).to_python(item))
+            files.append(super().to_python(item))
         return files
 
     def validate(self, data):
@@ -55,10 +56,10 @@ class FixturePathField(forms.MultipleChoiceField, forms.FilePathField):
 
     def __init__(self, path, match=None, **kwargs):
         match = match or (
-            '(?i)^.+(%s)$' % '|'.join(
-                ['\.%s' % ext for ext in get_serializer_formats()])
+            r'(?i)^.+(%s)$' % '|'.join(
+                [r'\.%s' % ext for ext in get_serializer_formats()])
         )  # Generate a regex string like: (?i)^.+(\.xml|\.json)$
-        super(FixturePathField, self).__init__(path, match=match, **kwargs)
+        super().__init__(path, match=match, **kwargs)
         if not self.required:
             del self.choices[0]  # Remove the empty option
 
@@ -70,7 +71,7 @@ class ImportForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(ImportForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if settings.SMUGGLER_FIXTURE_DIR:
             self.fields['store'] = forms.BooleanField(
                 label=_('Save in fixture directory'),
@@ -93,7 +94,7 @@ class ImportForm(forms.Form):
             self.fields['uploads'].required = True
 
     def clean(self):
-        super(ImportForm, self).clean()
+        super().clean()
         if settings.SMUGGLER_FIXTURE_DIR:
             uploads = self.cleaned_data['uploads']
             picked_files = self.cleaned_data['picked_files']
@@ -107,11 +108,12 @@ class ImportForm(forms.Form):
         css = {
             'all': ['admin/css/forms.css']
         }
-
         js = [
+            'admin/js/vendor/jquery/jquery%s.js' % (
+                '' if django_settings.DEBUG else '.min'
+            ),
+            'admin/js/jquery.init.js'
             'admin/js/core.js',
-            'admin/js/jquery.min.js',
-            'admin/js/jquery.init.js',
             'admin/js/SelectBox.js',
             'admin/js/SelectFilter2.js'
         ]

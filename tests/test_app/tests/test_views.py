@@ -7,11 +7,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, TransactionTestCase
 from django.test.utils import override_settings
 from django.urls import reverse
-from django.utils.six import assertRegex
-from django.utils.six.moves import reload_module
 from freezegun import freeze_time
 
-from smuggler import settings
 from smuggler.forms import ImportForm
 from tests.test_app.models import Page
 
@@ -21,9 +18,9 @@ def p(*args):
         os.path.join(os.path.dirname(__file__), *args))
 
 
-class SuperUserTestCase(object):
+class SuperUserTestCase:
     def setUp(self):
-        super(SuperUserTestCase, self).setUp()
+        super().setUp()
         superuser = User(username='superuser')
         superuser.set_password('test')
         superuser.is_staff = True
@@ -78,7 +75,7 @@ class TestDumpHandlesErrorsGracefully(SuperUserTestCase, TestCase):
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        assertRegex(self, response_messages[0].message,
+        self.assertRegex(response_messages[0].message,
                     r'An exception occurred while dumping data:.*flatpages.*')
 
     def test_erroneous_dump_redirects(self):
@@ -91,7 +88,7 @@ class TestDumpHandlesErrorsGracefully(SuperUserTestCase, TestCase):
 
 class TestLoadDataGet(SuperUserTestCase, TestCase):
     def setUp(self):
-        super(TestLoadDataGet, self).setUp()
+        super().setUp()
         self.url = reverse('load-data')
 
     def test_renders_correct_template(self):
@@ -106,22 +103,26 @@ class TestLoadDataGet(SuperUserTestCase, TestCase):
 
 class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
     def setUp(self):
-        super(TestLoadDataPost, self).setUp()
+        super().setUp()
         self.url = reverse('load-data')
 
     def test_load_fixture(self):
         self.assertEqual(0, Page.objects.count())
-        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
-        self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb'
+        ) as f:
+            self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         self.assertEqual(1, Page.objects.count())
 
     def test_load_fixture_message(self):
-        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
-        response = self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb'
+        ) as f:
+            response = self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.INFO, response_messages[0].level)
@@ -131,40 +132,44 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
     @override_settings(FILE_UPLOAD_MAX_MEMORY_SIZE=0)
     def test_load_fixture_with_chunks(self):
         self.assertEqual(0, Page.objects.count())
-        f = open(p('..', 'smuggler_fixtures', 'big_file.json'), mode='rb')
-        self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'big_file.json'), mode='rb'
+        ) as f:
+            self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         self.assertEqual(1, Page.objects.count())
 
     def test_handle_garbage_upload(self):
-        f = open(p('..', 'smuggler_fixtures', 'garbage', 'garbage.json'),
-                 mode='rb')
-        response = self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'garbage', 'garbage.json'), mode='rb'
+        ) as f:
+            response = self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        assertRegex(self, response_messages[0].message,
+        self.assertRegex(response_messages[0].message,
                     'An exception occurred while loading data: '
                     'Problem installing fixture .*')
 
     def test_handle_integrity_error(self):
-        f = open(p('..', 'smuggler_fixtures', 'garbage',
-                   'invalid_page_dump.json'), mode='rb')
-        response = self.client.post(self.url, {
-            'uploads': f
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'garbage', 'invalid_page_dump.json'),
+            mode='rb'
+        ) as f:
+            response = self.client.post(self.url, {
+                'uploads': f
+            }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.ERROR, response_messages[0].level)
-        assertRegex(self, response_messages[0].message,
+        self.assertRegex(response_messages[0].message,
                     r'(?i)An exception occurred while loading data:.*unique.*')
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_from_disk(self):
-        reload_module(settings)
         self.assertEqual(0, Page.objects.count())
         self.client.post(self.url, {
             'picked_files': p('..', 'smuggler_fixtures', 'page_dump.json')
@@ -173,12 +178,13 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_from_disk_and_upload(self):
-        reload_module(settings)
-        f = open(p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb')
-        response = self.client.post(self.url, {
-            'uploads': f,
-            'picked_files': p('..', 'smuggler_fixtures', 'page_dump.json')
-        }, follow=True)
+        with open(
+            p('..', 'smuggler_fixtures', 'page_dump.json'), mode='rb'
+        ) as f:
+            response = self.client.post(self.url, {
+                'uploads': f,
+                'picked_files': p('..', 'smuggler_fixtures', 'page_dump.json')
+            }, follow=True)
         response_messages = list(response.context['messages'])
         self.assertEqual(1, len(response_messages))
         self.assertEqual(messages.INFO, response_messages[0].level)
@@ -187,7 +193,6 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
 
     @override_settings(SMUGGLER_FIXTURE_DIR=p('..', 'smuggler_fixtures'))
     def test_load_and_save(self):
-        reload_module(settings)
         f = SimpleUploadedFile('uploaded.json',
                                b'[{"pk": 1, "model": "test_app.page",'
                                b' "fields": {"title": "test",'
@@ -199,6 +204,3 @@ class TestLoadDataPost(SuperUserTestCase, TransactionTestCase):
         self.assertTrue(os.path.exists(
             p('..', 'smuggler_fixtures', 'uploaded.json')))
         os.unlink(p('..', 'smuggler_fixtures', 'uploaded.json'))
-
-    def tearDown(self):
-        reload_module(settings)

@@ -17,9 +17,9 @@ from django.core.management.base import CommandError
 from django.core.serializers.base import DeserializationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ungettext_lazy
+from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext_lazy
 from django.views.generic.edit import FormView
 
 from smuggler import settings
@@ -47,7 +47,7 @@ def dump_to_response(request, app_label=None, exclude=None,
     except CommandError as e:
         messages.error(
             request,
-            _('An exception occurred while dumping data: %s') % force_text(e))
+            _('An exception occurred while dumping data: %s') % force_str(e))
     return HttpResponseRedirect(request.build_absolute_uri().split('dump')[0])
 
 
@@ -116,12 +116,12 @@ class LoadDataView(FormView):
         try:
             obj_count = load_fixtures(fixtures)
             user_msg = ' '.join([
-                ungettext_lazy(
+                ngettext_lazy(
                     'Successfully imported %(count)d file.',
                     'Successfully imported %(count)d files.',
                     len(fixtures)
                 ) % {'count': len(fixtures)},
-                ungettext_lazy(
+                ngettext_lazy(
                     'Loaded %(count)d object.',
                     'Loaded %(count)d objects.',
                     obj_count
@@ -136,13 +136,13 @@ class LoadDataView(FormView):
             # Remove our tmp files
             for tmp_file in tmp_fixtures:
                 os.unlink(tmp_file)
-        return super(LoadDataView, self).form_valid(form)
+        return super().form_valid(form)
 
     def get_admin_form(self, form):
         return AdminForm(form, self.get_fieldsets(form), {})
 
     def get_context_data(self, **kwargs):
-        context = super(LoadDataView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['adminform'] = self.get_admin_form(context['form'])
         return context
 
