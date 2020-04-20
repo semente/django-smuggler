@@ -11,17 +11,17 @@ Django Smuggler is a pluggable application for Django Web Framework that help
 you dump/load fixtures via the automatically-generated admin interface.
 """
 
-VERSION = (0, 9, 1)
+VERSION = (1, 0, 0)
 
 
 def get_version():
     """
     Returns the version as a human-format string.
     """
-    return '.'.join([str(i) for i in VERSION])
+    return ".".join([str(i) for i in VERSION])
 
 
-__author__ = 'See the file AUTHORS.'
-__license__ = 'GNU Lesser General Public License v3 or later (LGPLv3+)'
-__url__ = 'https://github.com/semente/django-smuggler'
+__author__ = "See the file AUTHORS."
+__license__ = "GNU Lesser General Public License v3 or later (LGPLv3+)"
+__url__ = "https://github.com/semente/django-smuggler"
 __version__ = get_version()
