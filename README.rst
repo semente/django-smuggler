@@ -131,6 +131,11 @@ Load form (with ``SMUGGLER_FIXTURE_DIR`` configured):
 Release notes
 =============
 
+Version 1.0.1 (2020-05-15)
+--------------------------
+
+* Fix Python packaging setup
+
 Version 1.0.0 (2020-04-20)
 --------------------------
 
