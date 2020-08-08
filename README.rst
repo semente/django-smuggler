@@ -51,11 +51,11 @@ After installation you need configure your project to recognizes the Smuggler
 application adding ``'smuggler'`` to your ``INSTALLED_APPS`` setting and setup
 the project *URLConf* like follow::
 
-  urlpatterns = patterns('',
+  urlpatterns = [
       # ...
-      (r'^admin/', include('smuggler.urls')),  # before admin url patterns!
-      (r'^admin/', include(admin.site.urls)),
-  )
+      path('admin/', include('smuggler.urls')),  # before admin url patterns!
+      path('admin/', admin.site.urls),
+  ]
 
 Then try access these urls:
 
@@ -130,6 +130,11 @@ Load form (with ``SMUGGLER_FIXTURE_DIR`` configured):
 
 Release notes
 =============
+
+Version 1.0.2 (unreleased)
+--------------------------
+
+* Support Django 3.1
 
 Version 1.0.1 (2020-05-15)
 --------------------------
