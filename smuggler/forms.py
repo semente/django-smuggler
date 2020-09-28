@@ -112,7 +112,7 @@ class ImportForm(forms.Form):
             'admin/js/vendor/jquery/jquery%s.js' % (
                 '' if django_settings.DEBUG else '.min'
             ),
-            'admin/js/jquery.init.js'
+            'admin/js/jquery.init.js',
             'admin/js/core.js',
             'admin/js/SelectBox.js',
             'admin/js/SelectFilter2.js'
