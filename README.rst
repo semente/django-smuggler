@@ -131,7 +131,7 @@ Load form (with ``SMUGGLER_FIXTURE_DIR`` configured):
 Release notes
 =============
 
-Version 1.0.2 (unreleased)
+Version 1.0.2 (2020-09-28)
 --------------------------
 
 * Support Django 3.1
