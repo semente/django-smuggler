@@ -14,7 +14,7 @@
   {{ form.media.css }}
 {% endblock %}
 
-{% block bodyclass %}change-form{% endblock %}
+{% block bodyclass %}{{ block.super }} change-form{% endblock %}
 
 {% block breadcrumbs %}
 <div class="breadcrumbs">
