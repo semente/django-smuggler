@@ -11,14 +11,17 @@ from django.urls import include, path
 from smuggler.views import dump_app_data, dump_data, dump_model_data, load_data
 
 urlpatterns = [
-    path('dump/', dump_data, name='dump-data'),
-    path('<slug:app_label>/', include([
-        path('dump/', dump_app_data, name='dump-app-data'),
-        path(
-            '<slug:model_label>/dump/',
-            dump_model_data,
-            name='dump-model-data'
+    path("dump/", dump_data, name="dump-data"),
+    path(
+        "<slug:app_label>/",
+        include(
+            [
+                path("dump/", dump_app_data, name="dump-app-data"),
+                path(
+                    "<slug:model_label>/dump/", dump_model_data, name="dump-model-data"
+                ),
+            ]
         ),
-    ])),
-    path('load/', load_data, name='load-data')
+    ),
+    path("load/", load_data, name="load-data"),
 ]

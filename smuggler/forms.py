@@ -19,11 +19,11 @@ from smuggler import settings
 class MultiFileInput(forms.FileInput):
     def render(self, name, value, attrs=None, **kwargs):
         attrs = attrs or {}
-        attrs['multiple'] = 'multiple'
+        attrs["multiple"] = "multiple"
         return super().render(name, None, attrs=attrs, **kwargs)
 
     def value_from_datadict(self, data, files, name):
-        if hasattr(files, 'getlist'):
+        if hasattr(files, "getlist"):
             return files.getlist(name)
         if name in files:
             return [files.get(name)]
@@ -45,19 +45,19 @@ class MultiFixtureField(forms.FileField):
             file_format = os.path.splitext(upload.name)[1][1:].lower()
             if file_format not in get_serializer_formats():
                 raise forms.ValidationError(
-                    _('Invalid file extension: .%(extension)s.') % {
-                        'extension': file_format
-                    })
+                    _("Invalid file extension: .%(extension)s.")
+                    % {"extension": file_format}
+                )
         return data
 
 
 class FixturePathField(forms.MultipleChoiceField, forms.FilePathField):
-    widget = FilteredSelectMultiple(_('files'), False)
+    widget = FilteredSelectMultiple(_("files"), False)
 
     def __init__(self, path, match=None, **kwargs):
         match = match or (
-            r'(?i)^.+(%s)$' % '|'.join(
-                [r'\.%s' % ext for ext in get_serializer_formats()])
+            r"(?i)^.+(%s)$"
+            % "|".join([r"\.%s" % ext for ext in get_serializer_formats()])
         )  # Generate a regex string like: (?i)^.+(\.xml|\.json)$
         super().__init__(path, match=match, **kwargs)
         if not self.required:
@@ -65,55 +65,49 @@ class FixturePathField(forms.MultipleChoiceField, forms.FilePathField):
 
 
 class ImportForm(forms.Form):
-    uploads = MultiFixtureField(
-        label=_('Upload'),
-        required=False
-    )
+    uploads = MultiFixtureField(label=_("Upload"), required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if settings.SMUGGLER_FIXTURE_DIR:
-            self.fields['store'] = forms.BooleanField(
-                label=_('Save in fixture directory'),
+            self.fields["store"] = forms.BooleanField(
+                label=_("Save in fixture directory"),
                 required=False,
                 help_text=(
-                    _('Uploads will be saved to "%(fixture_dir)s".') % {
-                        'fixture_dir': settings.SMUGGLER_FIXTURE_DIR
-                    })
+                    _('Uploads will be saved to "%(fixture_dir)s".')
+                    % {"fixture_dir": settings.SMUGGLER_FIXTURE_DIR}
+                ),
             )
-            self.fields['picked_files'] = FixturePathField(
+            self.fields["picked_files"] = FixturePathField(
                 settings.SMUGGLER_FIXTURE_DIR,
-                label=_('From fixture directory'),
+                label=_("From fixture directory"),
                 required=False,
                 help_text=(
-                    _('Data files from "%(fixture_dir)s".') % {
-                        'fixture_dir': settings.SMUGGLER_FIXTURE_DIR
-                    })
+                    _('Data files from "%(fixture_dir)s".')
+                    % {"fixture_dir": settings.SMUGGLER_FIXTURE_DIR}
+                ),
             )
         else:
-            self.fields['uploads'].required = True
+            self.fields["uploads"].required = True
 
     def clean(self):
         super().clean()
         if settings.SMUGGLER_FIXTURE_DIR:
-            uploads = self.cleaned_data['uploads']
-            picked_files = self.cleaned_data['picked_files']
+            uploads = self.cleaned_data["uploads"]
+            picked_files = self.cleaned_data["picked_files"]
             if not uploads and not picked_files:
                 raise forms.ValidationError(
-                    _('At least one fixture file needs to be'
-                      ' uploaded or selected.'))
+                    _("At least one fixture file needs to be" " uploaded or selected.")
+                )
         return self.cleaned_data
 
     class Media:
-        css = {
-            'all': ['admin/css/forms.css']
-        }
+        css = {"all": ["admin/css/forms.css"]}
         js = [
-            'admin/js/vendor/jquery/jquery%s.js' % (
-                '' if django_settings.DEBUG else '.min'
-            ),
-            'admin/js/jquery.init.js',
-            'admin/js/core.js',
-            'admin/js/SelectBox.js',
-            'admin/js/SelectFilter2.js'
+            "admin/js/vendor/jquery/jquery%s.js"
+            % ("" if django_settings.DEBUG else ".min"),
+            "admin/js/jquery.init.js",
+            "admin/js/core.js",
+            "admin/js/SelectBox.js",
+            "admin/js/SelectFilter2.js",
         ]
