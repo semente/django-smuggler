@@ -1,4 +1,4 @@
-# Copyright (c) 2009 Guilherme Gondim and contributors
+# Copyright (c) 2009 Guilherme Semente and contributors
 #
 # This file is part of Django Smuggler.
 #
