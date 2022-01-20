@@ -110,11 +110,9 @@ class LoadDataView(FormView):
                 save_uploaded_file_on_disk(upload, destination_path)
             else:  # Store the file in a tmp file
                 prefix, suffix = os.path.splitext(file_name)
-                destination_path = tempfile.mkstemp(suffix=suffix, prefix=prefix + "_")[
-                    1
-                ]
+                fd, destination_path = tempfile.mkstemp(suffix=suffix, prefix=prefix + "_")
                 save_uploaded_file_on_disk(upload, destination_path)
-                tmp_fixtures.append(destination_path)
+                tmp_fixtures.append((fd, destination_path))
             fixtures.append(destination_path)
         for file_name in picked_files:
             fixtures.append(file_name)
@@ -148,7 +146,8 @@ class LoadDataView(FormView):
             )
         finally:
             # Remove our tmp files
-            for tmp_file in tmp_fixtures:
+            for fd, tmp_file in tmp_fixtures:
+                os.close(fd)
                 os.unlink(tmp_file)
         return super().form_valid(form)
 
