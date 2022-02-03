@@ -1,4 +1,4 @@
-#/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (c) 2009-2013 Guilherme Gondim and contributors
 #
@@ -16,13 +16,6 @@ from setuptools import find_packages, setup
 
 # Dynamically calculate the version based on smuggler.VERSION.
 version = __import__('smuggler').get_version()
-
-if 'publish' in sys.argv:
-    os.system('python setup.py sdist bdist_wheel upload')
-    print("You probably want to also tag the version now:")
-    print("  git tag -a %s -m 'version %s'" % (version, version))
-    print("  git push --tags")
-    sys.exit()
 
 
 def read(filepath):
