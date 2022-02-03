@@ -131,6 +131,12 @@ Load form (with ``SMUGGLER_FIXTURE_DIR`` configured):
 Release notes
 =============
 
+Version 1.0.4 (2022-02-03)
+--------------------------
+
+* Fix #76
+
+
 Version 1.0.3 (2021-08-12)
 --------------------------
 
@@ -260,11 +266,11 @@ Version 0.1.1 (2010-01-20)
 Backwards-incompatible changes
 ==============================
 
-* Removed AdminFormMixin (Version 0.7)
+* Removed AdminFormMixin (version 0.7)
 
-* Removed signals.py (Version 0.6)
+* Removed signals.py (version 0.6)
 
-* Renamed urls from import/export to load/dump (Version 0.1)
+* Renamed urls from import/export to load/dump (version 0.1)
 
 
 Contributing
