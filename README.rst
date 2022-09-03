@@ -185,7 +185,7 @@ Version 0.7.0 (2016-02-25)
 Version 0.6.1 (2015-11-25)
 --------------------------
 
-* Increase Django 1.7 compatibilty by supporting
+* Increase Django 1.7 compatibility by supporting
   use_natural_foreign_keys and use_natural_primary_keys arguments
   for dumpdata
 
